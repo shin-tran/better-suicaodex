@@ -1,248 +1,152 @@
+"use client";
+
 import * as React from "react";
+import {
+  AudioWaveform,
+  Bookmark,
+  BookOpen,
+  Bot,
+  Command,
+  Frame,
+  GalleryVerticalEnd,
+  Map,
+  PieChart,
+  Settings2,
+  SquareTerminal,
+  Users,
+} from "lucide-react";
+import {
+  SiDiscord,
+  SiFacebook,
+  SiGithub,
+} from "@icons-pack/react-simple-icons";
 
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   SidebarRail,
+  SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { NavUser } from "./nav-user";
-import { Button } from "../ui/button";
-import Link from "next/link";
+import { NavMain } from "./nav-main";
 import { siteConfig } from "@/config/site";
-import { Icons } from "../icons";
+import { NavProjects } from "./nav-supports";
 
 // This is sample data.
 const data = {
   user: {
     name: "iamneyk",
     email: "iamneyk@suicaodex.com",
-    avatar: "/avatars/xidoco.jpg",
+    avatar: "/avatars/doro_think.webp",
   },
+
   navMain: [
     {
-      title: "Getting Started",
+      title: "Theo dõi",
       url: "#",
+      icon: Bookmark,
+      isActive: true,
       items: [
         {
-          title: "Installation",
+          title: "Thư viện",
           url: "#",
         },
         {
-          title: "Project Structure",
+          title: "Lịch sử đọc",
           url: "#",
         },
       ],
     },
     {
-      title: "Building Your Application",
+      title: "Truyện",
       url: "#",
+      icon: BookOpen,
+      isActive: true,
       items: [
         {
-          title: "Routing",
+          title: "Tìm kiếm nâng cao",
           url: "#",
         },
         {
-          title: "Data Fetching",
-          url: "#",
-          isActive: true,
-        },
-        {
-          title: "Rendering",
+          title: "Mới cập nhật",
           url: "#",
         },
         {
-          title: "Caching",
+          title: "Truyện mới đăng",
           url: "#",
         },
         {
-          title: "Styling",
-          url: "#",
-        },
-        {
-          title: "Optimizing",
-          url: "#",
-        },
-        {
-          title: "Configuring",
-          url: "#",
-        },
-        {
-          title: "Testing",
-          url: "#",
-        },
-        {
-          title: "Authentication",
-          url: "#",
-        },
-        {
-          title: "Deploying",
-          url: "#",
-        },
-        {
-          title: "Upgrading",
-          url: "#",
-        },
-        {
-          title: "Examples",
+          title: "Truyện ngẫu nhiên",
           url: "#",
         },
       ],
     },
     {
-      title: "API Reference",
+      title: "Cộng đồng",
       url: "#",
+      icon: Users,
       items: [
         {
-          title: "Components",
+          title: "Diễn đàn",
           url: "#",
         },
         {
-          title: "File Conventions",
-          url: "#",
-        },
-        {
-          title: "Functions",
-          url: "#",
-        },
-        {
-          title: "next.config.js Options",
-          url: "#",
-        },
-        {
-          title: "CLI",
-          url: "#",
-        },
-        {
-          title: "Edge Runtime",
+          title: "Nhóm dịch",
           url: "#",
         },
       ],
     },
     {
-      title: "Architecture",
+      title: "Tuỳ chỉnh",
       url: "#",
+      icon: Settings2,
       items: [
         {
-          title: "Accessibility",
+          title: "Giao diện",
           url: "#",
+          isTheme: true,
         },
         {
-          title: "Fast Refresh",
+          title: "R18",
           url: "#",
-        },
-        {
-          title: "Next.js Compiler",
-          url: "#",
-        },
-        {
-          title: "Supported Browsers",
-          url: "#",
-        },
-        {
-          title: "Turbopack",
-          url: "#",
+          isR18: true,
         },
       ],
     },
+  ],
+  supports: [
     {
-      title: "Community",
-      url: "#",
-      items: [
-        {
-          title: "Contribution Guide",
-          url: "#",
-        },
-      ],
+      name: "Facebook",
+      url: siteConfig.links.facebook,
+      icon: SiFacebook,
+    },
+    {
+      name: "Discord",
+      url: siteConfig.links.discord,
+      icon: SiDiscord,
+    },
+    {
+      name: "Github",
+      url: siteConfig.links.github,
+      icon: SiGithub,
     },
   ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar {...props}>
-      <SidebarHeader>
+    <Sidebar collapsible="icon" {...props}>
+      <SidebarHeader className="h-12 items-center justify-center">
         <NavUser user={data.user} />
       </SidebarHeader>
+      <SidebarSeparator />
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Table of Contents</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {data.navMain.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url} className="font-medium">
-                      {item.title}
-                    </a>
-                  </SidebarMenuButton>
-                  {item.items?.length ? (
-                    <SidebarMenuSub>
-                      {item.items.map((item) => (
-                        <SidebarMenuSubItem key={item.title}>
-                          <SidebarMenuSubButton
-                            asChild
-                            isActive={item.isActive}
-                          >
-                            <a href={item.url}>{item.title}</a>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      ))}
-                    </SidebarMenuSub>
-                  ) : null}
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <NavMain items={data.navMain} />
       </SidebarContent>
-      <SidebarFooter>
-        <div className="flex items-center gap-2 justify-center">
-          <Button variant="ghost" size="icon" className="h-8 w-8 px-0">
-            <Link
-              href={siteConfig.links.github}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Icons.gitHub className="h-4 w-4" />
-
-              <span className="sr-only">GitHub</span>
-            </Link>
-          </Button>
-
-          <Button variant="ghost" size="icon" className="h-8 w-8 px-0">
-            <Link
-              href={siteConfig.links.discord}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Icons.discord className="h-4 w-4" />
-              <span className="sr-only">Discord</span>
-            </Link>
-          </Button>
-          <Button variant="ghost" size="icon" className="h-8 w-8 px-0">
-            <Link
-              href={siteConfig.links.facebook}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Icons.facebook className="h-4 w-4" />
-              <span className="sr-only">Facebook</span>
-            </Link>
-          </Button>
-        </div>
-
-        {/* <h2 className="text-xs text-sidebar-foreground">SuicaoDex v1.0.0</h2> */}
+      <SidebarFooter className="p-0">
+        <NavProjects projects={data.supports} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

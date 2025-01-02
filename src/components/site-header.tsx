@@ -15,7 +15,7 @@ export function SiteHeader() {
   return (
     <header className="border-grid sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container-wrapper px-4">
-        <div className="flex h-14 items-center">
+        <div className="flex h-12 items-center">
           <MainNav />
           {/* <MobileNav /> */}
           <div className="flex flex-1 items-center justify-between gap-2 md:justify-end">

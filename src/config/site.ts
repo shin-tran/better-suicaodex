@@ -5,7 +5,7 @@ export const siteConfig = {
   description: "Still sucks but better",
   links: {
     discord: "https://discord.gg/dongmoe",
-    github: "https://github.com/better-suicaodex",
+    github: "https://github.com/TNTKien/better-suicaodex",
     facebook: "https://facebook.com/suicaodex",
   },
 };
