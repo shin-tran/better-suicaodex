@@ -1,20 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  AudioWaveform,
-  Bookmark,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-  Users,
-} from "lucide-react";
+import { Bookmark, BookOpen, Users } from "lucide-react";
 import {
   SiDiscord,
   SiFacebook,
@@ -32,7 +19,8 @@ import {
 import { NavUser } from "./nav-user";
 import { NavMain } from "./nav-main";
 import { siteConfig } from "@/config/site";
-import { NavProjects } from "./nav-supports";
+import { NavSupports } from "./nav-supports";
+import { NavSettings } from "./nav-settings";
 
 // This is sample data.
 const data = {
@@ -98,24 +86,8 @@ const data = {
         },
       ],
     },
-    {
-      title: "Tuỳ chỉnh",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "Giao diện",
-          url: "#",
-          isTheme: true,
-        },
-        {
-          title: "R18",
-          url: "#",
-          isR18: true,
-        },
-      ],
-    },
   ],
+
   supports: [
     {
       name: "Facebook",
@@ -144,9 +116,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarSeparator />
       <SidebarContent>
         <NavMain items={data.navMain} />
+        <NavSettings />
       </SidebarContent>
       <SidebarFooter className="p-0">
-        <NavProjects projects={data.supports} />
+        <NavSupports supports={data.supports} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

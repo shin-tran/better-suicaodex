@@ -1,6 +1,6 @@
 "use client";
 
-import { Anchor, SquareArrowOutUpRight, type LucideIcon } from "lucide-react";
+import { SquareArrowOutUpRight, type LucideIcon } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -8,13 +8,12 @@ import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar";
 
-export function NavProjects({
-  projects,
+export function NavSupports({
+  supports,
 }: {
-  projects: {
+  supports: {
     name: string;
     url: string;
     icon: LucideIcon;
@@ -26,7 +25,7 @@ export function NavProjects({
     <SidebarGroup>
       <SidebarGroupLabel>Góp ý/Báo lỗi</SidebarGroupLabel>
       <SidebarMenu>
-        {projects.map((item) => (
+        {supports.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild tooltip={item.name}>
               <a href={item.url} target="_blank">
