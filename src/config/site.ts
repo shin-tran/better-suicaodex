@@ -1,12 +1,23 @@
 export const siteConfig = {
-  name: "suicaodex",
+  name: "SuicaoDex",
   url: "https://suicaodex.com",
   ogImage: "https://suicaodex.com/hanabi_holder.webp",
-  description: "Still sucks but better",
+  description: "SuicaoDex - Trang web truyện tranh đầu hàng VN",
   links: {
     discord: "https://discord.gg/dongmoe",
     github: "https://github.com/TNTKien/better-suicaodex",
     facebook: "https://facebook.com/suicaodex",
+  },
+  mangadexAPI: {
+    webURL: "https://mangadex.org",
+    baseURL: "https://api.mangadex.org",
+    coverURL: "https://uploads.mangadex.org/covers",
+    imgURL: "https://uploads.mangadex.org",
+    ogURL: "https://og.mangadex.org/og-image",
+  },
+  suicaodex: {
+    domain: "https://suicaodex.com",
+    apiURL: "https://api.suicaodex.com", //pls use your own proxy server; or use built-in proxy, see /lib/axios.ts
   },
 };
 

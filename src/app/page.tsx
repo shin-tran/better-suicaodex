@@ -1,5 +1,4 @@
 import { CardsStats } from "@/components/stats";
-import { ThemeCustomizer } from "@/components/Theme/theme-customizer";
 import Image from "next/image";
 
 export default function Home() {
