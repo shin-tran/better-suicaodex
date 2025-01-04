@@ -1,15 +1,8 @@
-import Link from "next/link";
-
-import { siteConfig } from "@/config/site";
-import { Icons } from "@/components/icons";
-import { MainNav } from "@/components/main-nav";
-import { Button } from "./ui/button";
-import { SidebarTrigger } from "./ui/sidebar";
-import { Input } from "./ui/input";
+import { MainNav } from "@/components/Navbar/main-nav";
+import { Button } from "../ui/button";
+import { SidebarTrigger } from "../ui/sidebar";
 import { cn } from "@/lib/utils";
 import { ModeSwitcher } from "./mode-switcher";
-// import { MobileNav } from "@/components/mobile-nav";
-//import { ModeSwitcher } from "@/components/mode-switcher";
 
 export function SiteHeader() {
   return (
