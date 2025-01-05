@@ -1,35 +1,55 @@
+"use client";
 import { MainNav } from "@/components/Navbar/main-nav";
 import { Button } from "../ui/button";
 import { SidebarTrigger } from "../ui/sidebar";
 import { cn } from "@/lib/utils";
 import { ModeSwitcher } from "./mode-switcher";
+import { Search } from "lucide-react";
+import { useScrollDirection } from "@/hooks/use-scroll-direction";
+import useScrollOffset from "@/hooks/use-scroll-offset";
 
 export function SiteHeader() {
+  const { isAtTop } = useScrollOffset();
   return (
-    <header className="border-grid sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full",
+        isAtTop && "bg-transparent",
+        !isAtTop &&
+          "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-grid border-b"
+        // scrollDirection === "down" && !isAtTop && "-translate-y-full"
+        // "-translate-y-full",
+        // "border-grid border-b",
+        // "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+        // "bg-transparent"
+      )}
+    >
       <div className="container-wrapper px-4">
-        <div className="flex h-12 items-center">
+        <div className="flex h-12 items-center justify-between">
           <MainNav />
           {/* <MobileNav /> */}
-          <div className="flex flex-1 items-center justify-between gap-2 md:justify-end">
-            <div className="w-full flex-1 md:w-auto md:flex-none">
-              {/* <CommandMenu /> */}
+          <div className="flex flex-1 items-center gap-2 justify-end">
+            <div className="hidden md:flex md:w-auto">
               <Button
-                variant="outline"
+                variant="ghost"
                 className={cn(
-                  "relative h-8 w-full justify-start rounded-[0.5rem] bg-muted/50 text-sm font-normal text-muted-foreground shadow-none sm:pr-12 md:w-40 lg:w-56 xl:w-64"
+                  "relative h-8 justify-start rounded-[0.5rem] bg-muted/50 text-sm font-normal px-2 shadow-sm sm:pr-12 md:w-40 lg:w-56 xl:w-64"
                 )}
               >
-                <span className="hidden lg:inline-flex">Tìm kiếm...</span>
-                <span className="inline-flex lg:hidden">Tìm kiếm...</span>
-                <kbd className="pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
-                  <span className="text-xs">⌘</span>K
-                </kbd>
+                <Search />
+                <span className="hidden md:inline-flex">Tìm kiếm...</span>
               </Button>
             </div>
-            <nav className="flex items-center gap-0.5">
+            <Button
+              variant="ghost"
+              className="h-8 w-8 bg-muted/50 px-0 inline-flex shadow-sm md:hidden"
+            >
+              <Search />
+              <span className="sr-only">Tìm kiếm</span>
+            </Button>
+            <nav className="flex items-center gap-2">
               <ModeSwitcher />
-              <SidebarTrigger />
+              <SidebarTrigger className="w-8 h-8 bg-muted/50 shadow-sm" />
             </nav>
           </div>
         </div>
