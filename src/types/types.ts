@@ -19,7 +19,7 @@ export type Status = "ongoing" | "completed" | "cancelled" | "hiatus";
 export type Manga = {
   id: string;
   title: string;
-  altTitle: string;
+  altTitle: string | null;
   tags: Tag[];
   cover: string;
   author: Author[];

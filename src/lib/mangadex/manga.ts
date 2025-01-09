@@ -5,20 +5,40 @@ import { ArtistParser } from "./artist";
 import { Manga, MangaStats } from "@/types/types";
 
 export function MangaParser(data: any): Manga {
-  const titleVi = data.attributes.altTitles.find((item: any) => item.vi)?.vi;
-  let title = titleVi
-    ? titleVi
-    : data.attributes.title[Object.keys(data.attributes.title)[0]];
+  // const titleVi = data.attributes.altTitles.find((item: any) => item.vi)?.vi;
+  // let title = titleVi
+  //   ? titleVi
+  //   : data.attributes.title[Object.keys(data.attributes.title)[0]];
 
-  if (!title) {
-    title = data.attributes.altTitles.find((item: any) => item.en)?.en;
+  // if (!title) {
+  //   title = data.attributes.altTitles.find((item: any) => item.en)?.en;
+  // }
+
+  // const altTitle =
+  //   data.attributes.title.en ||
+  //   data.attributes.altTitles.find((item: any) => item.en)?.en ||
+  //   data.attributes.altTitles.find((item: any) => item.ja)?.ja ||
+  //   null;
+
+  const altTitles = data.attributes.altTitles;
+  const titles = data.attributes.title;
+
+  const enTitles = [
+    ...(titles.en ? [titles.en] : []),
+    ...altTitles.filter((t: any) => t.en).map((t: any) => t.en!),
+  ];
+  const viTitle = altTitles.find((t: any) => t.vi)?.vi || undefined;
+  const jaTitle = altTitles.find((t: any) => t.ja)?.ja || undefined;
+
+  const title = viTitle || enTitles[0] || jaTitle;
+  let altTitle: string | null = null;
+  if (title == viTitle) {
+    altTitle = enTitles[0] || jaTitle || null;
+  } else if (title == enTitles[0]) {
+    altTitle = enTitles[1] || jaTitle || null;
+  } else if (title == jaTitle) {
+    altTitle = null;
   }
-
-  const altTitle =
-    data.attributes.title.en ||
-    data.attributes.altTitles.find((item: any) => item.en)?.en ||
-    data.attributes.altTitles.find((item: any) => item.ja)?.ja ||
-    null;
 
   const language = data.attributes.availableTranslatedLanguages;
 
