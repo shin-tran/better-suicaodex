@@ -608,7 +608,7 @@
 }
 
 .dark .theme-blue {
-  --background: 222.2 84% 4.9%;
+  --background: 20 14.3% 4.1%;
   --foreground: 210 40% 98%;
 
   --muted: 217.2 32.6% 17.5%;
@@ -736,7 +736,7 @@
 }
 
 .dark .theme-violet {
-  --background: 224 71.4% 4.1%;
+  --background: 20 14.3% 4.1%;
   --foreground: 210 20% 98%;
 
   --muted: 215 27.9% 16.9%;
