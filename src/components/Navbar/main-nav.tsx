@@ -28,7 +28,7 @@ export function MainNav() {
           fetchPriority="high"
           alt="SuicaoDex"
           className={cn(
-            "hidden xs:flex h-[22px] w-auto drop-shadow-md dark:invert",
+            "h-[22px] w-auto drop-shadow-md dark:invert",
             isAtTop && isMobile ? "" : "invert"
           )}
         />

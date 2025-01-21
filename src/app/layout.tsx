@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased mx-4 md:mx-8 lg:mx-12`}>
+      <body className={`${inter.className} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -33,7 +33,7 @@ export default function RootLayout({
           enableColorScheme
         >
           <SidebarProvider defaultOpen={false}>
-            <div className="border-grid flex flex-1 flex-col">
+            <div className="border-grid flex flex-1 flex-col mx-4 md:mx-8 lg:mx-12">
               <SiteHeader />
               <main>{children}</main>
             </div>
