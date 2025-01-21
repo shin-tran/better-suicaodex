@@ -13,11 +13,11 @@ interface MangaDetailsProps {
 
 export default function MangaDetails({ manga }: MangaDetailsProps) {
   const isMobile = useIsMobile();
-  return (
-    <>
-      <Background id={manga.id} src={manga.cover} />
 
-      {isMobile ? (
+  if (isMobile)
+    return (
+      <>
+        <Background id={manga.id} src={manga.cover} />
         <div className="flex flex-row gap-4 mt-2">
           <MangaCover
             id={manga.id}
@@ -26,6 +26,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
             //placeholder="/doro_think.webp"
             loading="lazy"
             className="max-w-[130px] shadow-md"
+            wrapper="max-w-[130px]"
             isExpandable
             //priority
           />
@@ -47,37 +48,43 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
             {!!manga.stats && <MangaStatsComponent stats={manga.stats} />}
           </div>
         </div>
-      ) : (
-        <div className="flex mt-2 gap-4">
-          <MangaCover
-            id={manga.id}
-            cover={manga.cover}
-            alt={manga.title}
-            placeholder="/doro_think.webp"
-            loading="lazy"
-            className="max-w-[200px] shadow-md"
-            isExpandable
-            //priority
-          />
-          <div className="flex flex-col gap-2 justify-start">
-            <p
-              className={cn(
-                "drop-shadow-md font-black",
-                "text-3xl md:text-5xl md:text-white lg:text-6xl"
-              )}
-            >
-              {manga.title}
-            </p>
-            {!!manga.altTitle && (
-              <h2 className="text-lg md:text-white">{manga.altTitle}</h2>
+      </>
+    );
+
+  return (
+    <>
+      <Background id={manga.id} src={manga.cover} />
+
+      <div className="flex mt-2 gap-4">
+        <MangaCover
+          id={manga.id}
+          cover={manga.cover}
+          alt={manga.title}
+          placeholder="/doro_think.webp"
+          loading="lazy"
+          className="max-w-[200px] shadow-md"
+          wrapper="max-w-[200px]"
+          isExpandable
+          //priority
+        />
+        <div className="flex flex-col gap-2 justify-start">
+          <p
+            className={cn(
+              "drop-shadow-md font-black",
+              "text-3xl md:text-5xl md:text-white lg:text-6xl"
             )}
-            <p className="text-sm md:text-white">
-              {manga.author.map((a) => a.name).join(", ")}
-            </p>
-            {/* {!!manga.stats && <MangaStatsComponent stats={manga.stats} />} */}
-          </div>
+          >
+            {manga.title}
+          </p>
+          {!!manga.altTitle && (
+            <h2 className="text-lg md:text-white">{manga.altTitle}</h2>
+          )}
+          <p className="text-sm md:text-white">
+            {manga.author.map((a) => a.name).join(", ")}
+          </p>
+          {/* {!!manga.stats && <MangaStatsComponent stats={manga.stats} />} */}
         </div>
-      )}
+      </div>
     </>
   );
 }

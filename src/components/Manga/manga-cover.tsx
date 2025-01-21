@@ -10,7 +10,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { Skeleton } from "../ui/skeleton";
 
 interface MangaCoverProps extends React.HTMLAttributes<HTMLImageElement> {
   id: string;
@@ -20,6 +19,7 @@ interface MangaCoverProps extends React.HTMLAttributes<HTMLImageElement> {
   loading?: "lazy" | "eager";
   placeholder?: string;
   isExpandable?: boolean;
+  wrapper?: string;
 }
 
 const MangaCover: FC<MangaCoverProps> = ({
@@ -30,6 +30,7 @@ const MangaCover: FC<MangaCoverProps> = ({
   placeholder,
   loading,
   isExpandable = false,
+  wrapper,
   className,
   ...props
 }) => {
@@ -39,7 +40,7 @@ const MangaCover: FC<MangaCoverProps> = ({
     <div
       className={cn(
         "relative bg-cover bg-no-repeat bg-center rounded-md",
-        className
+        wrapper
       )}
       style={{
         aspectRatio: 5 / 7,
