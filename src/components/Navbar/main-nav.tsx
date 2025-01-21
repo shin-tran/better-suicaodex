@@ -17,12 +17,12 @@ export function MainNav() {
     <div>
       <Link href="/" className="mr-4 flex items-center gap-1 lg:mr-6">
         {/* <Icons.logo className="h-6 w-6" /> */}
-        <img
+        {/* <img
           src="/doro.webp"
           fetchPriority="high"
           alt="Doro"
           className="h-10 w-auto pb-1 -ml-1"
-        />
+        /> */}
         <img
           src="/scd.webp"
           fetchPriority="high"

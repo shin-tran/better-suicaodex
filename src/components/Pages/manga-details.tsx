@@ -18,7 +18,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
       <Background id={manga.id} src={manga.cover} />
 
       {isMobile ? (
-        <div className="flex flex-row gap-4 px-4 mt-2">
+        <div className="flex flex-row gap-4 mt-2">
           <MangaCover
             id={manga.id}
             cover={manga.cover}
@@ -48,7 +48,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
           </div>
         </div>
       ) : (
-        <div className="flex px-4 mt-2 gap-4">
+        <div className="flex mt-2 gap-4">
           <MangaCover
             id={manga.id}
             cover={manga.cover}

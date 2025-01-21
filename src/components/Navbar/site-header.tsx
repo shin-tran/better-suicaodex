@@ -24,7 +24,7 @@ export function SiteHeader() {
         // "bg-transparent"
       )}
     >
-      <div className="container-wrapper px-4">
+      <div className="container-wrapper">
         <div className="flex h-12 items-center justify-between">
           <MainNav />
           {/* <MobileNav /> */}
