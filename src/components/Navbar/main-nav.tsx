@@ -6,10 +6,12 @@ import { siteConfig } from "@/config/site";
 import { Icons } from "@/components/icons";
 import useScrollOffset from "@/hooks/use-scroll-offset";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export function MainNav() {
   const pathname = usePathname();
   const { isAtTop } = useScrollOffset();
+  const isMobile = useIsMobile();
 
   return (
     <div>
@@ -27,7 +29,7 @@ export function MainNav() {
           alt="SuicaoDex"
           className={cn(
             "hidden xs:flex h-[22px] w-auto drop-shadow-md dark:invert",
-            isAtTop && "invert"
+            isAtTop && isMobile ? "" : "invert"
           )}
         />
         {/* <span  className="font-bold inline-block">{siteConfig.name}</span> */}

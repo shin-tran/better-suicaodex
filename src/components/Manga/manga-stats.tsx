@@ -12,6 +12,7 @@ import { RatingChart } from "./rating-chart";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { useConfig } from "@/hooks/use-config";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MangaStatsProps {
   stats: MangaStats;
@@ -19,11 +20,7 @@ interface MangaStatsProps {
 
 export const MangaStatsComponent: FC<MangaStatsProps> = ({ stats }) => {
   const [config] = useConfig();
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    setIsMobile(window.innerWidth < 768);
-  }, []);
+  const isMobile = useIsMobile();
 
   return (
     <div className="flex flex-row gap-2">
