@@ -11,10 +11,8 @@ import { Button } from "../ui/button";
 import {
   Archive,
   BookOpen,
-  BookOpenCheck,
   Bug,
   Ellipsis,
-  ExternalLink,
   LibraryBig,
   ListPlus,
 } from "lucide-react";
@@ -22,13 +20,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import MangaDesc from "../Manga/manga-description";
+import MangaDescription from "../Manga/manga-description";
 
 interface MangaDetailsProps {
   manga: Manga;
@@ -141,10 +137,10 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
           </div>
 
           {!!manga.description && (
-            <MangaDesc
+            <MangaDescription
               desc={manga.description}
-              height="64px"
-              maxHeight="64px"
+              height={64}
+              maxHeight={64}
             />
           )}
         </div>

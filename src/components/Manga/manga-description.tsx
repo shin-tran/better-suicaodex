@@ -5,24 +5,34 @@ import { cn } from "@/lib/utils";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 
-interface MangaDescProps {
+interface MangaDescriptionProps {
   desc: string;
-  height?: string;
-  maxHeight?: string;
+  height: number;
+  maxHeight: number;
 }
 
-const MangaDesc = ({ desc, height, maxHeight }: MangaDescProps) => {
+const MangaDescription = ({
+  desc,
+  height,
+  maxHeight,
+}: MangaDescriptionProps) => {
   const [expanded, setExpanded] = useState(false);
-  const [fullHeight, setFullHeight] = useState<string | undefined>(height);
+  const [fullHeight, setFullHeight] = useState<number>(height);
   const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (contentRef.current) {
+      setFullHeight(contentRef.current.scrollHeight);
+    }
+  }, []);
 
   useEffect(() => {
     if (expanded && contentRef.current) {
       setTimeout(() => {
         if (contentRef.current) {
-          setFullHeight(`${contentRef.current.scrollHeight}px`);
+          setFullHeight(contentRef.current.scrollHeight);
         }
-      }, 100); // Chờ 100ms để Markdown render xong
+      }, 100);
     }
   }, [expanded]);
 
@@ -82,36 +92,37 @@ const MangaDesc = ({ desc, height, maxHeight }: MangaDescProps) => {
       </div>
 
       {/* button */}
-
-      <div
-        className={cn(
-          "flex justify-center w-full h-full border-t transition-[border-color]",
-          expanded ? "border-transparent" : "border-primary"
-        )}
-      >
-        <Button
-          size="sm"
-          className="rounded-t-none h-4 px-1"
-          onClick={handleExpand}
-          variant={expanded ? "secondary" : "default"}
-        >
-          {expanded ? (
-            <>
-              <ChevronsUp />
-              thu gọn
-              <ChevronsUp />
-            </>
-          ) : (
-            <>
-              <ChevronsDown />
-              xem thêm
-              <ChevronsDown />
-            </>
+      {fullHeight > maxHeight && (
+        <div
+          className={cn(
+            "flex justify-center w-full h-full border-t transition-[border-color]",
+            expanded ? "border-transparent" : "border-primary"
           )}
-        </Button>
-      </div>
+        >
+          <Button
+            size="sm"
+            className="rounded-t-none h-4 px-1"
+            onClick={handleExpand}
+            variant={expanded ? "secondary" : "default"}
+          >
+            {expanded ? (
+              <>
+                <ChevronsUp />
+                thu gọn
+                <ChevronsUp />
+              </>
+            ) : (
+              <>
+                <ChevronsDown />
+                xem thêm
+                <ChevronsDown />
+              </>
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
 
-export default MangaDesc;
+export default MangaDescription;
