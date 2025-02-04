@@ -33,9 +33,9 @@ export default function RootLayout({
           enableColorScheme
         >
           <SidebarProvider defaultOpen={false}>
-            <div className="border-grid flex flex-1 flex-col mx-4 md:mx-8 lg:mx-12">
+            <div className="border-grid flex flex-1 flex-col">
               <SiteHeader />
-              <main>{children}</main>
+              <main className="mx-4 md:mx-8 lg:mx-12">{children}</main>
             </div>
 
             <AppSidebar side="right" />

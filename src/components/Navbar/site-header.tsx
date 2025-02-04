@@ -14,6 +14,7 @@ export function SiteHeader() {
     <header
       className={cn(
         "sticky top-0 z-50 w-full",
+        "px-4 md:px-8 lg:px-12",
         isAtTop && "bg-transparent",
         !isAtTop &&
           "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"

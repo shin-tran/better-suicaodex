@@ -43,7 +43,7 @@ const MangaCover: FC<MangaCoverProps> = ({
         wrapper
       )}
       style={{
-        aspectRatio: 5 / 7,
+        // aspectRatio: 5 / 7,
         backgroundImage: placeholder ? `url(${placeholder})` : undefined,
       }}
     >
@@ -77,6 +77,9 @@ const MangaCover: FC<MangaCoverProps> = ({
           {...props}
           fetchPriority={priority ? "high" : "auto"}
           loading={loading}
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = "/xidoco.jpg";
+          }}
         />
       </div>
     </div>

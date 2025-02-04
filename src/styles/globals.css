@@ -102,3 +102,38 @@ body {
     scrollbar-color: hsl(var(--border)) transparent;
   }
 }
+
+.transition-\[border-color\] {
+  transition-duration: 0.15s;
+  transition-property: border-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-\[max-height\,height\] {
+  transition-duration: 0.15s;
+  transition-property: max-height, height;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-\[max-height\] {
+  transition-duration: 0.15s;
+  transition-property: max-height;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-\[opacity\,color\,border-color\] {
+  transition-duration: 0.15s;
+  transition-property: opacity, color, border-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-\[outline-color\] {
+  transition-duration: 0.15s;
+  transition-property: outline-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.markdown-content {
+  display: block;
+  overflow: hidden;
+}
