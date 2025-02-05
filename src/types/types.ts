@@ -16,6 +16,18 @@ export type Artist = {
 export type Group = {
   id: string;
   name: string;
+  description: string | null;
+  website: string | null;
+  discord: string | null;
+  email: string | null;
+  twitter: string | null;
+  //   language: string[];
+  leader?: {
+    id: string;
+    username: string;
+  } | null;
+  repliesCount?: number;
+  totalUploaded?: number;
 };
 
 export type ContentRating = "safe" | "suggestive" | "erotica" | "pornographic";
@@ -43,23 +55,6 @@ export type Manga = {
   stats?: MangaStats;
 };
 
-export type Chapter = {
-  id: string;
-  vol: string;
-  chapter: string;
-  title: string;
-  updatedAt: string;
-  externalUrl?: string;
-  group: Group[];
-  language?: string;
-  pages?: string[];
-  manga: {
-    id: string;
-    title?: string;
-    cover?: string;
-  };
-};
-
 export type MangaStats = {
   rating: {
     bayesian: number;
@@ -79,4 +74,34 @@ export type MangaStats = {
   };
   follows: number;
   comments?: number;
+};
+
+export type Chapter = {
+  id: string;
+  vol: string;
+  chapter: string;
+  title: string;
+  updatedAt: string;
+  externalUrl?: string;
+  group: Group[];
+  language?: string;
+  pages?: string[];
+  manga: {
+    id: string;
+    title?: string;
+    cover?: string;
+  };
+};
+
+export type ChapterVolume = {
+  chapters: Chapter[];
+  total: number;
+};
+export type ChapterGroup = {
+  chapter: string;
+  group: Chapter[];
+};
+export type Volume = {
+  vol: string;
+  chapters: ChapterGroup[];
 };

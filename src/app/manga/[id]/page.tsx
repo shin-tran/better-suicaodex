@@ -1,5 +1,9 @@
 import MangaDetails from "@/components/Pages/manga-details";
 import { siteConfig } from "@/config/site";
+import {
+  getChapterVolume,
+  groupChaptersByVolume,
+} from "@/lib/mangadex/chapter";
 import { fetchMangaDetail } from "@/lib/mangadex/manga";
 import { Metadata } from "next";
 
@@ -47,6 +51,7 @@ export default async function Page(props: pageProps) {
   const params = await props.params;
   const { id } = params;
   const manga = await fetchMangaDetail(id);
+  //const { volumes, total } = await getChapterVolume(id, "vi", 100, 0);
 
   return <MangaDetails manga={manga} />;
 }

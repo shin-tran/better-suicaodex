@@ -35,7 +35,7 @@ export default function RootLayout({
           <SidebarProvider defaultOpen={false}>
             <div className="border-grid flex flex-1 flex-col">
               <SiteHeader />
-              <main className="mx-4 md:mx-8 lg:mx-12">{children}</main>
+              <main className="py-4 mx-4 md:mx-8 lg:mx-12">{children}</main>
             </div>
 
             <AppSidebar side="right" />

@@ -28,6 +28,7 @@ import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import MangaDescription from "../Manga/manga-description";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { ChapterList } from "../Chapter/ChapterList";
 
 interface MangaDetailsProps {
   manga: Manga;
@@ -41,7 +42,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
       <>
         <Background id={manga.id} src={manga.cover} />
         <div className="flex flex-col gap-4">
-          <div className="flex flex-row gap-4 mt-2">
+          <div className="flex flex-row gap-4">
             <MangaCover
               id={manga.id}
               cover={manga.cover}
@@ -166,7 +167,14 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
                 Bình luận
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="chapter">chương 1</TabsContent>
+            <TabsContent value="chapter">
+              <ChapterList
+                language="vi"
+                limit={100}
+                mangaID={manga.id}
+                finalChapter={manga.finalChapter}
+              />
+            </TabsContent>
             <TabsContent value="comment">mẹ mày</TabsContent>
           </Tabs>
         </div>
