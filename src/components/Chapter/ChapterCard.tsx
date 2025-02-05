@@ -1,0 +1,3 @@
+interface ChapterCardProps {
+  // chapter: Chapter;
+}
