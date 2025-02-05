@@ -53,17 +53,17 @@ const MangaCover: FC<MangaCoverProps> = ({
             <DialogTrigger className="flex opacity-0 hover:opacity-100 transition-opacity items-center justify-center absolute inset-0 bg-black bg-opacity-50 rounded cursor-pointer">
               <Expand size={55} color="white" />
             </DialogTrigger>
-            <DialogContent className="[&>button]:hidden bg-transparent border-none border-0 shadow-none">
+            <DialogContent className="[&>button]:hidden bg-transparent border-none border-0 shadow-none p-0 w-auto h-auto">
               <DialogTitle className="hidden"></DialogTitle>
               <DialogDescription className="hidden"></DialogDescription>
 
-              <div className="w-full h-full flex justify-center items-center relative">
+              <div className="max-w-screen-md max-h-screen flex justify-center items-center relative">
                 <img
                   src={
                     siteConfig.suicaodex.apiURL + "/covers/" + id + "/" + cover
                   }
                   alt={`Ảnh bìa ${alt}`}
-                  className="max-h-[95vh] w-auto"
+                  className="max-h-full max-w-full object-contain"
                 />
               </div>
             </DialogContent>
