@@ -1,18 +1,21 @@
-import { ChevronsDown, ChevronsUp } from "lucide-react";
+import { ChevronsDown, ChevronsUp, Loader2, Undo2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
+import { SiGoogletranslate } from "@icons-pack/react-simple-icons";
 
 interface MangaDescriptionProps {
-  desc: string;
+  content: string;
+  language: "en" | "vi";
   height: number;
   maxHeight: number;
 }
 
 const MangaDescription = ({
-  desc,
+  content,
+  language,
   height,
   maxHeight,
 }: MangaDescriptionProps) => {
@@ -20,11 +23,40 @@ const MangaDescription = ({
   const [fullHeight, setFullHeight] = useState<number>(height);
   const contentRef = useRef<HTMLDivElement>(null);
 
+  const [translated, setTranslated] = useState(false);
+  const [translatedDesc, setTranslatedDesc] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleTranslate = async () => {
+    if (!translatedDesc) {
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=vi&dt=t&q=${encodeURIComponent(
+            content
+          )}`
+        );
+        const data = await response.json();
+        const translatedText = data[0].map((part: any) => part[0]).join(""); // Gộp kết quả dịch
+        setTranslatedDesc(translatedText);
+      } catch (error) {
+        console.error("Lỗi dịch thuật:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    setTranslated(!translated);
+  };
+
   useEffect(() => {
     if (contentRef.current) {
-      setFullHeight(contentRef.current.scrollHeight);
+      setTimeout(() => {
+        if (contentRef.current) {
+          setFullHeight(contentRef.current.scrollHeight);
+        }
+      }, 100);
     }
-  }, []);
+  }, [translated, expanded]);
 
   useEffect(() => {
     if (expanded && contentRef.current) {
@@ -46,7 +78,7 @@ const MangaDescription = ({
       <div
         className="overflow-hidden transition-[max-height,height] text-sm"
         style={{
-          maxHeight: expanded ? fullHeight : maxHeight ?? height,
+          maxHeight: expanded ? fullHeight : maxHeight,
           height: expanded ? fullHeight : height,
           maskImage: expanded
             ? "none"
@@ -63,7 +95,6 @@ const MangaDescription = ({
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  //   style={{ textDecoration: "underline" }}
                   className="text-primary hover:underline"
                 >
                   {children}
@@ -86,8 +117,29 @@ const MangaDescription = ({
               td: ({ children }) => <td className="px-2 py-1">{children}</td>,
             }}
           >
-            {desc.replace(/   /g, "")}
+            {/* {content.replace(/   /g, "")} */}
+            {translated && translatedDesc ? translatedDesc : content}
           </ReactMarkdown>
+
+          {/* translate btn */}
+          {language === "en" && (
+            <Button
+              size="sm"
+              className="rounded-sm text-xs transition opacity-50 hover:opacity-100 mt-2"
+              onClick={handleTranslate}
+              variant="ghost"
+            >
+              {isLoading ? (
+                <Loader2 className="animate-spin" />
+              ) : translated ? (
+                <Undo2 />
+              ) : (
+                <SiGoogletranslate size={18} />
+              )}
+
+              {translated ? "Xem bản gốc" : "Dịch sang tiếng Việt"}
+            </Button>
+          )}
         </div>
       </div>
 

@@ -17,8 +17,8 @@ export async function generateMetadata(props: pageProps): Promise<Metadata> {
 
     return {
       title: `${mangaDetails.title} - SuicaoDex`,
-      description: mangaDetails.description
-        ? mangaDetails.description
+      description: mangaDetails.description.content
+        ? mangaDetails.description.content
         : `Đọc truyện ${mangaDetails.title} - SuicaoDex`,
       keywords: [
         `Manga`,
@@ -30,8 +30,8 @@ export async function generateMetadata(props: pageProps): Promise<Metadata> {
       openGraph: {
         title: `${mangaDetails.title} - SuicaoDex`,
         siteName: "SuicaoDex",
-        description: mangaDetails.description
-          ? mangaDetails.description
+        description: mangaDetails.description.content
+          ? mangaDetails.description.content
           : `Đọc truyện ${mangaDetails.title} - SuicaoDex`,
         images: `${siteConfig.mangadexAPI.ogURL}/manga/${mangaDetails.id}`,
       },

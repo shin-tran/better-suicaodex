@@ -25,6 +25,7 @@ import {
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import MangaDescription from "../Manga/manga-description";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 interface MangaDetailsProps {
   manga: Manga;
@@ -68,6 +69,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
               {!!manga.stats && <MangaStatsComponent stats={manga.stats} />}
             </div>
           </div>
+
           <div className="flex flex-wrap gap-1">
             <Tags
               tags={manga.tags}
@@ -136,13 +138,27 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
             </Button> */}
           </div>
 
-          {!!manga.description && (
+          {!!manga.description.content && (
             <MangaDescription
-              desc={manga.description}
-              height={64}
-              maxHeight={64}
+              content={manga.description.content}
+              language={manga.description.language}
+              height={72}
+              maxHeight={72}
             />
           )}
+
+          <Tabs defaultValue="chapter">
+            <TabsList className="rounded-sm w-full">
+              <TabsTrigger value="chapter" className="rounded-sm w-full">
+                Danh sách chương
+              </TabsTrigger>
+              <TabsTrigger value="comment" className="rounded-sm w-full">
+                Bình luận
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="chapter">chương 1</TabsContent>
+            <TabsContent value="comment">mẹ mày</TabsContent>
+          </Tabs>
         </div>
       </>
     );
@@ -156,7 +172,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
           id={manga.id}
           cover={manga.cover}
           alt={manga.title}
-          placeholder="/doro_think.webp"
+          //placeholder="/doro_think.webp"
           loading="lazy"
           className="max-w-[200px] shadow-md"
           wrapper="max-w-[200px]"

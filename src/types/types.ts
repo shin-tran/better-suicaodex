@@ -13,6 +13,11 @@ export type Artist = {
   name: string;
 };
 
+export type Group = {
+  id: string;
+  name: string;
+};
+
 export type ContentRating = "safe" | "suggestive" | "erotica" | "pornographic";
 export type Status = "ongoing" | "completed" | "cancelled" | "hiatus";
 
@@ -25,7 +30,10 @@ export type Manga = {
   author: Author[];
   artist: Artist[];
   language: string[];
-  description: string;
+  description: {
+    language: "en" | "vi";
+    content: string;
+  };
   contentRating: ContentRating;
   status: Status;
   raw?: string;
@@ -33,6 +41,23 @@ export type Manga = {
   finalChapter?: string;
   latestChapter?: string;
   stats?: MangaStats;
+};
+
+export type Chapter = {
+  id: string;
+  vol: string;
+  chapter: string;
+  title: string;
+  updatedAt: string;
+  externalUrl?: string;
+  group: Group[];
+  language?: string;
+  pages?: string[];
+  manga: {
+    id: string;
+    title?: string;
+    cover?: string;
+  };
 };
 
 export type MangaStats = {

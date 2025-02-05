@@ -41,6 +41,16 @@ export function MangaParser(data: any): Manga {
   }
 
   const language = data.attributes.availableTranslatedLanguages;
+  const description: { language: "vi" | "en"; content: string } = data
+    .attributes.description.vi
+    ? {
+        language: "vi",
+        content: data.attributes.description.vi,
+      }
+    : {
+        language: "en",
+        content: data.attributes.description.en,
+      };
 
   const coverArt = data.relationships.find(
     (item: any) => item.type === "cover_art"
@@ -58,9 +68,7 @@ export function MangaParser(data: any): Manga {
     cover: coverArt ? coverArt.attributes.fileName : null,
     author: author,
     artist: artist,
-    description: data.attributes.description.vi
-      ? data.attributes.description.vi
-      : data.attributes.description.en,
+    description: description,
     contentRating: contentRating,
     status: status,
     raw:
