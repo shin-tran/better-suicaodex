@@ -14,7 +14,9 @@ import {
   Bug,
   Ellipsis,
   LibraryBig,
+  List,
   ListPlus,
+  MessageSquare,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -149,10 +151,18 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
 
           <Tabs defaultValue="chapter">
             <TabsList className="rounded-sm w-full">
-              <TabsTrigger value="chapter" className="rounded-sm w-full">
+              <TabsTrigger
+                value="chapter"
+                className="rounded-sm w-full flex gap-1"
+              >
+                <List size={20} />
                 Danh sách chương
               </TabsTrigger>
-              <TabsTrigger value="comment" className="rounded-sm w-full">
+              <TabsTrigger
+                value="comment"
+                className="rounded-sm w-full flex gap-1"
+              >
+                <MessageSquare size={20} />
                 Bình luận
               </TabsTrigger>
             </TabsList>
