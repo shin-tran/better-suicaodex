@@ -1,5 +1,7 @@
 import { Icons } from "@/components/icons";
 
+/* eslint-disable  @typescript-eslint/no-empty-object-type */
+
 export interface NavItem {
   title: string;
   href?: string;

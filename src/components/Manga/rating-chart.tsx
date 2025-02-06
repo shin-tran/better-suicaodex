@@ -1,12 +1,7 @@
 "use client";
 
-import { Bar, BarChart, LabelList, XAxis, YAxis } from "recharts";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import { Bar, BarChart, XAxis, YAxis } from "recharts";
+import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { MangaStats } from "@/types/types";
 import millify from "millify";
 

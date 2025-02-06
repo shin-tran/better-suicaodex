@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, Inter_Tight } from "next/font/google";
+import { Inter } from "next/font/google";
 import "@/styles/globals.css";
 import "@/styles/themes.css";
 import { SidebarProvider } from "@/components/ui/sidebar";

@@ -1,9 +1,5 @@
 import MangaDetails from "@/components/Pages/manga-details";
 import { siteConfig } from "@/config/site";
-import {
-  getChapterVolume,
-  groupChaptersByVolume,
-} from "@/lib/mangadex/chapter";
 import { fetchMangaDetail } from "@/lib/mangadex/manga";
 import { Metadata } from "next";
 

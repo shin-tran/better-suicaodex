@@ -1,6 +1,6 @@
 import { ChevronsDown, ChevronsUp, Loader2, Undo2 } from "lucide-react";
 import { Button } from "../ui/button";
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
@@ -37,7 +37,9 @@ const MangaDescription = ({
           )}`
         );
         const data = await response.json();
-        const translatedText = data[0].map((part: any) => part[0]).join(""); // Gộp kết quả dịch
+        const translatedText = data[0]
+          .map((part: any) => part[0])
+          .join(""); /* eslint-disable  @typescript-eslint/no-explicit-any */
         setTranslatedDesc(translatedText);
       } catch (error) {
         console.error("Lỗi dịch thuật:", error);

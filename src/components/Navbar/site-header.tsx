@@ -5,7 +5,6 @@ import { SidebarTrigger } from "../ui/sidebar";
 import { cn } from "@/lib/utils";
 import { ModeSwitcher } from "./mode-switcher";
 import { Search } from "lucide-react";
-import { useScrollDirection } from "@/hooks/use-scroll-direction";
 import useScrollOffset from "@/hooks/use-scroll-offset";
 
 export function SiteHeader() {

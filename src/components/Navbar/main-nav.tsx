@@ -2,14 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { siteConfig } from "@/config/site";
-import { Icons } from "@/components/icons";
 import useScrollOffset from "@/hooks/use-scroll-offset";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export function MainNav() {
-  const pathname = usePathname();
   const { isAtTop } = useScrollOffset();
   const isMobile = useIsMobile();
 

@@ -5,7 +5,7 @@ import { Clock, MessageSquare, Users } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { cn, formatTimeToNow } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 interface ChapterCardProps {
   chapters: ChapterGroup;
@@ -13,7 +13,7 @@ interface ChapterCardProps {
 }
 
 export const ChapterCard = ({ chapters, finalChapter }: ChapterCardProps) => {
-  const router = useRouter();
+  // const router = useRouter();
   if (chapters.group.length > 1) return <p> 2 con mẹ mày</p>;
 
   return (

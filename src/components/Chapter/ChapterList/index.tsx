@@ -48,6 +48,12 @@ export const ChapterList = ({
     fetchData();
   }, [currentPage]);
 
+  if (fetchFailed) return <p>Failed to fetch data</p>;
+
+  if (isLoading) return <p>Loading...</p>;
+
+  if (totalPages === 0) return <p>No chapters found</p>;
+  if (totalPages > 1000) setCurrentPage(1000); //temporary for testing
   return (
     <div className="flex flex-col gap-2">
       {volume.length > 0 &&
