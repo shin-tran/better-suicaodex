@@ -1,33 +1,89 @@
 "use client";
-import { ChapterGroup } from "@/types/types";
+import { Chapter, ChapterGroup } from "@/types/types";
 import { Card } from "../../ui/card";
-import { Clock, MessageSquare, Users } from "lucide-react";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Clock, ExternalLink, MessageSquare, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { cn, formatTimeToNow } from "@/lib/utils";
-// import { useRouter } from "next/navigation";
-
+import { useRouter } from "next/navigation";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { ComponentProps } from "react";
 interface ChapterCardProps {
   chapters: ChapterGroup;
   finalChapter?: string;
 }
 
-export const ChapterCard = ({ chapters, finalChapter }: ChapterCardProps) => {
-  // const router = useRouter();
-  if (chapters.group.length > 1) return <p> 2 con mẹ mày</p>;
+interface SingleCardProps {
+  chapter: Chapter;
+  finalChapter?: string;
+  className?: string;
+}
 
+export const ChapterCard = ({ chapters, finalChapter }: ChapterCardProps) => {
+  if (chapters.group.length > 1)
+    return (
+      <Accordion
+        type="multiple"
+        className="w-full bg-card shadow-sm border rounded-[0.125rem]"
+        defaultValue={["item-1"]}
+      >
+        <AccordionItem value="item-1" className="border-none">
+          <AccordionTrigger className="p-1.5 [&[data-state=open]]:border-b">
+            <p className="font-semibold text-sm md:text-base line-clamp-1">
+              {chapters.chapter ? `Chapter ${chapters.chapter}` : "Oneshot"}
+            </p>
+          </AccordionTrigger>
+          {chapters.group.map((chapter, index) => (
+            <AccordionContent key={chapter.id} className="pb-0">
+              <div className="pl-6">
+                <SingleCard
+                  chapter={chapter}
+                  finalChapter={finalChapter}
+                  className={cn(
+                    "border-r-0 shadow-none border-b-0 rounded-none",
+                    index === 0 && "border-t-0"
+                  )}
+                />
+              </div>
+            </AccordionContent>
+          ))}
+        </AccordionItem>
+      </Accordion>
+    );
+
+  return <SingleCard chapter={chapters.group[0]} finalChapter={finalChapter} />;
+};
+
+const SingleCard = ({ chapter, finalChapter, className }: SingleCardProps) => {
+  const router = useRouter();
   return (
-    <Link suppressHydrationWarning href={`/chapter/${chapters.group[0].id}`}>
-      <Card className="flex flex-col justify-between rounded-none px-1.5 py-1.5 shadow-sm relative min-h-14 hover:bg-accent">
+    <Link
+      suppressHydrationWarning
+      href={
+        chapter.externalUrl ? chapter.externalUrl : `/chapter/${chapter.id}`
+      }
+    >
+      <Card
+        className={cn(
+          "flex flex-col justify-between rounded-[0.125rem] px-1.5 py-1.5 shadow-sm relative min-h-14 hover:bg-accent",
+          className && className
+        )}
+      >
         <div className="flex justify-between">
           <div className="flex items-center space-x-1">
+            {chapter.externalUrl && <ExternalLink size={16} />}
             <p className="font-semibold text-sm md:text-base line-clamp-1">
-              {chapters.chapter
-                ? `Ch. ${chapters.chapter}
-        ${chapters.group[0].title ? ` - ${chapters.group[0].title}` : ""}`
+              {chapter.chapter
+                ? `Ch. ${chapter.chapter}
+      ${chapter.title ? ` - ${chapter.title}` : ""}`
                 : "Oneshot"}
             </p>
-            {finalChapter && finalChapter === chapters.chapter && (
+            {finalChapter && finalChapter === chapter.chapter && (
               <span className="text-[0.625rem] font-bold bg-primary rounded-sm px-1">
                 END
               </span>
@@ -45,39 +101,39 @@ export const ChapterCard = ({ chapters, finalChapter }: ChapterCardProps) => {
         <div className="flex justify-between">
           <div className="flex items-center">
             <Users size={16} />
-            {chapters.group[0].group.length === 0 ? (
+            {chapter.group.length === 0 ? (
               <span className="line-clamp-1 font-normal text-xs px-[0.25rem]">
                 No Group
               </span>
             ) : (
-              chapters.group[0].group.map((group) => (
-                <Link
-                  className={cn(
-                    buttonVariants({
-                      variant: "ghost",
-                      className:
-                        "line-clamp-1 font-normal rounded-sm h-4 py-0 px-[0.25rem] hover:underline hover:text-primary",
-                      size: "sm",
-                    })
-                  )}
-                  href={`/groups/${group.id}`}
-                  key={group.id}
-                >
-                  {group.name}
-                </Link>
-                // <Button
+              chapter.group.map((group) => (
+                // <Link
+                //   className={cn(
+                //     buttonVariants({
+                //       variant: "ghost",
+                //       className:
+                //         "line-clamp-1 font-normal rounded-sm h-4 py-0 px-[0.25rem] hover:underline hover:text-primary",
+                //       size: "sm",
+                //     })
+                //   )}
+                //   href={`/groups/${group.id}`}
                 //   key={group.id}
-                //   variant="ghost"
-                //   className="line-clamp-1 font-normal rounded-sm h-4 py-0 px-[0.25rem] hover:underline hover:text-primary"
-                //   size="sm"
-                //   onClick={(e: React.MouseEvent) => {
-                //     e.preventDefault();
-                //     e.stopPropagation();
-                //     router.push(`/groups/${group.id}`);
-                //   }}
                 // >
                 //   {group.name}
-                // </Button>
+                // </Link>
+                <Button
+                  key={group.id}
+                  variant="ghost"
+                  className="line-clamp-1 font-normal rounded-sm h-4 py-0 px-[0.25rem] hover:underline hover:text-primary"
+                  size="sm"
+                  onClick={(e: React.MouseEvent) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    router.push(`/groups/${group.id}`);
+                  }}
+                >
+                  {group.name}
+                </Button>
               ))
             )}
           </div>
@@ -85,9 +141,9 @@ export const ChapterCard = ({ chapters, finalChapter }: ChapterCardProps) => {
             <Clock size={16} />
             <time
               className="text-xs font-light line-clamp-1"
-              dateTime={new Date(chapters.group[0].updatedAt).toDateString()}
+              dateTime={new Date(chapter.updatedAt).toDateString()}
             >
-              {formatTimeToNow(new Date(chapters.group[0].updatedAt))}
+              {formatTimeToNow(new Date(chapter.updatedAt))}
             </time>
           </div>
         </div>

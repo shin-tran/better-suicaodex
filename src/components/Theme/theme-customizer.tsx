@@ -25,7 +25,7 @@ export function ThemeCustomizer() {
   // const [config, setConfig] = useConfig();
   // const { resolvedTheme: mode } = useTheme();
   const [mounted, setMounted] = React.useState(false);
-  console.log(mounted);
+
   React.useEffect(() => {
     setMounted(true);
   }, []);
