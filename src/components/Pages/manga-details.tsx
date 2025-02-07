@@ -29,6 +29,7 @@ import { siteConfig } from "@/config/site";
 import MangaDescription from "../Manga/manga-description";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { ChapterList } from "../Chapter/ChapterList";
+import { useConfig } from "@/hooks/use-config";
 
 interface MangaDetailsProps {
   manga: Manga;
@@ -36,6 +37,7 @@ interface MangaDetailsProps {
 
 export default function MangaDetails({ manga }: MangaDetailsProps) {
   const isMobile = useIsMobile();
+  const [config] = useConfig();
 
   if (isMobile)
     return (
@@ -94,7 +96,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
                   <Ellipsis />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
+              <DropdownMenuContent className={`theme-${config.theme}`}>
                 <DropdownMenuItem>
                   <Link
                     href={`${siteConfig.mangadexAPI.webURL}/title/${manga.id}`}
@@ -190,7 +192,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
             cover={manga.cover}
             alt={manga.title}
             placeholder="/xidoco.jpg"
-            //className="shadow-lg"
+            className="shadow-lg"
             wrapper="max-w-[200px]"
             isExpandable
             //priority
