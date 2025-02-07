@@ -38,7 +38,7 @@ const MangaCover: FC<MangaCoverProps> = ({
       <div className="relative">
         {isExpandable && (
           <Dialog>
-            <DialogTrigger className="z-10 flex opacity-0 hover:opacity-100 transition-opacity items-center justify-center absolute inset-0 bg-black bg-opacity-50 rounded cursor-pointer">
+            <DialogTrigger className="z-10 flex opacity-0 hover:opacity-100 transition-opacity items-center justify-center absolute inset-0 bg-black bg-opacity-50 rounded-sm cursor-pointer">
               <Expand size={50} color="white" />
             </DialogTrigger>
             <DialogContent className="[&>button]:hidden bg-transparent border-none border-0 shadow-none p-0 w-auto h-auto">
@@ -58,6 +58,7 @@ const MangaCover: FC<MangaCoverProps> = ({
             </DialogContent>
           </Dialog>
         )}
+
         <LazyLoadImage
           wrapperClassName="!block bg-cover bg-no-repeat bg-center rounded-sm"
           placeholderSrc={placeholder}
