@@ -170,7 +170,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
             <TabsContent value="chapter">
               <ChapterList
                 language="vi"
-                limit={50}
+                limit={15}
                 mangaID={manga.id}
                 finalChapter={manga.finalChapter}
               />
