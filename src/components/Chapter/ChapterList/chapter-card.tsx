@@ -12,7 +12,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ComponentProps } from "react";
+
 interface ChapterCardProps {
   chapters: ChapterGroup;
   finalChapter?: string;
@@ -30,9 +30,9 @@ export const ChapterCard = ({ chapters, finalChapter }: ChapterCardProps) => {
       <Accordion
         type="multiple"
         className="w-full bg-card shadow-sm border rounded-[0.125rem]"
-        defaultValue={["item-1"]}
+        defaultValue={["chapter"]}
       >
-        <AccordionItem value="item-1" className="border-none">
+        <AccordionItem value="chapter" className="border-none">
           <AccordionTrigger className="p-1.5 [&[data-state=open]]:border-b">
             <p className="font-semibold text-sm md:text-base line-clamp-1">
               {chapters.chapter ? `Chapter ${chapters.chapter}` : "Oneshot"}
