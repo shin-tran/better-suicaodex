@@ -17,6 +17,7 @@ import {
   List,
   ListPlus,
   MessageSquare,
+  Share2,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -51,7 +52,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
               alt={manga.title}
               placeholder="/xidoco.jpg"
               className="shadow-lg"
-              wrapper="max-w-[130px]"
+              wrapper="max-w-[130px] min-w-[130px]"
               isExpandable
             />
 
@@ -84,6 +85,10 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
           <div className="flex flex-grow gap-2 ">
             <Button size="icon" className="rounded-sm grow-0">
               <ListPlus />
+            </Button>
+
+            <Button size="icon" className="rounded-sm grow-0">
+              <Share2 />
             </Button>
 
             <DropdownMenu>
@@ -193,7 +198,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
             alt={manga.title}
             placeholder="/xidoco.jpg"
             className="shadow-lg"
-            wrapper="max-w-[200px]"
+            wrapper="max-w-[200px] min-w-[200px]"
             isExpandable
             //priority
           />
