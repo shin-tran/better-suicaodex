@@ -11,6 +11,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import useSWR from "swr";
+import { Loader2 } from "lucide-react";
 
 interface ChapterListProps {
   mangaID: string;
@@ -28,41 +30,45 @@ export const ChapterList = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [volume, setVolume] = useState<Volume[]>([]);
   const [totalPages, setTotalPages] = useState(0);
-  const [fetchFailed, setFetchFailed] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
   const offset = (currentPage - 1) * limit;
 
+  const { data, error, isLoading } = useSWR(
+    [mangaID, language, limit, offset],
+    ([mangaID, language, limit, offset]) =>
+      getChapterVolume(mangaID, language, limit, offset),
+    {
+      refreshInterval: 1000 * 60 * 5,
+    }
+  );
+
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const { volumes, total } = await getChapterVolume(
-          mangaID,
-          language,
-          limit,
-          offset
-        );
-        console.log(volumes);
-        setVolume(volumes);
-        setTotalPages(Math.ceil(total / limit));
-      } catch (error) {
-        console.log(error);
-        setFetchFailed(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    if (data) {
+      setVolume(data.volumes);
+      setTotalPages(Math.ceil(data.total / limit));
+    }
+  }, [data]);
 
-    fetchData();
-  }, [currentPage]);
+  if (isLoading)
+    return (
+      <div className="flex justify-center items-center w-full h-16">
+        <Loader2 className="animate-spin w-8 h-8" />
+      </div>
+    );
 
-  if (fetchFailed) return <p>Failed to fetch data</p>;
+  if (error)
+    return (
+      <div className="flex justify-center items-center w-full h-16 bg-secondary rounded-sm">
+        <p className="font-semibold">Có lỗi xảy ra, vui lòng thử lại sau!</p>
+      </div>
+    );
 
-  if (isLoading) return <p>Loading...</p>;
+  if (totalPages === 0)
+    return (
+      <div className="flex justify-center items-center w-full h-16 bg-secondary rounded-sm">
+        <p className="font-semibold">Truyện này chưa có chương nào!</p>
+      </div>
+    );
 
-  if (totalPages === 0) return <p>No chapters found</p>;
-  if (totalPages > 1000) setCurrentPage(1000); //temporary for testing
   return (
     <>
       <div className="flex flex-col gap-0">

@@ -1,4 +1,3 @@
-import { CardsStats } from "@/components/stats";
 import Image from "next/image";
 
 export default function Home() {
@@ -13,12 +12,6 @@ export default function Home() {
           height={38}
           priority
         />
-
-        <CardsStats />
-        <CardsStats />
-        <CardsStats />
-        <CardsStats />
-        <CardsStats />
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a

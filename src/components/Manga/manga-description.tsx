@@ -75,7 +75,7 @@ const MangaDescription = ({
   };
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col">
       {/* content */}
       <div
         className="overflow-hidden transition-[max-height,height] text-sm"

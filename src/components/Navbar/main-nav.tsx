@@ -26,7 +26,7 @@ export function MainNav() {
           alt="SuicaoDex"
           className={cn(
             "h-[22px] w-auto drop-shadow-md dark:invert",
-            isAtTop && isMobile ? "" : "invert"
+            isAtTop && !isMobile && "invert"
           )}
         />
         {/* <span  className="font-bold inline-block">{siteConfig.name}</span> */}
