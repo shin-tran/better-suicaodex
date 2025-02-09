@@ -62,7 +62,7 @@ export const ChapterList = ({
       </div>
     );
 
-  if (totalPages === 0)
+  if (totalPages === 0 && !data)
     return (
       <div className="flex justify-center items-center w-full h-16 bg-secondary rounded-sm">
         <p className="font-semibold">Truyện này chưa có chương nào!</p>
