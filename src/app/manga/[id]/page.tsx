@@ -1,53 +1,68 @@
+import MangaNotFound from "@/components/Manga/manga-notfound";
 import MangaDetails from "@/components/Pages/manga-details";
 import { siteConfig } from "@/config/site";
 import { fetchMangaDetail } from "@/lib/mangadex/manga";
+import { Manga } from "@/types/types";
 import { Metadata } from "next";
 
-interface pageProps {
+interface PageProps {
   params: Promise<{
     id: string;
   }>;
 }
 
-export async function generateMetadata(props: pageProps): Promise<Metadata> {
-  const params = await props.params;
-  const { id } = params;
-  try {
-    const mangaDetails = await fetchMangaDetail(id);
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  const { status, manga } = await getMangaData(id);
 
-    return {
-      title: `${mangaDetails.title} - SuicaoDex`,
-      description: mangaDetails.description.content
-        ? mangaDetails.description.content
-        : `Đọc truyện ${mangaDetails.title} - SuicaoDex`,
-      keywords: [
-        `Manga`,
-        `${mangaDetails.title}`,
-        "SuicaoDex",
-        `${mangaDetails.altTitle}`,
-      ],
-
-      openGraph: {
-        title: `${mangaDetails.title} - SuicaoDex`,
-        siteName: "SuicaoDex",
-        description: mangaDetails.description.content
-          ? mangaDetails.description.content
-          : `Đọc truyện ${mangaDetails.title} - SuicaoDex`,
-        images: `${siteConfig.mangadexAPI.ogURL}/manga/${mangaDetails.id}`,
-      },
-    };
-  } catch (error) {
-    return {
-      title: "404 Not Found",
-    };
+  if (status === 404) {
+    return { title: "Không tìm thấy trang yêu cầu" };
+  } else if (status === 503) {
+    return { title: "Đang bảo trì..." };
+  } else if (status !== 200 || !manga) {
+    return { title: "Lỗi mất rồi :(" };
   }
+
+  const description =
+    manga.description.content || `Đọc truyện ${manga.title} - SuicaoDex`;
+
+  return {
+    title: `${manga.title} - SuicaoDex`,
+    description,
+    keywords: [`Manga`, manga.title, "SuicaoDex", manga.altTitle || ""],
+    openGraph: {
+      title: `${manga.title} - SuicaoDex`,
+      siteName: "SuicaoDex",
+      description,
+      images: `${siteConfig.mangadexAPI.ogURL}/manga/${manga.id}`,
+    },
+  };
 }
 
-export default async function Page(props: pageProps) {
-  const params = await props.params;
-  const { id } = params;
-  const manga = await fetchMangaDetail(id);
-  //const { volumes, total } = await getChapterVolume(id, "vi", 100, 0);
+export default async function Page({ params }: PageProps) {
+  const { id } = await params;
+  const { status, manga } = await getMangaData(id);
+
+  if (status === 404) {
+    return <MangaNotFound />;
+  } else if (status === 503) {
+    return <div>Đang bảo trì...</div>;
+  } else if (status !== 200 || !manga) {
+    return <div>Lỗi mất rồi :(</div>;
+  }
 
   return <MangaDetails manga={manga} />;
+}
+
+async function getMangaData(
+  id: string
+): Promise<{ status: number; manga: Manga | null }> {
+  try {
+    const mangaData = await fetchMangaDetail(id);
+    return { status: 200, manga: mangaData };
+  } catch (error: any) {
+    return { status: error.status || 500, manga: null };
+  }
 }

@@ -2,13 +2,14 @@ import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
 interface BackgroundProps {
-  id: string;
+  id?: string;
   src: string;
 }
 
 export default function Background({ id, src }: BackgroundProps) {
-  const coverURL =
-    siteConfig.suicaodex.apiURL + "/covers/" + id + "/" + src + ".256.jpg";
+  const coverURL = id
+    ? siteConfig.suicaodex.apiURL + "/covers/" + id + "/" + src + ".256.jpg"
+    : src;
 
   return (
     <>
