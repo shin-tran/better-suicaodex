@@ -157,7 +157,6 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
             <MangaDescription
               content={manga.description.content}
               language={manga.description.language}
-              height={72}
               maxHeight={72}
             />
           )}
@@ -328,7 +327,6 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
           <MangaDescription
             content={manga.description.content}
             language={manga.description.language}
-            height={100}
             maxHeight={100}
           />
         )}

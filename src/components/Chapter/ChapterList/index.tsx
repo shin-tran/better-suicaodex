@@ -57,14 +57,14 @@ export const ChapterList = ({
 
   if (error)
     return (
-      <div className="flex justify-center items-center w-full h-16 bg-secondary rounded-sm">
+      <div className="flex justify-center items-center w-full h-16 bg-secondary rounded-sm mt-4">
         <p className="font-semibold">Có lỗi xảy ra, vui lòng thử lại sau!</p>
       </div>
     );
 
   if (data?.total === 0)
     return (
-      <div className="flex justify-center items-center w-full h-16 bg-secondary rounded-sm">
+      <div className="flex justify-center items-center w-full h-16 bg-secondary rounded-sm mt-4">
         <p className="font-semibold">Truyện này chưa có chương nào!</p>
       </div>
     );

@@ -9,18 +9,16 @@ import { SiGoogletranslate } from "@icons-pack/react-simple-icons";
 interface MangaDescriptionProps {
   content: string;
   language: "en" | "vi";
-  height: number;
   maxHeight: number;
 }
 
 const MangaDescription = ({
   content,
   language,
-  height,
   maxHeight,
 }: MangaDescriptionProps) => {
   const [expanded, setExpanded] = useState(false);
-  const [fullHeight, setFullHeight] = useState<number>(height);
+  const [fullHeight, setFullHeight] = useState<number>(0);
   const contentRef = useRef<HTMLDivElement>(null);
 
   const [translated, setTranslated] = useState(false);
@@ -78,13 +76,14 @@ const MangaDescription = ({
     <div className="flex flex-col gap-1">
       {/* content */}
       <div
-        className="overflow-hidden transition-[max-height,height] text-sm !h-auto"
+        className="overflow-hidden transition-[max-height,height] text-sm"
         style={{
           maxHeight: expanded ? fullHeight : maxHeight,
-          height: expanded ? fullHeight : height,
-          maskImage: expanded
-            ? "none"
-            : "linear-gradient(black 0%, black 60%, transparent 100%)",
+          height: expanded ? fullHeight : "auto",
+          maskImage:
+            expanded || fullHeight < maxHeight
+              ? "none"
+              : "linear-gradient(black 0%, black 60%, transparent 100%)",
         }}
       >
         <div ref={contentRef}>
