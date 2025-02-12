@@ -2,7 +2,7 @@
 
 import { Manga } from "@/types/types";
 import MangaCover from "../Manga/manga-cover";
-import Background from "../Manga/background";
+import Banner from "../Manga/manga-banner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { MangaStatsComponent } from "../Manga/manga-stats";
 import { cn } from "@/lib/utils";
@@ -43,7 +43,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
   if (isMobile)
     return (
       <>
-        <Background id={manga.id} src={manga.cover} />
+        <Banner id={manga.id} src={manga.cover} />
         <div className="flex flex-col gap-4">
           <div className="flex flex-row gap-4">
             <div className="relative">
@@ -51,7 +51,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
                 id={manga.id}
                 cover={manga.cover}
                 alt={manga.title}
-                placeholder="/xidoco.jpg"
+                placeholder="/images/xidoco.jpg"
                 className="shadow-md drop-shadow-md"
                 wrapper="w-[130px] h-auto"
                 isExpandable
@@ -196,7 +196,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
 
   return (
     <>
-      <Background id={manga.id} src={manga.cover} />
+      <Banner id={manga.id} src={manga.cover} />
 
       <div className="flex flex-col gap-4">
         <div className="flex flex-row gap-4">
@@ -205,7 +205,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
               id={manga.id}
               cover={manga.cover}
               alt={manga.title}
-              placeholder="/xidoco.jpg"
+              placeholder="/images/xidoco.jpg"
               className="shadow-md drop-shadow-md"
               wrapper="w-[200px] h-auto"
               isExpandable
@@ -327,7 +327,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
           <MangaDescription
             content={manga.description.content}
             language={manga.description.language}
-            maxHeight={100}
+            maxHeight={234}
           />
         )}
 

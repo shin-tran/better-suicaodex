@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+//import { usePathname } from "next/navigation";
 import useScrollOffset from "@/hooks/use-scroll-offset";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -12,7 +12,10 @@ export function MainNav() {
 
   return (
     <div>
-      <Link href="/" className="mr-4 flex items-center gap-1 lg:mr-6">
+      <Link
+        href="/"
+        className="mr-4 flex items-center gap-1 justify-start lg:mr-6"
+      >
         {/* <Icons.logo className="h-6 w-6" /> */}
         {/* <img
           src="/doro.webp"
@@ -21,11 +24,11 @@ export function MainNav() {
           className="h-10 w-auto pb-1 -ml-1"
         /> */}
         <img
-          src="/scd.webp"
+          src="/suicaodex.webp"
           fetchPriority="high"
           alt="SuicaoDex"
           className={cn(
-            "h-[22px] w-auto drop-shadow-md dark:invert",
+            "h-[22px] w-auto drop-shadow-md dark:invert hidden xs:flex",
             isAtTop && !isMobile && "invert"
           )}
         />

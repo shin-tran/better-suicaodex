@@ -1,24 +1,24 @@
 import Link from "next/link";
-import { Button, buttonVariants } from "../ui/button";
-import Background from "./background";
+import { buttonVariants } from "../ui/button";
+import Banner from "./manga-banner";
 import { cn } from "@/lib/utils";
 
 export default function MangaNotFound() {
   return (
     <>
-      <Background src="/xidoco.jpg" />
+      <Banner src="/images/xidoco.jpg" />
       <div className="flex flex-col gap-4">
-        <div className="flex flex-row items-start gap-4">
+        <div className="flex flex-row items-start gap-6">
           <img
-            src="/xidoco.jpg"
+            src="/images/xidoco.jpg"
             alt="xidoco"
             className="w-[130px] md:w-[200px] h-auto rounded-sm drop-shadow-md shadow-md"
           />
-          <p className="uppercase font-black text-3xl md:text-5xl drop-shadow-lg md:text-white">
-            Truyện không tồn tại
-          </p>
         </div>
 
+        <p className="uppercase font-black text-3xl drop-shadow-lg text-center">
+          Truyện bạn đang tìm không tồn tại!
+        </p>
         <Link
           href="/"
           className={cn(

@@ -80,10 +80,9 @@ const MangaDescription = ({
         style={{
           maxHeight: expanded ? fullHeight : maxHeight,
           height: expanded ? fullHeight : "auto",
-          maskImage:
-            expanded || fullHeight < maxHeight
-              ? "none"
-              : "linear-gradient(black 0%, black 60%, transparent 100%)",
+          maskImage: expanded
+            ? "none"
+            : "linear-gradient(black 0%, black 60%, transparent 100%)",
         }}
       >
         <div ref={contentRef}>

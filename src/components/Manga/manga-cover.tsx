@@ -72,7 +72,7 @@ const MangaCover: FC<MangaCoverProps> = ({
         alt={`Ảnh bìa ${alt}`}
         onLoad={() => setLoaded(true)}
         onError={(e) => {
-          e.currentTarget.src = "/xidoco.jpg";
+          e.currentTarget.src = "/images/xidoco.jpg";
         }}
         {...props}
       />

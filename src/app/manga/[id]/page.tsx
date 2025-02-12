@@ -1,3 +1,4 @@
+import MangaMaintain from "@/components/Manga/manga-maintain";
 import MangaNotFound from "@/components/Manga/manga-notfound";
 import MangaDetails from "@/components/Pages/manga-details";
 import { siteConfig } from "@/config/site";
@@ -18,7 +19,7 @@ export async function generateMetadata({
   const { status, manga } = await getMangaData(id);
 
   if (status === 404) {
-    return { title: "Không tìm thấy trang yêu cầu" };
+    return { title: "Truyện không tồn tại" };
   } else if (status === 503) {
     return { title: "Đang bảo trì..." };
   } else if (status !== 200 || !manga) {
@@ -48,7 +49,7 @@ export default async function Page({ params }: PageProps) {
   if (status === 404) {
     return <MangaNotFound />;
   } else if (status === 503) {
-    return <div>Đang bảo trì...</div>;
+    return <MangaMaintain />;
   } else if (status !== 200 || !manga) {
     return <div>Lỗi mất rồi :(</div>;
   }
