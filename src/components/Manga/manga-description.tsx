@@ -89,8 +89,6 @@ const MangaDescription = ({
     setState((prev) => ({ ...prev, expanded: !prev.expanded }));
   };
 
-  console.log(state.fullHeight, maxHeight);
-
   return (
     <div className="relative flex flex-col gap-1">
       <div
