@@ -61,6 +61,7 @@ export const ChapterCard = ({ chapters, finalChapter }: ChapterCardProps) => {
 
 const SingleCard = ({ chapter, finalChapter, className }: SingleCardProps) => {
   const router = useRouter();
+
   return (
     <Link
       suppressHydrationWarning
@@ -76,6 +77,21 @@ const SingleCard = ({ chapter, finalChapter, className }: SingleCardProps) => {
       >
         <div className="flex justify-between">
           <div className="flex items-center space-x-1">
+            {chapter.language === "vi" && (
+              <img
+                src="/flags/vn.svg"
+                alt="Vietnamese"
+                className="inline-block select-none flex-shrink-0 !h-5 !w-5"
+              />
+            )}
+
+            {chapter.language === "en" && (
+              <img
+                src="/flags/en.svg"
+                alt="English"
+                className="inline-block select-none flex-shrink-0 !h-5 !w-5"
+              />
+            )}
             {chapter.externalUrl && <ExternalLink size={16} />}
             <p className="font-semibold text-sm md:text-base line-clamp-1">
               {chapter.chapter

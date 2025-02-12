@@ -67,7 +67,7 @@ export function groupChaptersByVolume(chapters: Chapter[]): Volume[] {
 
 export async function getChapterVolume(
   mangaID: string,
-  language: string,
+  language: string[],
   limit: number,
   offset: number
 ): Promise<{ volumes: Volume[]; total: number }> {
@@ -86,7 +86,7 @@ export async function getChapterVolume(
     params: {
       limit: limit,
       offset: offset,
-      translatedLanguage: [language],
+      translatedLanguage: language,
       includes: ["scanlation_group", "manga"],
       contentRating: ["safe", "suggestive", "erotica", "pornographic"],
       ...finalOrderQuery,

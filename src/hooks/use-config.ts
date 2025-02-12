@@ -7,6 +7,8 @@ type Config = {
   theme: BaseColor["name"];
   radius: number;
   packageManager: "npm" | "yarn" | "pnpm" | "bun";
+  translatedLanguage: ["vi"] | ["en"] | ["vi", "en"];
+  r18: boolean;
 };
 
 const configAtom = atomWithStorage<Config>("config", {
@@ -14,6 +16,8 @@ const configAtom = atomWithStorage<Config>("config", {
   theme: "zinc",
   radius: 0.5,
   packageManager: "bun",
+  translatedLanguage: ["vi"],
+  r18: false,
 });
 
 export function useConfig() {

@@ -278,7 +278,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
         )}
 
         <Tabs defaultValue="chapter">
-          <TabsList className="rounded-sm">
+          <TabsList className="rounded-sm w-full md:w-auto">
             <TabsTrigger
               value="chapter"
               className="rounded-sm w-full flex gap-1"
@@ -296,7 +296,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
           </TabsList>
           <TabsContent value="chapter">
             <ChapterList
-              language="vi"
+              language={config.translatedLanguage}
               limit={50}
               mangaID={manga.id}
               finalChapter={manga.finalChapter}
