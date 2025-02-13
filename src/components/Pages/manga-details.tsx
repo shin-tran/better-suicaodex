@@ -61,7 +61,8 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
                 có chắc chắn muốn xem?
               </AlertDialogTitle>
               <AlertDialogDescription>
-                Chọn "Tiếp tục" sẽ thiết lập tuỳ chỉnh R18 thành "Hiện"
+                Chọn &quot;Tiếp tục&quot; sẽ thiết lập tuỳ chỉnh R18 thành
+                &quot;Hiện&quot;
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
