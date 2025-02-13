@@ -69,7 +69,8 @@ export async function getChapterVolume(
   mangaID: string,
   language: string[],
   limit: number,
-  offset: number
+  offset: number,
+  r18?: boolean
 ): Promise<{ volumes: Volume[]; total: number }> {
   const order = {
     volume: "desc",
@@ -82,13 +83,18 @@ export async function getChapterVolume(
     finalOrderQuery[`order[${key}]`] = value;
   }
 
+  const contentRating = ["safe", "suggestive", "erotica"];
+  if (r18) {
+    contentRating.push("pornographic");
+  }
+
   const { data } = await axiosInstance.get(`/manga/${mangaID}/feed?`, {
     params: {
       limit: limit,
       offset: offset,
       translatedLanguage: language,
       includes: ["scanlation_group", "manga"],
-      contentRating: ["safe", "suggestive", "erotica", "pornographic"],
+      contentRating: contentRating,
       ...finalOrderQuery,
     },
   });

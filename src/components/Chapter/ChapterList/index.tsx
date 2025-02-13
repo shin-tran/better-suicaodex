@@ -20,6 +20,7 @@ interface ChapterListProps {
   language: string[];
   limit: number;
   finalChapter?: string;
+  r18?: boolean;
 }
 
 export const ChapterList = ({
@@ -27,6 +28,7 @@ export const ChapterList = ({
   language,
   limit,
   finalChapter,
+  r18,
 }: ChapterListProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [volume, setVolume] = useState<Volume[]>([]);
@@ -34,9 +36,9 @@ export const ChapterList = ({
   const offset = (currentPage - 1) * limit;
 
   const { data, error, isLoading } = useSWR(
-    [mangaID, language, limit, offset],
-    ([mangaID, language, limit, offset]) =>
-      getChapterVolume(mangaID, language, limit, offset),
+    [mangaID, language, limit, offset, r18],
+    ([mangaID, language, limit, offset, r18]) =>
+      getChapterVolume(mangaID, language, limit, offset, r18),
     {
       refreshInterval: 1000 * 60 * 5,
     }

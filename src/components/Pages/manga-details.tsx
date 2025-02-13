@@ -31,6 +31,16 @@ import MangaDescription from "../Manga/manga-description";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { ChapterList } from "../Chapter/ChapterList";
 import { useConfig } from "@/hooks/use-config";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
 
 interface MangaDetailsProps {
   manga: Manga;
@@ -38,10 +48,40 @@ interface MangaDetailsProps {
 
 export default function MangaDetails({ manga }: MangaDetailsProps) {
   const isMobile = useIsMobile();
-  const [config] = useConfig();
+  const [config, setConfig] = useConfig();
 
   return (
     <>
+      {!config.r18 && manga.contentRating === "pornographic" && (
+        <AlertDialog defaultOpen>
+          <AlertDialogContent className={`theme-${config.theme}`}>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Truyện có <span className="text-red-600">yếu tố 18+</span>, bạn
+                có chắc chắn muốn xem?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                Chọn "Tiếp tục" sẽ thiết lập tuỳ chỉnh R18 thành "Hiện"
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel asChild>
+                <Link href="/">Quay lại</Link>
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() =>
+                  setConfig({
+                    ...config,
+                    r18: true,
+                  })
+                }
+              >
+                Tiếp tục
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
       <Banner id={manga.id} src={manga.cover} />
 
       <div className="flex flex-col gap-4">
@@ -300,6 +340,7 @@ export default function MangaDetails({ manga }: MangaDetailsProps) {
               limit={100}
               mangaID={manga.id}
               finalChapter={manga.finalChapter}
+              r18={config.r18}
             />
           </TabsContent>
           <TabsContent value="comment">Tính năng đang phát triển!</TabsContent>

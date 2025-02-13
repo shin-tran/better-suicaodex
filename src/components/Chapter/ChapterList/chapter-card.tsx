@@ -12,6 +12,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
 
 interface ChapterCardProps {
   chapters: ChapterGroup;
@@ -100,9 +101,9 @@ const SingleCard = ({ chapter, finalChapter, className }: SingleCardProps) => {
                 : "Oneshot"}
             </p>
             {finalChapter && finalChapter === chapter.chapter && (
-              <span className="text-[0.625rem] font-bold bg-primary rounded-sm px-1">
+              <Badge className="flex items-center gap-1 px-1 py-0 font-bold rounded-[0.25rem] text-[0.625rem] max-h-4">
                 END
-              </span>
+              </Badge>
             )}
           </div>
 
