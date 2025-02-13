@@ -49,7 +49,10 @@ export type Manga = {
   contentRating: ContentRating;
   status: Status;
   raw?: string;
-  firstChapter?: string;
+  firstChapter?: {
+    en: string;
+    vi: string;
+  };
   finalChapter?: string;
   latestChapter?: string;
   stats?: MangaStats;

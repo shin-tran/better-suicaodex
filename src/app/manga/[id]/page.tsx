@@ -1,6 +1,4 @@
-import MangaMaintain from "@/components/Manga/manga-maintain";
-import MangaNotFound from "@/components/Manga/manga-notfound";
-import MangaDetails from "@/components/Pages/manga-details";
+import MangaDetails from "@/components/Pages/MangaDetails/manga-details";
 import { siteConfig } from "@/config/site";
 import { fetchMangaDetail } from "@/lib/mangadex/manga";
 import { Manga } from "@/types/types";
@@ -44,17 +42,7 @@ export async function generateMetadata({
 
 export default async function Page({ params }: PageProps) {
   const { id } = await params;
-  const { status, manga } = await getMangaData(id);
-
-  if (status === 404) {
-    return <MangaNotFound />;
-  } else if (status === 503) {
-    return <MangaMaintain />;
-  } else if (status !== 200 || !manga) {
-    return <div>Lỗi mất rồi :(</div>;
-  }
-
-  return <MangaDetails manga={manga} />;
+  return <MangaDetails id={id} />;
 }
 
 async function getMangaData(
