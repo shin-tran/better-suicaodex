@@ -1,21 +1,20 @@
 "use client";
 
-import Banner from "@/components/Manga/manga-banner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 export default function MangaDetailsSkeleton() {
   return (
     <>
-      {/* <div className="absolute h-[17.5rem] z-[-2] w-auto left-0 right-0 top-0 block">
+      <div className="absolute h-[17.5rem] z-[-2] w-auto left-0 right-0 top-0 hidden md:block">
         <div
           className={cn(
             "absolute h-[17.5rem] w-full",
             "transition-[width] duration-150 ease-in-out",
-            "bg-no-repeat bg-cover bg-center-25 bg-slate-500"
+            "bg-no-repeat bg-cover bg-center-25 bg-gray-800/50"
           )}
         ></div>
-      </div> */}
+      </div>
 
       <div className="flex flex-col gap-4">
         <div className="flex flex-row gap-4">

@@ -5,10 +5,12 @@ import Link from "next/link";
 import useScrollOffset from "@/hooks/use-scroll-offset";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { usePathname } from "next/navigation";
 
 export function MainNav() {
   const { isAtTop } = useScrollOffset();
   const isMobile = useIsMobile();
+  const pathname = usePathname();
 
   return (
     <div>
@@ -29,7 +31,8 @@ export function MainNav() {
           alt="SuicaoDex"
           className={cn(
             "h-[22px] w-auto drop-shadow-md dark:invert hidden xs:flex",
-            isAtTop && !isMobile && "invert"
+            !isAtTop && "filter-none",
+            pathname.includes("/manga") && "md:invert"
           )}
         />
         {/* <span  className="font-bold inline-block">{siteConfig.name}</span> */}
