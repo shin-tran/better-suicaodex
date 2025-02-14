@@ -1,15 +1,14 @@
 "use client";
 
 import Link from "next/link";
-//import { usePathname } from "next/navigation";
 import useScrollOffset from "@/hooks/use-scroll-offset";
 import { cn } from "@/lib/utils";
-import { useIsMobile } from "@/hooks/use-mobile";
+// import { useIsMobile } from "@/hooks/use-mobile";
 import { usePathname } from "next/navigation";
 
 export function MainNav() {
   const { isAtTop } = useScrollOffset();
-  const isMobile = useIsMobile();
+  // const isMobile = useIsMobile();
   const pathname = usePathname();
 
   return (

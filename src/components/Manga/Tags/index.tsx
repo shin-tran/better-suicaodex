@@ -12,7 +12,7 @@ interface TagsProps {
 export default function Tags({ tags, contentRating, status }: TagsProps) {
   return (
     <>
-      <StatusChip status={status} />
+      <StatusChip status={status} isLink />
       <ContentRatingChip rating={contentRating} />
       {tags.map((tag) => (
         <NormalTag key={tag.id} className="uppercase">

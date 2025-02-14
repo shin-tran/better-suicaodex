@@ -151,7 +151,9 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
                   ].join(", ")}
                 </p>
               </div>
-              {!!manga.stats && <MangaStatsComponent stats={manga.stats} />}
+              {!!manga.stats && (
+                <MangaStatsComponent stats={manga.stats} size="sm" />
+              )}
             </div>
           ) : (
             <div className="flex flex-col">
@@ -259,7 +261,9 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
                   />
                 </div>
 
-                {!!manga.stats && <MangaStatsComponent stats={manga.stats} />}
+                {!!manga.stats && (
+                  <MangaStatsComponent stats={manga.stats} size="lg" />
+                )}
               </div>
             </div>
           )}

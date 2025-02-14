@@ -2,9 +2,10 @@ import NormalTag from "./normal-tag";
 
 interface StatusChipProps {
   status: string;
+  isLink?: boolean;
 }
 
-const StatusChip = ({ status }: StatusChipProps) => {
+const StatusChip = ({ status, isLink = false }: StatusChipProps) => {
   const statusTextColor = {
     ongoing: "text-blue-500 dark:text-blue-400",
     completed: "text-green-500 dark:text-green-400",
@@ -28,12 +29,19 @@ const StatusChip = ({ status }: StatusChipProps) => {
 
   return (
     <NormalTag
-      className={`uppercase bg-default ${statusTextColor} outline outline-2 -outline-offset-2 ${statusOutline}`}
+      className={`uppercase bg-default ${statusTextColor} outline outline-2 -outline-offset-2 ${statusOutline} w-fit`}
     >
       <span className={`${statusBg} rounded-full w-2 h-2`} />
-      <a href={`/advanced-search?status=${status}`} className="hover:underline">
-        {status}
-      </a>
+      {isLink ? (
+        <a
+          href={`/advanced-search?status=${status}`}
+          className="hover:underline"
+        >
+          {status}
+        </a>
+      ) : (
+        status
+      )}
     </NormalTag>
   );
 };

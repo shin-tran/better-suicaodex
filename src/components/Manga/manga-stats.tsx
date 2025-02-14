@@ -16,9 +16,10 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MangaStatsProps {
   stats: MangaStats;
+  size: "sm" | "lg";
 }
 
-export const MangaStatsComponent: FC<MangaStatsProps> = ({ stats }) => {
+export const MangaStatsComponent: FC<MangaStatsProps> = ({ stats, size }) => {
   const [config] = useConfig();
   const isMobile = useIsMobile();
 
@@ -41,8 +42,13 @@ export const MangaStatsComponent: FC<MangaStatsProps> = ({ stats }) => {
       ) : (
         <HoverCard openDelay={0}>
           <HoverCardTrigger asChild>
-            <span className="flex items-center gap-1 text-base cursor-pointer text-[hsl(var(--primary))] drop-shadow-md">
-              <Star size={18} />
+            <span
+              className={cn(
+                "flex items-center gap-1 cursor-pointer text-[hsl(var(--primary))] drop-shadow-md",
+                size === "sm" ? "text-sm" : "text-base"
+              )}
+            >
+              <Star size={size === "sm" ? 16 : 18} />
               <span>{stats.rating.bayesian.toFixed(2)}</span>
             </span>
           </HoverCardTrigger>
@@ -52,16 +58,26 @@ export const MangaStatsComponent: FC<MangaStatsProps> = ({ stats }) => {
         </HoverCard>
       )}
 
-      <span className="flex items-center gap-1 text-sm md:text-base drop-shadow-md">
-        <Bookmark size={isMobile ? 16 : 18} />
+      <span
+        className={cn(
+          "flex items-center gap-1 drop-shadow-md",
+          size === "sm" ? "text-sm" : "text-base"
+        )}
+      >
+        <Bookmark size={size === "sm" ? 16 : 18} />
         <span>{stats.follows.toLocaleString("en-US")}</span>
       </span>
-      <span className="flex items-center gap-1 text-sm md:text-base drop-shadow-md">
-        <MessageSquare size={isMobile ? 16 : 18} />
-        {!!stats.comments && (
+      {!!stats.comments && (
+        <span
+          className={cn(
+            "flex items-center gap-1 drop-shadow-md",
+            size === "sm" ? "text-sm" : "text-base"
+          )}
+        >
+          <MessageSquare size={size === "sm" ? 16 : 18} />
           <span>{stats.comments.toLocaleString("en-US")}</span>
-        )}
-      </span>
+        </span>
+      )}
     </div>
   );
 };

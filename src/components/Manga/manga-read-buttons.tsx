@@ -69,8 +69,7 @@ export default function MangaReadButtons({ id }: MangaReadButtonProps) {
         disabled
         className="rounded-sm md:h-10 grow md:grow-0"
       >
-        <TriangleAlert />
-        Lỗi!!!
+        Lỗi mất rồi 😭
       </Button>
     );
   }

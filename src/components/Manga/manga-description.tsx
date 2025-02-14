@@ -118,7 +118,7 @@ const MangaDescription = ({
                 </a>
               ),
               table: ({ children }) => (
-                <table className="table-auto border-collapse border border-secondary rounded-md">
+                <table className="table-auto border-collapse border border-secondary rounded-md w-fit">
                   {children}
                 </table>
               ),

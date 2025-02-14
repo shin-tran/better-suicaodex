@@ -210,3 +210,32 @@ export async function FirstEnChapter(
   });
   return ChaptersParser(data.data)[0];
 }
+
+export async function SearchManga(
+  query: string,
+  r18: boolean
+): Promise<Manga[]> {
+  const { data } = await axiosInstance.get("/manga?", {
+    params: {
+      limit: 20,
+      title: query,
+      contentRating: r18
+        ? ["safe", "suggestive", "erotica", "pornographic"]
+        : ["safe", "suggestive", "erotica"],
+      includes: ["author", "artist", "cover_art"],
+      order: {
+        relevance: "desc",
+      },
+    },
+  });
+  const mangas = data.data.map((item: any) => MangaParser(item));
+  if (mangas.length === 0) return [];
+  const stats = await Promise.all(
+    mangas.map((manga: Manga) => getMangaStats(manga.id))
+  );
+
+  return mangas.map((manga: Manga, index: number) => ({
+    ...manga,
+    stats: stats[index],
+  }));
+}
