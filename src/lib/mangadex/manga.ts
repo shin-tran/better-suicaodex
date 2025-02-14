@@ -2,7 +2,7 @@ import axiosInstance from "../axios";
 import { TagsParser } from "./tag";
 import { AuthorParser } from "./author";
 import { ArtistParser } from "./artist";
-import { Chapter, Manga, MangaStats } from "@/types/types";
+import { Chapter, Manga, MangasStats, MangaStats } from "@/types/types";
 import { ChaptersParser } from "./chapter";
 
 export function MangaParser(data: any): Manga {
@@ -133,6 +133,27 @@ export async function getMangaStats(id: string): Promise<MangaStats> {
   return MangaStatsParser(data, id);
 }
 
+export async function getMangasStats(ids: string[]): Promise<MangasStats[]> {
+  const { data } = await axiosInstance.get(`/statistics/manga?`, {
+    params: {
+      manga: ids,
+    },
+  });
+  return ids.map((id: any) => MangasStatsParser(data, id));
+}
+
+export function MangasStatsParser(data: any, id: string): MangasStats {
+  return {
+    rating: {
+      bayesian: data.statistics[id].rating.bayesian,
+    },
+    follows: data.statistics[id].follows,
+    comments: data.statistics[id].comments
+      ? data.statistics[id].comments.repliesCount
+      : 0,
+  };
+}
+
 export async function getFirstChapter(
   id: string,
   r18: boolean
@@ -217,7 +238,7 @@ export async function SearchManga(
 ): Promise<Manga[]> {
   const { data } = await axiosInstance.get("/manga?", {
     params: {
-      limit: 20,
+      limit: 10,
       title: query,
       contentRating: r18
         ? ["safe", "suggestive", "erotica", "pornographic"]
@@ -230,9 +251,8 @@ export async function SearchManga(
   });
   const mangas = data.data.map((item: any) => MangaParser(item));
   if (mangas.length === 0) return [];
-  const stats = await Promise.all(
-    mangas.map((manga: Manga) => getMangaStats(manga.id))
-  );
+
+  const stats = await getMangasStats(mangas.map((manga: Manga) => manga.id));
 
   return mangas.map((manga: Manga, index: number) => ({
     ...manga,

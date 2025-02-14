@@ -79,6 +79,14 @@ export type MangaStats = {
   comments?: number;
 };
 
+export type MangasStats = {
+  rating: {
+    bayesian: number;
+  };
+  follows: number;
+  comments?: number;
+};
+
 export type Chapter = {
   id: string;
   vol: string;

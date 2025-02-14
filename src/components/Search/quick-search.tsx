@@ -38,6 +38,7 @@ export default function QuickSearch() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { query } = values;
+
     try {
       setIsLoading(true);
       setError(false);
@@ -67,8 +68,6 @@ export default function QuickSearch() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  console.log(isLoading);
 
   return (
     <>
