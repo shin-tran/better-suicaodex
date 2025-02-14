@@ -31,8 +31,8 @@ export function MainNav() {
           alt="SuicaoDex"
           className={cn(
             "h-[22px] w-auto drop-shadow-md dark:invert hidden xs:flex",
-            !isAtTop && "filter-none",
-            pathname.includes("/manga") && "md:invert"
+            pathname.includes("/manga") && "md:invert",
+            !isAtTop && "filter-none md:filter-none"
           )}
         />
         {/* <span  className="font-bold inline-block">{siteConfig.name}</span> */}
