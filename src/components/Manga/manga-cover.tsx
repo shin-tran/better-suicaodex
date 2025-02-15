@@ -11,6 +11,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { Skeleton } from "../ui/skeleton";
 
 interface MangaCoverProps extends React.HTMLAttributes<HTMLImageElement> {
   id: string;
@@ -52,7 +53,7 @@ const MangaCover: FC<MangaCoverProps> = ({
             <DialogTitle className="hidden"></DialogTitle>
             <DialogDescription className="hidden"></DialogDescription>
 
-            <div className="max-w-screen-md max-h-screen flex justify-center items-center relative">
+            <div className="max-w-screen-md max-h-screen flex justify-center items-center relative bg-gray-500 ease-in-out duration-300">
               <img
                 src={
                   siteConfig.suicaodex.apiURL + "/covers/" + id + "/" + cover
