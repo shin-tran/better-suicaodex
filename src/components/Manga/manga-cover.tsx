@@ -19,6 +19,7 @@ interface MangaCoverProps extends React.HTMLAttributes<HTMLImageElement> {
   placeholder?: string;
   isExpandable?: boolean;
   wrapper?: string;
+  quality?: "256" | "512" | "full";
 }
 
 const MangaCover: FC<MangaCoverProps> = ({
@@ -29,10 +30,15 @@ const MangaCover: FC<MangaCoverProps> = ({
   isExpandable = false,
   wrapper,
   className,
+  quality = "512",
   ...props
 }) => {
-  const src =
-    siteConfig.suicaodex.apiURL + "/covers/" + id + "/" + cover + ".512.jpg";
+  let src = siteConfig.suicaodex.apiURL + "/covers/" + id + "/" + cover;
+
+  if (quality !== "full") {
+    src += `.${quality}.jpg`;
+  }
+
   const [loaded, setLoaded] = useState(false);
 
   return (

@@ -23,6 +23,7 @@ export default function CompactCard({ manga }: CompactCardProps) {
           placeholder="/images/xidoco.jpg"
           wrapper="w-14 h-auto border"
           className="!w-14 !h-20 !object-cover"
+          quality="256"
         />
         <div className="flex flex-col justify-evenly w-full">
           <p className="line-clamp-1 font-black text-xl">{manga.title}</p>
