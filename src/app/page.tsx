@@ -1,11 +1,47 @@
-import MangaSlide from "@/components/Manga/Swiper/manga-slide";
-import { fetchMangaDetail } from "@/lib/mangadex/manga";
+// import MangaSlide from "@/components/Manga/Swiper/manga-slide";
+// import { fetchMangaDetail } from "@/lib/mangadex/manga";
 import RandomMangaSlide from "@/components/Manga/Swiper/random-manga-slide";
 
 export default async function Home() {
-  const manga = await fetchMangaDetail("35c70727-7b57-4091-ad96-9034af5c5e98");
-  console.log(manga);
+  // const manga = await fetchMangaDetail("3b62f955-732c-43b2-84e7-cc1ff57896a7");
+  // console.log(manga);
   const list = [
+    {
+      id: "3b62f955-732c-43b2-84e7-cc1ff57896a7",
+      title:
+        "Abandoned ~Tsuyosugite Buki ga Kowareru Yuusha to Buki Shokunin no Elf~",
+      language: ["vi", "pt-br", "tr", "pl", "en"],
+      altTitle:
+        "Abandoned: The Hero Who's So Strong He Breaks Every Weapon, and the Elf Weaponsmith",
+      tags: [
+        { id: "391b0423-d847-456f-aff0-8b0cfc03066b", name: "Action" },
+        { id: "87cc87cd-a395-47af-b27a-93258283bbc6", name: "Adventure" },
+        { id: "cdc58593-87dd-415e-bbc0-2ec27bf404cc", name: "Fantasy" },
+        { id: "e197df38-d0e7-43b5-9b09-2842d0c326dd", name: "Web Comic" },
+      ],
+      cover: "7bd9d778-ad3a-4e6c-ac9a-c8f025fb07b4.png",
+      author: [
+        {
+          id: "2205665a-44f2-4a18-8165-1e0ba5eacf04",
+          name: "Iwata Nawoya",
+        },
+      ],
+      artist: [
+        {
+          id: "2205665a-44f2-4a18-8165-1e0ba5eacf04",
+          name: "Iwata Nawoya",
+        },
+      ],
+      description: {
+        language: "en",
+        content:
+          "An elf weaponsmith meets a hero who's so strong every weapon shatters in his hands after a single use.",
+      },
+      contentRating: "safe",
+      status: "ongoing",
+      raw: "https://ganma.jp/web/magazine/abandoned",
+      finalChapter: null,
+    },
     {
       id: "35c70727-7b57-4091-ad96-9034af5c5e98",
       title:
