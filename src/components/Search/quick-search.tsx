@@ -25,7 +25,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { Label } from "../ui/label";
 
 const formSchema = z.object({
   query: z.string().min(1),
@@ -154,7 +153,7 @@ export default function QuickSearch() {
                     </Link>
                   </Button>
                 </div>
-                <div className="grid gap-2 max-h-[85vh] overflow-y-auto">
+                <div className="grid gap-2 max-h-[80vh] overflow-y-auto">
                   {mangas.map((manga) => (
                     <Link
                       key={manga.id}
@@ -226,7 +225,11 @@ export default function QuickSearch() {
                     <Search className="absolute right-16 transform h-4 w-4" />
 
                     <DialogClose asChild>
-                      <Button variant="ghost" size="icon">
+                      <Button
+                        variant="secondary"
+                        size="icon"
+                        className="h-8 w-8"
+                      >
                         <X />
                       </Button>
                     </DialogClose>
@@ -243,7 +246,7 @@ export default function QuickSearch() {
                   Nhập từ khoá đi mới tìm được chứ...
                 </div>
               ) : isLoading ? (
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 pb-2">
                   <Skeleton className="w-[69px] h-5 rounded-sm bg-gray-500 mb-2" />
                   <Skeleton className="w-full h-24 rounded-sm bg-gray-500" />
                   <Skeleton className="w-full h-24 rounded-sm bg-gray-500" />
@@ -266,10 +269,12 @@ export default function QuickSearch() {
                       </Link>
                     </Button>
                   </div>
-                  <div className="grid gap-2 max-h-[85vh] overflow-y-auto">
+                  <div className="flex flex-col gap-2 max-h-lvh overflow-y-scroll pb-2">
                     {mangas.map((manga) => (
                       <Link key={manga.id} href={`/manga/${manga.id}`}>
-                        <CompactCard manga={manga} />
+                        <DialogClose className="w-full text-start">
+                          <CompactCard manga={manga} />
+                        </DialogClose>
                       </Link>
                     ))}
                   </div>

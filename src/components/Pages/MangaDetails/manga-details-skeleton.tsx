@@ -28,7 +28,7 @@ export default function MangaDetailsSkeleton() {
               <Skeleton className="w-2/3 h-6 bg-gray-500 rounded-md" />
             </div>
 
-            <Skeleton className="w-1/2 h-4 bg-gray-500 rounded-md" />
+            <Skeleton className="w-1/2 h-4 md:h-10 bg-gray-500 rounded-md" />
           </div>
         </div>
       </div>

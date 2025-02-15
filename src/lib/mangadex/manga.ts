@@ -238,7 +238,7 @@ export async function SearchManga(
 ): Promise<Manga[]> {
   const { data } = await axiosInstance.get("/manga?", {
     params: {
-      limit: 10,
+      limit: 20,
       title: query,
       contentRating: r18
         ? ["safe", "suggestive", "erotica", "pornographic"]
