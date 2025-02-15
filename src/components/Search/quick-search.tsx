@@ -88,6 +88,7 @@ export default function QuickSearch() {
                 <FormItem className="flex items-center w-full justify-end space-y-0">
                   <FormControl>
                     <Input
+                      autoComplete="off"
                       placeholder="Tìm kiếm..."
                       className={cn(
                         "bg-muted/50 hover:bg-accent focus:bg-background border-none h-8 shadow-sm",
