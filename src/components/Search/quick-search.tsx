@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
-import { ArrowRight, Search } from "lucide-react";
+import { ArrowRight, Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Input } from "../ui/input";
 import { z } from "zod";
@@ -15,6 +15,17 @@ import { Manga } from "@/types/types";
 import CompactCard from "./Result/compact-card";
 import Link from "next/link";
 import { Skeleton } from "../ui/skeleton";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { Label } from "../ui/label";
 
 const formSchema = z.object({
   query: z.string().min(1),
@@ -167,13 +178,109 @@ export default function QuickSearch() {
         <div className="fixed inset-0 bg-black/30 dark:bg-white/30 h-lvh z-[5]" />
       )}
 
-      <Button
-        variant="ghost"
-        className="h-8 w-8 bg-muted/50 px-0 inline-flex shadow-sm md:hidden"
-      >
-        <Search />
-        <span className="sr-only">Tìm kiếm</span>
-      </Button>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button
+            variant="ghost"
+            className="h-8 w-8 bg-muted/50 px-0 inline-flex shadow-sm md:hidden"
+          >
+            <Search />
+            <span className="sr-only">Tìm kiếm</span>
+          </Button>
+        </DialogTrigger>
+        <DialogContent
+          className={cn(
+            "w-full max-w-full border-none top-0 translate-y-0 px-4 py-2",
+            `theme-${config.theme}`,
+            "[&>button]:hidden"
+          )}
+        >
+          <DialogHeader>
+            <DialogTitle className="hidden">Tìm kiếm nhanh</DialogTitle>
+            <DialogDescription className="hidden">Tìm kiếm</DialogDescription>
+          </DialogHeader>
+
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              onChange={form.handleSubmit(onSubmit)}
+              className="w-full"
+            >
+              <FormField
+                control={form.control}
+                name="query"
+                render={({ field }) => (
+                  <FormItem className="flex items-center w-full justify-end gap-1.5 space-y-0">
+                    <FormControl>
+                      <Input
+                        autoComplete="off"
+                        placeholder="Tìm kiếm..."
+                        className={cn(
+                          "bg-secondary border-none h-8 shadow-sm"
+
+                          // "placeholder:text-current"
+                        )}
+                        {...field}
+                      />
+                    </FormControl>
+                    <Search className="absolute right-16 transform h-4 w-4" />
+
+                    <DialogClose asChild>
+                      <Button variant="ghost" size="icon">
+                        <X />
+                      </Button>
+                    </DialogClose>
+                  </FormItem>
+                )}
+              />
+            </form>
+          </Form>
+
+          <DialogFooter>
+            <div>
+              {form.getValues("query").length === 0 ? (
+                <div className="text-gray-500">
+                  Nhập từ khoá đi mới tìm được chứ...
+                </div>
+              ) : isLoading ? (
+                <div className="flex flex-col gap-2">
+                  <Skeleton className="w-[69px] h-5 rounded-sm bg-gray-500 mb-2" />
+                  <Skeleton className="w-full h-24 rounded-sm bg-gray-500" />
+                  <Skeleton className="w-full h-24 rounded-sm bg-gray-500" />
+                  <Skeleton className="w-full h-24 rounded-sm bg-gray-500" />
+                </div>
+              ) : error ? (
+                <div className="text-gray-500">Lỗi mất rồi 😭</div>
+              ) : mangas.length > 0 ? (
+                <>
+                  <div className="mb-2 flex justify-between items-center">
+                    <p className="font-black text-xl">Manga</p>
+                    <Button
+                      asChild
+                      size="icon"
+                      variant="ghost"
+                      className="[&_svg]:size-6"
+                    >
+                      <Link href={`/advanced-search`}>
+                        <ArrowRight />
+                      </Link>
+                    </Button>
+                  </div>
+                  <div className="grid gap-2 max-h-[85vh] overflow-y-auto">
+                    {mangas.map((manga) => (
+                      <Link key={manga.id} href={`/manga/${manga.id}`}>
+                        <CompactCard manga={manga} />
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className="text-gray-500">Không có kết quả</div>
+              )}
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
