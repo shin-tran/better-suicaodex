@@ -116,48 +116,36 @@ const SingleCard = ({ chapter, finalChapter, className }: SingleCardProps) => {
           </Button>
         </div>
         <div className="flex justify-between">
-          <div className="flex items-center">
-            <Users size={16} />
+          <div className="flex items-center justify-self-start">
+            <Users size={16} className="shrink-0" />
             {chapter.group.length === 0 ? (
               <span className="line-clamp-1 font-normal text-xs px-[0.25rem]">
                 No Group
               </span>
             ) : (
-              chapter.group.map((group) => (
-                // <Link
-                //   className={cn(
-                //     buttonVariants({
-                //       variant: "ghost",
-                //       className:
-                //         "line-clamp-1 font-normal rounded-sm h-4 py-0 px-[0.25rem] hover:underline hover:text-primary",
-                //       size: "sm",
-                //     })
-                //   )}
-                //   href={`/groups/${group.id}`}
-                //   key={group.id}
-                // >
-                //   {group.name}
-                // </Link>
-                <Button
-                  key={group.id}
-                  variant="ghost"
-                  className="line-clamp-1 font-normal rounded-sm h-4 py-0 px-[0.25rem] hover:underline hover:text-primary"
-                  size="sm"
-                  onClick={(e: React.MouseEvent) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    router.push(`/groups/${group.id}`);
-                  }}
-                >
-                  {group.name}
-                </Button>
-              ))
+              <div className="flex items-center space-x-1">
+                {chapter.group.map((group) => (
+                  <Button
+                    key={group.id}
+                    variant="ghost"
+                    className="whitespace-normal font-normal text-start line-clamp-1 rounded-sm h-4 py-0 px-[0.25rem] hover:underline hover:text-primary"
+                    size="sm"
+                    onClick={(e: React.MouseEvent) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      router.push(`/groups/${group.id}`);
+                    }}
+                  >
+                    {group.name}
+                  </Button>
+                ))}
+              </div>
             )}
           </div>
-          <div className="flex items-center space-x-1 justify-self-start">
-            <Clock size={16} />
+          <div className="flex items-center space-x-1 w-full max-w-max justify-end">
+            <Clock size={16} className="shrink-0" />
             <time
-              className="text-xs font-light line-clamp-1"
+              className="text-xs font-light"
               dateTime={new Date(chapter.updatedAt).toDateString()}
             >
               {formatTimeToNow(new Date(chapter.updatedAt))}
