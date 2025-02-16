@@ -47,13 +47,13 @@ export default function QuickSearch() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     const { query } = values;
 
     try {
       setIsLoading(true);
       setError(false);
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
       const res = await SearchManga(query, config.r18);
       setMangas(res);
     } catch (err) {

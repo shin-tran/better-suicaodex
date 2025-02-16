@@ -259,3 +259,28 @@ export async function SearchManga(
     stats: stats[index],
   }));
 }
+
+export async function getPopularMangas(
+  language: ("vi" | "en")[],
+  r18: boolean
+): Promise<Manga[]> {
+  const { data } = await axiosInstance.get(`/manga?`, {
+    params: {
+      limit: 10,
+      includes: ["cover_art", "author", "artist"],
+      contentRating: r18
+        ? ["safe", "suggestive", "erotica", "pornographic"]
+        : ["safe", "suggestive", "erotica"],
+      hasAvailableChapters: "true",
+      availableTranslatedLanguage: language,
+      order: {
+        followedCount: "desc",
+      },
+      createdAtSince: new Date(new Date().setDate(new Date().getDate() - 30))
+        .toISOString()
+        .slice(0, 19),
+    },
+  });
+
+  return data.data.map((item: any) => MangaParser(item));
+}

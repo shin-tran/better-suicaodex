@@ -40,7 +40,7 @@ export const ChapterList = ({
     ([mangaID, language, limit, offset, r18]) =>
       getChapterVolume(mangaID, language, limit, offset, r18),
     {
-      refreshInterval: 1000 * 60 * 5,
+      refreshInterval: 1000 * 60 * 10,
     }
   );
 
