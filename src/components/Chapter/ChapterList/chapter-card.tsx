@@ -142,14 +142,14 @@ const SingleCard = ({ chapter, finalChapter, className }: SingleCardProps) => {
               </div>
             )}
           </div>
-          <div className="flex items-center space-x-1 w-full max-w-max justify-end">
-            <Clock size={16} className="shrink-0" />
+          <div className="flex items-center space-x-1 w-full max-w-max justify-end pr-1">
             <time
               className="text-xs font-light"
               dateTime={new Date(chapter.updatedAt).toDateString()}
             >
               {formatTimeToNow(new Date(chapter.updatedAt))}
             </time>
+            <Clock size={16} className="shrink-0" />
           </div>
         </div>
       </Card>
