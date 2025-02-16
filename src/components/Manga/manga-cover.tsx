@@ -21,6 +21,7 @@ interface MangaCoverProps extends React.HTMLAttributes<HTMLImageElement> {
   isExpandable?: boolean;
   wrapper?: string;
   quality?: "256" | "512" | "full";
+  preload?: boolean;
 }
 
 const MangaCover: FC<MangaCoverProps> = ({
@@ -32,6 +33,7 @@ const MangaCover: FC<MangaCoverProps> = ({
   wrapper,
   className,
   quality = "512",
+  preload = false,
   ...props
 }) => {
   let src = siteConfig.suicaodex.apiURL + "/covers/" + id + "/" + cover;
@@ -78,6 +80,7 @@ const MangaCover: FC<MangaCoverProps> = ({
         src={src}
         alt={`Ảnh bìa ${alt}`}
         onLoad={() => setLoaded(true)}
+        visibleByDefault={preload}
         onError={(e) => {
           e.currentTarget.src = "/images/xidoco.jpg";
         }}

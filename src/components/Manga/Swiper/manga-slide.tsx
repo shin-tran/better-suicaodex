@@ -58,6 +58,7 @@ export default function MangaSlide({ manga }: MangaSlideProps) {
             placeholder="/images/xidoco.jpg"
             className="shadow-md drop-shadow-md aspect-[7/10] !object-cover"
             wrapper="w-[130px] md:w-[200px] lg:w-[215px] h-auto"
+            preload={true}
           />
         </Link>
 
