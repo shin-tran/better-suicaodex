@@ -37,7 +37,7 @@ export default function LatestUpdate() {
   const [part1, part2, part3] = splitArr(data);
 
   return (
-    <div className="flex flex-col ">
+    <div className="flex flex-col">
       <div className="flex justify-between">
         <div>
           <hr className="w-9 h-1 bg-primary border-none" />
@@ -58,13 +58,13 @@ export default function LatestUpdate() {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 gap-3">
+        <div className="hidden md:grid grid-cols-1 gap-3">
           {part2.map((chapter) => (
             <LatestCard key={chapter.id} chapter={chapter} />
           ))}
         </div>
 
-        <div className="hidden md:grid grid-cols-1 gap-3">
+        <div className="hidden lg:grid grid-cols-1 gap-3">
           {part3.map((chapter) => (
             <LatestCard key={chapter.id} chapter={chapter} />
           ))}

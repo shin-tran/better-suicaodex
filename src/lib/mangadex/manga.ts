@@ -284,3 +284,25 @@ export async function getPopularMangas(
 
   return data.data.map((item: any) => MangaParser(item));
 }
+
+export async function getRecentlyMangas(
+  limit: number,
+  language: ("vi" | "en")[],
+  r18: boolean
+): Promise<Manga[]> {
+  const { data } = await axiosInstance.get(`/manga?`, {
+    params: {
+      limit: limit,
+      includes: ["cover_art", "author", "artist"],
+      availableTranslatedLanguage: language,
+      contentRating: r18
+        ? ["safe", "suggestive", "erotica", "pornographic"]
+        : ["safe", "suggestive", "erotica"],
+      order: {
+        createdAt: "desc",
+      },
+    },
+  });
+
+  return data.data.map((item: any) => MangaParser(item));
+}

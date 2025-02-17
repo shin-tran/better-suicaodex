@@ -1,6 +1,7 @@
 "use client";
 
 import LatestUpdate from "./LatestUpdate";
+import RecentlyAdded from "./Recently";
 import PopularSwiper from "./Swiper";
 
 export default function HomePage() {
@@ -12,6 +13,10 @@ export default function HomePage() {
 
       <section className="-mt-4 md:-mt-8 lg:-mt-3">
         <LatestUpdate />
+      </section>
+
+      <section className="mt-9">
+        <RecentlyAdded />
       </section>
     </div>
   );
