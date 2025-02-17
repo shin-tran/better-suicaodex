@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import SlideSkeleton from "./slide-skeleton";
 
-export default function SwiperDemo() {
+export default function PopularSwiper() {
   const [config] = useConfig();
   const { data, isLoading, error } = useSWR(
     [config.translatedLanguage, config.r18],
@@ -35,7 +35,7 @@ export default function SwiperDemo() {
         <h1 className="text-2xl font-black uppercase">Tiêu điểm</h1>
       </div>
 
-      <div className="fixed !p-0 !m-0 top-0 left-0 w-full">
+      <div className="absolute !p-0 !m-0 top-0 left-0 w-full">
         <div>
           <Swiper
             className="h-[344px] md:h-[440px]"

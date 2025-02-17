@@ -5,8 +5,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { Artist, Author, Manga } from "@/types/types";
 import Link from "next/link";
-import MangaCover from "../manga-cover";
-import Tags from "../Tags";
+import MangaCover from "../../../Manga/manga-cover";
+import Tags from "../../../Manga/Tags";
 // import remarkGfm from "remark-gfm";
 // import ReactMarkdown from "react-markdown";
 
@@ -115,7 +115,7 @@ export default function MangaSlide({ manga }: MangaSlideProps) {
             </ReactMarkdown> */}
           </div>
 
-          <p className="text-base md:text-lg italic font-medium line-clamp-1 max-w-[80%]">
+          <p className="text-base md:text-lg italic font-medium line-clamp-1 max-w-full md:max-w-[80%]">
             {[
               ...new Set([
                 ...manga.author.map((a: Author) => a.name),

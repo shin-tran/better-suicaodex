@@ -116,3 +116,9 @@ export type Volume = {
   vol: string;
   chapters: ChapterGroup[];
 };
+
+export type LastestManga = {
+  info: Manga;
+  lastestChap: Chapter[];
+  total?: number;
+};

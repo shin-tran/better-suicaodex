@@ -1,9 +1,5 @@
-import SwiperDemo from "@/components/Manga/Swiper";
+import HomePage from "@/components/Pages/Home";
 
-export default async function Home() {
-  return (
-    <>
-      <SwiperDemo />
-    </>
-  );
+export default function Home() {
+  return <HomePage />;
 }
