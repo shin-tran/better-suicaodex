@@ -58,7 +58,7 @@ export default function LatestUpdate() {
           ))}
         </div>
 
-        <div className="hidden md:grid grid-cols-1 gap-3">
+        <div className="grid grid-cols-1 gap-3">
           {part2.map((chapter) => (
             <LatestCard key={chapter.id} chapter={chapter} />
           ))}
