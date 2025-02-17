@@ -34,6 +34,8 @@ export default function LatestUpdate() {
     );
   if (error || !data) return null;
 
+  const [part1, part2, part3] = splitArr(data);
+
   return (
     <div className="flex flex-col ">
       <div className="flex justify-between">
@@ -50,10 +52,33 @@ export default function LatestUpdate() {
       </div>
 
       <div className="grid grid-cols-1 gap-3 mt-4 md:grid-cols-2 lg:grid-cols-3">
-        {data.map((chapter) => (
-          <LatestCard key={chapter.id} chapter={chapter} />
-        ))}
+        <div className="grid grid-cols-1 gap-3">
+          {part1.map((chapter) => (
+            <LatestCard key={chapter.id} chapter={chapter} />
+          ))}
+        </div>
+
+        <div className="hidden md:grid grid-cols-1 gap-3">
+          {part2.map((chapter) => (
+            <LatestCard key={chapter.id} chapter={chapter} />
+          ))}
+        </div>
+
+        <div className="hidden md:grid grid-cols-1 gap-3">
+          {part3.map((chapter) => (
+            <LatestCard key={chapter.id} chapter={chapter} />
+          ))}
+        </div>
       </div>
     </div>
   );
+}
+
+function splitArr<T>(array: T[]): [T[], T[], T[]] {
+  const size = array.length / 3;
+  const part1 = array.slice(0, size);
+  const part2 = array.slice(size, size * 2);
+  const part3 = array.slice(size * 2);
+
+  return [part1, part2, part3];
 }
