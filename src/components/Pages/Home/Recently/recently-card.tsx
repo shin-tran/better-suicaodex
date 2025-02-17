@@ -13,7 +13,7 @@ interface RecentlyCardProps {
 }
 
 export default function RecentlyCard({ manga }: RecentlyCardProps) {
-  let src =
+  const src =
     siteConfig.suicaodex.apiURL +
     "/covers/" +
     manga.id +
