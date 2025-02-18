@@ -312,9 +312,10 @@ export async function getTopFollowedMangas(
   r18: boolean
 ): Promise<Manga[]> {
   const params: any = {
-    limit: 10,
+    limit: 5,
     includes: ["cover_art", "author", "artist"],
     availableTranslatedLanguage: language,
+    hasAvailableChapters: "true",
     contentRating: r18
       ? ["safe", "suggestive", "erotica", "pornographic"]
       : ["safe", "suggestive", "erotica"],
@@ -324,6 +325,34 @@ export async function getTopFollowedMangas(
   };
 
   const { data } = await axiosInstance.get(`/manga?`, { params });
+
+  const mangas = data.data.map((item: any) => MangaParser(item));
+  const stats = await getMangasStats(mangas.map((manga: Manga) => manga.id));
+
+  return mangas.map((manga: Manga, index: number) => ({
+    ...manga,
+    stats: stats[index],
+  }));
+}
+
+export async function getTopRatedMangas(
+  language: ("vi" | "en")[],
+  r18: boolean
+): Promise<Manga[]> {
+  const { data } = await axiosInstance.get(`/manga?`, {
+    params: {
+      limit: 5,
+      includes: ["cover_art", "author", "artist"],
+      hasAvailableChapters: "true",
+      availableTranslatedLanguage: language,
+      contentRating: r18
+        ? ["safe", "suggestive", "erotica", "pornographic"]
+        : ["safe", "suggestive", "erotica"],
+      order: {
+        rating: "desc",
+      },
+    },
+  });
 
   const mangas = data.data.map((item: any) => MangaParser(item));
   const stats = await getMangasStats(mangas.map((manga: Manga) => manga.id));

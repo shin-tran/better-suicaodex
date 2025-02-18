@@ -1,6 +1,8 @@
 "use client";
 
 import LatestUpdate from "./LatestUpdate";
+import LeaderBoard from "./LeaderBoard";
+import TopFollowed from "./LeaderBoard/TopFollowed";
 import RecentlyAdded from "./Recently";
 import PopularSwiper from "./Swiper";
 
@@ -17,6 +19,10 @@ export default function HomePage() {
 
       <section className="mt-9">
         <RecentlyAdded />
+      </section>
+
+      <section className="mt-9">
+        <LeaderBoard />
       </section>
     </div>
   );
