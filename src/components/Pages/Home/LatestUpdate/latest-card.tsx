@@ -24,8 +24,8 @@ export default function LatestCard({ chapter }: LatestCardProps) {
                 cover={chapter.manga.cover}
                 alt={chapter.manga.title}
                 placeholder="/images/xidoco.jpg"
-                wrapper="w-14 h-auto border"
-                className="!w-14 !h-20 !object-cover"
+                wrapper="w-20 h-auto border"
+                className="!w-20 !h-28 !object-cover"
                 quality="256"
                 //isExpandable
               />
