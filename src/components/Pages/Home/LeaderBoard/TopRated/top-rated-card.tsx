@@ -31,7 +31,7 @@ export default function TopRatedCard({ manga }: TopRatedCardProps) {
           <div className="flex flex-col gap-1">
             <Link
               href={`/manga/${manga.id}`}
-              className="line-clamp-1 font-bold text-xl"
+              className="line-clamp-2 font-bold text-xl"
             >
               {manga.title}
             </Link>
