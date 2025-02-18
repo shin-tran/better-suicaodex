@@ -25,8 +25,8 @@ import { NavSettings } from "./nav-settings";
 // This is sample data.
 const data = {
   user: {
-    name: "iamneyk",
-    email: "iamneyk@suicaodex.com",
+    name: "Dorothy",
+    email: "doro@suicaodex.com",
     avatar: "/avatars/doro_think.webp",
   },
 
@@ -39,11 +39,11 @@ const data = {
       items: [
         {
           title: "Thư viện",
-          url: "#",
+          url: "/my-library",
         },
         {
           title: "Lịch sử đọc",
-          url: "#",
+          url: "/history",
         },
       ],
     },
@@ -55,15 +55,15 @@ const data = {
       items: [
         {
           title: "Tìm kiếm nâng cao",
-          url: "#",
+          url: "/advanced-search",
         },
         {
           title: "Mới cập nhật",
-          url: "#",
+          url: "/latest",
         },
         {
           title: "Truyện mới đăng",
-          url: "#",
+          url: "/recent",
         },
         {
           title: "Truyện ngẫu nhiên",
@@ -78,11 +78,11 @@ const data = {
       items: [
         {
           title: "Diễn đàn",
-          url: "#",
+          url: "/forum",
         },
         {
           title: "Nhóm dịch",
-          url: "#",
+          url: "/groups",
         },
       ],
     },
