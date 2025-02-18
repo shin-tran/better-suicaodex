@@ -67,7 +67,7 @@ const data = {
         },
         {
           title: "Truyện ngẫu nhiên",
-          url: "#",
+          url: "/random",
         },
       ],
     },
