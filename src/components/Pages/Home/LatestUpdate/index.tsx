@@ -34,6 +34,8 @@ export default function LatestUpdate() {
     );
   if (error || !data) return null;
 
+  console.log(data);
+
   const [part1, part2, part3] = splitArr(data);
 
   return (

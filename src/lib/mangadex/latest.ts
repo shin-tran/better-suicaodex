@@ -48,14 +48,18 @@ export async function getLatestChapters(
         limit: 20,
         ids: uniqueMangaIDs,
         includes: ["cover_art", "author", "artist"],
+        contentRating: r18
+          ? ["safe", "suggestive", "erotica", "pornographic"]
+          : ["safe", "suggestive", "erotica"],
       },
     });
 
     const mangas = mangasData.data.map((m: any) => MangaParser(m));
+    // console.log(mangas);
     //add title and cover to the latest chapters
     latestChapters.forEach((chapter) => {
       const ma = mangas.find((m: Manga) => m.id === chapter.manga?.id);
-      //console.log(ma);
+      // console.log(ma);
       if (ma && chapter.manga) {
         chapter.manga.title = ma.title;
         chapter.manga.cover = ma.cover;
