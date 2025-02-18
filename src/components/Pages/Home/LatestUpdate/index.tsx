@@ -26,7 +26,7 @@ export default function LatestUpdate() {
         <h1 className="text-2xl font-black uppercase">Mới cập nhật</h1>
 
         <div className="grid grid-cols-1 gap-3 mt-4 md:grid-cols-2 lg:grid-cols-3">
-          {[...Array(6)].map((_, index) => (
+          {[...Array(9)].map((_, index) => (
             <LatestSkeleton key={index} />
           ))}
         </div>
