@@ -14,6 +14,7 @@ export const siteConfig = {
     coverURL: "https://uploads.mangadex.org/covers",
     imgURL: "https://uploads.mangadex.org",
     ogURL: "https://og.mangadex.org/og-image",
+    staffPickList: "805ba886-dd99-4aa4-b460-4bd7c7b71352",
   },
   suicaodex: {
     domain: "https://suicaodex.com",

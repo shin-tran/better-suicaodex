@@ -20,45 +20,33 @@ export default function TopRated() {
 
   if (isLoading)
     return (
-      <div className="flex flex-col gap-2">
-        <hr className="w-9 h-1 bg-primary border-none" />
-        <h1 className="text-2xl font-black uppercase">Top đánh giá</h1>
-
-        <div className="grid grid-cols-1 gap-1.5 rounded-sm">
-          {[...Array(5)].map((_, index) => (
-            <LeaderBoardCardSkeleton key={index} />
-          ))}
-        </div>
+      <div className="grid grid-cols-1 gap-1.5 rounded-sm">
+        {[...Array(5)].map((_, index) => (
+          <LeaderBoardCardSkeleton key={index} />
+        ))}
       </div>
     );
   if (error || !data) return null;
 
   return (
-    <div className="flex flex-col gap-2">
-      <div>
-        <hr className="w-9 h-1 bg-primary border-none" />
-        <h1 className="text-2xl font-black uppercase">Top đánh giá</h1>
-      </div>
-
-      <div className="grid grid-cols-1 gap-1.5 rounded-sm">
-        {data.map((manga, index) => (
-          <div key={manga.id} className="flex flex-col gap-1.5">
-            <div className="flex gap-1.5 justify-between items-center">
-              <TopRatedCard key={manga.id} manga={manga} />
-              <span
-                className={cn(
-                  "text-7xl md:text-8xl font-black",
-                  index === 0 && "text-primary"
-                )}
-              >
-                {index + 1}
-              </span>
-            </div>
-
-            {index !== data.length - 1 && <Separator />}
+    <div className="grid grid-cols-1 gap-1.5 rounded-sm">
+      {data.map((manga, index) => (
+        <div key={manga.id} className="flex flex-col gap-1.5">
+          <div className="flex gap-1.5 justify-between items-center">
+            <TopRatedCard key={manga.id} manga={manga} />
+            <span
+              className={cn(
+                "text-7xl md:text-8xl font-black",
+                index === 0 && "text-primary"
+              )}
+            >
+              {index + 1}
+            </span>
           </div>
-        ))}
-      </div>
+
+          {index !== data.length - 1 && <Separator />}
+        </div>
+      ))}
     </div>
   );
 }

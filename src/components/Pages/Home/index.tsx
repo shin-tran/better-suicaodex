@@ -2,8 +2,8 @@
 
 import LatestUpdate from "./LatestUpdate";
 import LeaderBoard from "./LeaderBoard";
-import TopFollowed from "./LeaderBoard/TopFollowed";
 import RecentlyAdded from "./Recently";
+import StaffPick from "./StaffPick";
 import PopularSwiper from "./Swiper";
 
 export default function HomePage() {
@@ -21,8 +21,13 @@ export default function HomePage() {
         <RecentlyAdded />
       </section>
 
-      <section className="mt-9">
-        <LeaderBoard />
+      <section className="mt-9 grid grid-cols-1 gap-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+        <div className="lg:col-span-2 xl:col-span-3 2xl:col-span-4">
+          <StaffPick />
+        </div>
+        <div className="lg:col-span-2">
+          <LeaderBoard />
+        </div>
       </section>
     </div>
   );

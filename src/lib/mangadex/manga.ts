@@ -4,6 +4,7 @@ import { AuthorParser } from "./author";
 import { ArtistParser } from "./artist";
 import { Chapter, Manga, MangasStats, MangaStats } from "@/types/types";
 import { ChaptersParser } from "./chapter";
+import { siteConfig } from "@/config/site";
 
 export function MangaParser(data: any): Manga {
   // const titleVi = data.attributes.altTitles.find((item: any) => item.vi)?.vi;
@@ -312,7 +313,7 @@ export async function getTopFollowedMangas(
   r18: boolean
 ): Promise<Manga[]> {
   const params: any = {
-    limit: 5,
+    limit: 10,
     includes: ["cover_art", "author", "artist"],
     availableTranslatedLanguage: language,
     hasAvailableChapters: "true",
@@ -341,7 +342,7 @@ export async function getTopRatedMangas(
 ): Promise<Manga[]> {
   const { data } = await axiosInstance.get(`/manga?`, {
     params: {
-      limit: 5,
+      limit: 10,
       includes: ["cover_art", "author", "artist"],
       hasAvailableChapters: "true",
       availableTranslatedLanguage: language,
@@ -361,4 +362,32 @@ export async function getTopRatedMangas(
     ...manga,
     stats: stats[index],
   }));
+}
+
+export async function getStaffPickMangas(r18: boolean): Promise<Manga[]> {
+  const StaffPickID = await axiosInstance
+    .get(`/list/${siteConfig.mangadexAPI.staffPickList}`)
+    .then((res) =>
+      res.data.data.relationships
+        .filter((item: any) => item.type === "manga")
+        .map((item: any) => item.id)
+    );
+
+  const { data } = await axiosInstance.get(`/manga?`, {
+    params: {
+      limit: 32,
+      includes: ["cover_art", "author", "artist"],
+      // hasAvailableChapters: "true",
+      // availableTranslatedLanguage: ["vi"],
+      contentRating: r18
+        ? ["safe", "suggestive", "erotica"]
+        : ["safe", "suggestive", "erotica", "pornographic"],
+      ids: StaffPickID,
+      order: {
+        rating: "desc",
+      },
+    },
+  });
+
+  return data.data.map((item: any) => MangaParser(item));
 }
