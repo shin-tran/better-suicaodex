@@ -4,13 +4,43 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TopFollowed from "./TopFollowed";
 import TopRated from "./TopRated";
 import { Bookmark, ChevronsDown, ChevronsUp, Star } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 export default function LeaderBoard() {
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = () => setExpanded((prev) => !prev);
+  const [fullHeight, setFullHeight] = useState(0);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const updateFullHeight = useCallback(() => {
+    if (contentRef.current) {
+      setFullHeight(contentRef.current.scrollHeight || 0);
+    }
+  }, []);
+
+  useEffect(() => {
+    const observer = new ResizeObserver(() => {
+      updateFullHeight();
+    });
+
+    if (contentRef.current) {
+      observer.observe(contentRef.current);
+    }
+
+    const handleResize = () => {
+      updateFullHeight();
+    };
+
+    window.addEventListener("resize", handleResize);
+    const timer = setTimeout(updateFullHeight, 100);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(timer);
+    };
+  }, [expanded, updateFullHeight]);
 
   return (
     <div className="flex flex-col">
@@ -18,20 +48,19 @@ export default function LeaderBoard() {
       <h1 className="text-2xl font-black uppercase">Bảng xếp hạng</h1>
 
       <Tabs
+        ref={contentRef}
         defaultValue="follow"
         className={cn(
           "mt-4",
           "overflow-hidden transition-all duration-500 ease-in-out"
         )}
         style={{
-          maxHeight: expanded ? "2000px" : "700px",
+          maxHeight: expanded ? fullHeight : "700px",
           opacity: expanded ? 1 : 0.95,
-          //   maskImage: expanded
-          //     ? "none"
-          //     : "linear-gradient(to bottom, black 0%, black 60%, transparent 100%)",
-          WebkitMaskImage: expanded
-            ? "none"
-            : "linear-gradient(to bottom, black 0%, black 60%, transparent 100%)",
+          WebkitMaskImage:
+            expanded || fullHeight < 700
+              ? "none"
+              : "linear-gradient(to bottom, black 0%, black 60%, transparent 100%)",
         }}
       >
         <TabsList className="rounded-sm w-full ">
@@ -52,33 +81,35 @@ export default function LeaderBoard() {
         </TabsContent>
       </Tabs>
 
-      <div
-        className={cn(
-          "flex justify-center w-full h-full transition-[border-color]",
-          expanded ? "border-transparent" : "border-primary"
-        )}
-      >
-        <Button
-          size="sm"
-          className="h-4 px-1 rounded-sm hover:animate-bounce"
-          onClick={toggleExpanded}
-          variant={expanded ? "secondary" : "default"}
-        >
-          {expanded ? (
-            <>
-              <ChevronsUp />
-              thu gọn
-              <ChevronsUp />
-            </>
-          ) : (
-            <>
-              <ChevronsDown />
-              xem thêm
-              <ChevronsDown />
-            </>
+      {fullHeight > 700 && (
+        <div
+          className={cn(
+            "flex justify-center w-full h-full",
+            expanded && "mt-2"
           )}
-        </Button>
-      </div>
+        >
+          <Button
+            size="sm"
+            className="h-4 px-1 rounded-sm"
+            onClick={toggleExpanded}
+            variant={expanded ? "secondary" : "default"}
+          >
+            {expanded ? (
+              <>
+                <ChevronsUp />
+                thu gọn
+                <ChevronsUp />
+              </>
+            ) : (
+              <>
+                <ChevronsDown />
+                xem thêm
+                <ChevronsDown />
+              </>
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

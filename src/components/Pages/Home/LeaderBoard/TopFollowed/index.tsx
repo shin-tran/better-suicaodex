@@ -21,7 +21,7 @@ export default function TopFollowed() {
   if (isLoading)
     return (
       <div className="grid grid-cols-1 gap-1.5 rounded-sm">
-        {[...Array(5)].map((_, index) => (
+        {[...Array(4)].map((_, index) => (
           <LeaderBoardCardSkeleton key={index} />
         ))}
       </div>

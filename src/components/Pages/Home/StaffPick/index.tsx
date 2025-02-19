@@ -7,13 +7,44 @@ import useSWR from "swr";
 import { Skeleton } from "@/components/ui/skeleton";
 import RecentlyCard from "../Recently/recently-card";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronsDown, ChevronsUp } from "lucide-react";
 
 export default function StaffPick() {
   const [config] = useConfig();
   const [expanded, setExpanded] = useState(false);
+  const [fullHeight, setFullHeight] = useState(0);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const updateFullHeight = useCallback(() => {
+    if (contentRef.current) {
+      setFullHeight(contentRef.current.scrollHeight || 0);
+    }
+  }, []);
+
+  useEffect(() => {
+    const observer = new ResizeObserver(() => {
+      updateFullHeight();
+    });
+
+    if (contentRef.current) {
+      observer.observe(contentRef.current);
+    }
+
+    const handleResize = () => {
+      updateFullHeight();
+    };
+
+    window.addEventListener("resize", handleResize);
+    const timer = setTimeout(updateFullHeight, 100);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(timer);
+    };
+  }, [expanded, updateFullHeight]);
+
   const toggleExpanded = () => setExpanded((prev) => !prev);
 
   const { data, error, isLoading } = useSWR(
@@ -51,16 +82,14 @@ export default function StaffPick() {
       </div>
 
       <div
+        ref={contentRef}
         className={cn(
           "mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3",
           "overflow-hidden transition-all duration-500 ease-in-out"
         )}
         style={{
-          maxHeight: expanded ? "2000px" : "700px",
+          maxHeight: expanded ? fullHeight : "700px",
           opacity: expanded ? 1 : 0.95,
-          //   maskImage: expanded
-          //     ? "none"
-          //     : "linear-gradient(to bottom, black 0%, black 60%, transparent 100%)",
           WebkitMaskImage: expanded
             ? "none"
             : "linear-gradient(to bottom, black 0%, black 60%, transparent 100%)",
@@ -74,14 +103,11 @@ export default function StaffPick() {
       </div>
 
       <div
-        className={cn(
-          "flex justify-center w-full h-full transition-[border-color]",
-          expanded ? "border-transparent" : "border-primary"
-        )}
+        className={cn("flex justify-center w-full h-full", expanded && "mt-2")}
       >
         <Button
           size="sm"
-          className="h-4 px-1 rounded-sm hover:animate-bounce"
+          className="h-4 px-1 rounded-sm"
           onClick={toggleExpanded}
           variant={expanded ? "secondary" : "default"}
         >
