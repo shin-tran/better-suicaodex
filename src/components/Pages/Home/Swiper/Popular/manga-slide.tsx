@@ -5,8 +5,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { Artist, Author, Manga } from "@/types/types";
 import Link from "next/link";
-import MangaCover from "../../../Manga/manga-cover";
-import Tags from "../../../Manga/Tags";
+import MangaCover from "../../../../Manga/manga-cover";
+import Tags from "../../../../Manga/Tags";
 // import remarkGfm from "remark-gfm";
 // import ReactMarkdown from "react-markdown";
 

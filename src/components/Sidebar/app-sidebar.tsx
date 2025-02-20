@@ -62,7 +62,7 @@ const data = {
           url: "/latest",
         },
         {
-          title: "Truyện mới đăng",
+          title: "Truyện mới",
           url: "/recent",
         },
         {

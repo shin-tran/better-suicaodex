@@ -4,7 +4,8 @@ import LatestUpdate from "./LatestUpdate";
 import LeaderBoard from "./LeaderBoard";
 import RecentlyAdded from "./Recently";
 import StaffPick from "./StaffPick";
-import PopularSwiper from "./Swiper";
+import CompletedSwiper from "./Swiper/Completed";
+import PopularSwiper from "./Swiper/Popular";
 
 export default function HomePage() {
   return (
@@ -28,6 +29,10 @@ export default function HomePage() {
         <div className="lg:col-span-2">
           <LeaderBoard />
         </div>
+      </section>
+
+      <section className="mt-9">
+        <CompletedSwiper />
       </section>
     </div>
   );

@@ -391,3 +391,23 @@ export async function getStaffPickMangas(r18: boolean): Promise<Manga[]> {
 
   return data.data.map((item: any) => MangaParser(item));
 }
+
+export async function getCompletedMangas(
+  language: ("vi" | "en")[],
+  r18: boolean
+): Promise<Manga[]> {
+  const { data } = await axiosInstance.get(`/manga?`, {
+    params: {
+      limit: 32,
+      includes: ["cover_art", "author", "artist"],
+      hasAvailableChapters: "true",
+      availableTranslatedLanguage: language,
+      contentRating: r18
+        ? ["safe", "suggestive", "erotica", "pornographic"]
+        : ["safe", "suggestive", "erotica"],
+      status: ["completed"],
+    },
+  });
+
+  return data.data.map((item: any) => MangaParser(item));
+}
