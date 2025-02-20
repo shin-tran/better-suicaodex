@@ -66,9 +66,13 @@ export default function MangaCompletedCard({ manga }: MangaCompletedCardProps) {
               {manga.description.content}
             </ReactMarkdown>
 
-            <Button asChild className="self-end w-min">
+            <Button
+              asChild
+              className="self-end [&_svg]:size-6"
+              size="icon"
+              variant="secondary"
+            >
               <Link href={`/manga/${manga.id}`}>
-                <span>Xem chi tiết</span>
                 <ArrowRight />
               </Link>
             </Button>

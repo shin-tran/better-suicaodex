@@ -32,14 +32,7 @@ export default function CompletedSwiper() {
         <hr className="w-9 h-1 bg-primary border-none" />
         <h1 className="text-2xl font-black uppercase">đã hoàn thành</h1>
 
-        <div className="mt-4 grid grid-cols-3 md:grid-cols-6 gap-3">
-          {[...Array(isMobile ? 3 : 6)].map((_, index) => (
-            <Skeleton
-              key={index}
-              className="w-full h-[300px] rounded-sm bg-gray-500"
-            />
-          ))}
-        </div>
+        <Skeleton className="mt-4 w-full h-[280px] md:h-[400px] rounded-sm bg-gray-500" />
       </div>
     );
 
@@ -62,7 +55,7 @@ export default function CompletedSwiper() {
 
       <div className="overflow-hidden">
         <Swiper
-          slidesPerView={isMobile ? 3 : 6}
+          slidesPerView={isMobile ? 3 : 5}
           autoplay={true}
           loop={true}
           modules={[Autoplay]}
