@@ -85,11 +85,11 @@ export default function StaffPick() {
         ref={contentRef}
         className={cn(
           "mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3",
-          "overflow-hidden transition-all duration-500 ease-in-out"
+          "overflow-hidden transition-all duration-500"
         )}
         style={{
           maxHeight: expanded ? fullHeight : "700px",
-          opacity: expanded ? 1 : 0.95,
+          // opacity: expanded ? 1 : 0.95,
           WebkitMaskImage: expanded
             ? "none"
             : "linear-gradient(to bottom, black 0%, black 60%, transparent 100%)",

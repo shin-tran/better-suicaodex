@@ -50,13 +50,10 @@ export default function LeaderBoard() {
       <Tabs
         ref={contentRef}
         defaultValue="follow"
-        className={cn(
-          "mt-4",
-          "overflow-hidden transition-all duration-500 ease-in-out"
-        )}
+        className={cn("mt-4", "overflow-hidden transition-all duration-500")}
         style={{
           maxHeight: expanded ? fullHeight : "700px",
-          opacity: expanded ? 1 : 0.95,
+          // opacity: expanded ? 1 : 0.95,
           WebkitMaskImage:
             expanded || fullHeight < 700
               ? "none"
