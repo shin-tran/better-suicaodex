@@ -93,9 +93,11 @@ export default function MangaCompletedCard({ manga }: MangaCompletedCardProps) {
       </CardContent>
 
       <CardFooter className="py-2 px-0 w-full">
-        <p className="text-base font-semibold line-clamp-2 drop-shadow-sm">
-          {manga.title}
-        </p>
+        <Link href={`/manga/${manga.id}`}>
+          <p className="text-base font-semibold line-clamp-2 drop-shadow-sm">
+            {manga.title}
+          </p>
+        </Link>
       </CardFooter>
     </Card>
   );
