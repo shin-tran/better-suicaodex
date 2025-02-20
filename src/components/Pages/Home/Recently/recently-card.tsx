@@ -30,7 +30,7 @@ export default function RecentlyCard({ manga }: RecentlyCardProps) {
             "!block rounded-sm object-cover w-full h-full",
             !loaded && "aspect-[5/7]"
           )}
-          placeholderSrc="/images/xidoco.jpg"
+          placeholderSrc="/images/xidoco.webp"
           className={cn(
             "h-auto w-full rounded-sm block object-cover aspect-[5/7]"
           )}
@@ -38,7 +38,7 @@ export default function RecentlyCard({ manga }: RecentlyCardProps) {
           alt={`Ảnh bìa ${manga.title}`}
           onLoad={() => setLoaded(true)}
           onError={(e) => {
-            e.currentTarget.src = "/images/xidoco.jpg";
+            e.currentTarget.src = "/images/xidoco.webp";
           }}
         />
       </CardContent>

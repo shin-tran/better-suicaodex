@@ -6,11 +6,11 @@ import { cn } from "@/lib/utils";
 export default function MangaNotFound() {
   return (
     <>
-      <Banner src="/images/xidoco.jpg" />
+      <Banner src="/images/xidoco.webp" />
       <div className="flex flex-col gap-4">
         <div className="flex flex-row items-start gap-6">
           <img
-            src="/images/xidoco.jpg"
+            src="/images/xidoco.webp"
             alt="xidoco"
             className="w-[130px] md:w-[200px] h-auto rounded-sm drop-shadow-md shadow-md"
           />

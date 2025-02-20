@@ -82,7 +82,7 @@ const MangaCover: FC<MangaCoverProps> = ({
         onLoad={() => setLoaded(true)}
         visibleByDefault={preload}
         onError={(e) => {
-          e.currentTarget.src = "/images/xidoco.jpg";
+          e.currentTarget.src = "/images/xidoco.webp";
         }}
         {...props}
       />

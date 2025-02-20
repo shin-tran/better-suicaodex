@@ -18,12 +18,12 @@ export function MainNav() {
         className="mr-4 flex items-center gap-1 justify-start lg:mr-6"
       >
         {/* <Icons.logo className="h-6 w-6" /> */}
-        {/* <img
-          src="/doro.webp"
+        <img
+          src="/images/cunny.webp"
           fetchPriority="high"
-          alt="Doro"
-          className="h-10 w-auto pb-1 -ml-1"
-        /> */}
+          alt="uhhohhh"
+          className="h-7 w-auto"
+        />
         <img
           src="/suicaodex.webp"
           fetchPriority="high"

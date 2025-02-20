@@ -124,7 +124,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
               id={manga.id}
               cover={manga.cover}
               alt={manga.title}
-              placeholder="/images/xidoco.jpg"
+              placeholder="/images/xidoco.webp"
               className="shadow-md drop-shadow-md"
               wrapper="w-[130px] md:w-[200px] h-auto"
               isExpandable

@@ -20,7 +20,7 @@ export default function CompactCard({ manga }: CompactCardProps) {
           id={manga.id}
           cover={manga.cover}
           alt={manga.title}
-          placeholder="/images/xidoco.jpg"
+          placeholder="/images/xidoco.webp"
           wrapper="w-14 h-auto border"
           className="!w-14 !h-20 !object-cover"
           quality="256"
