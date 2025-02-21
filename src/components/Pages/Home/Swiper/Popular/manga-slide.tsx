@@ -8,12 +8,14 @@ import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import Tags from "@/components/Manga/Tags";
 import MangaCover from "@/components/Manga/manga-cover";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MangaSlideProps {
   manga: Manga;
 }
 
 export default function MangaSlide({ manga }: MangaSlideProps) {
+  const isMobile = useIsMobile();
   const bannerSrc =
     siteConfig.suicaodex.apiURL + "/covers/" + manga.id + "/" + manga.cover;
 
@@ -62,9 +64,11 @@ export default function MangaSlide({ manga }: MangaSlideProps) {
         </Link>
 
         <div
-          className="grid gap-6 sm:gap-2 h-full min-h-0 md:pb-1.5 lg:pb-1"
+          className="grid gap-6 sm:gap-2 h-full min-h-0 pb-8 md:pb-1.5 lg:pb-1"
           style={{
-            gridTemplateRows: "max-content min-content auto max-content",
+            gridTemplateRows: isMobile
+              ? "1fr auto"
+              : "max-content min-content auto max-content",
           }}
         >
           <Link href={`/manga/${manga.id}`}>

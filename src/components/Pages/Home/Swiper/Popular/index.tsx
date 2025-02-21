@@ -38,7 +38,7 @@ export default function PopularSwiper() {
       <div className="absolute !p-0 !m-0 top-0 left-0 w-full">
         <div>
           <Swiper
-            className="h-[334px] md:h-[410px] lg:h-[430px]"
+            className="h-[335px] md:h-[410px] lg:h-[430px]"
             onSlideChange={(swiper) => setSlideIndex(swiper.realIndex + 1)}
             autoplay={true}
             loop={true}
