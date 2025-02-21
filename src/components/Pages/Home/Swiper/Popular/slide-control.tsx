@@ -19,10 +19,9 @@ export default function SlideControl() {
       <Button
         size="icon"
         className={cn(
-          "h-8 w-8 bg-accent/50 rounded-full [&_svg]:size-6",
-          "md:h-10 md:w-10 md:bg-transparent md:hover:bg-accent/50"
+          "h-8 w-8 bg-transparent hover:bg-transparent hover:text-primary rounded-full [&_svg]:size-6",
+          "md:h-10 md:w-10"
         )}
-        variant="ghost"
         onClick={() => swiper.slidePrev()}
       >
         <ChevronLeft />
@@ -33,10 +32,9 @@ export default function SlideControl() {
       <Button
         size="icon"
         className={cn(
-          "h-8 w-8 bg-accent/50 rounded-full [&_svg]:size-6",
-          "md:h-10 md:w-10 md:bg-transparent md:hover:bg-accent/50"
+          "h-8 w-8 bg-transparent hover:bg-transparent hover:text-primary rounded-full [&_svg]:size-6",
+          "md:h-10 md:w-10"
         )}
-        variant="ghost"
         onClick={() => swiper.slideNext()}
       >
         <ChevronRight />
