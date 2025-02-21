@@ -19,7 +19,7 @@ export default function SlideControl() {
       <Button
         size="icon"
         className={cn(
-          "h-8 w-8 bg-transparent hover:bg-transparent hover:text-primary rounded-full [&_svg]:size-6",
+          "h-8 w-8 bg-transparent hover:bg-transparent hover:text-primary rounded-full [&_svg]:size-6 shadow-none text-inherit",
           "md:h-10 md:w-10"
         )}
         onClick={() => swiper.slidePrev()}
@@ -32,7 +32,7 @@ export default function SlideControl() {
       <Button
         size="icon"
         className={cn(
-          "h-8 w-8 bg-transparent hover:bg-transparent hover:text-primary rounded-full [&_svg]:size-6",
+          "h-8 w-8 bg-transparent hover:bg-transparent hover:text-primary rounded-full [&_svg]:size-6 shadow-none text-inherit",
           "md:h-10 md:w-10"
         )}
         onClick={() => swiper.slideNext()}

@@ -5,13 +5,16 @@ import { cn } from "@/lib/utils";
 import { ModeSwitcher } from "./mode-switcher";
 import useScrollOffset from "@/hooks/use-scroll-offset";
 import QuickSearch from "../Search/quick-search";
+import { usePathname } from "next/navigation";
 
 export function SiteHeader() {
   const { isAtTop } = useScrollOffset();
+  const pathname = usePathname();
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full",
+        "top-0 z-50 w-full",
+        !pathname.includes("/chapter") && "sticky",
         "px-4 md:px-8 lg:px-12",
         isAtTop && "bg-transparent",
         !isAtTop &&

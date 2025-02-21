@@ -1,6 +1,7 @@
-import { Chapter, Volume } from "@/types/types";
+import { Chapter, ChapterAggregate, Volume } from "@/types/types";
 import { GroupParser } from "./group";
 import axiosInstance from "../axios";
+import { siteConfig } from "@/config/site";
 
 export function ChaptersParser(data: any[]): Chapter[] {
   return data.map((item) => {
@@ -102,4 +103,89 @@ export async function getChapterVolume(
   const chapters = ChaptersParser(data.data);
 
   return { volumes: groupChaptersByVolume(chapters), total };
+}
+
+export async function getChapterDetail(id: string): Promise<Chapter> {
+  const { data } = await axiosInstance.get(`/chapter/${id}?`, {
+    params: {
+      includes: ["scanlation_group", "manga"],
+    },
+  });
+  const chapter = ChaptersParser([data.data])[0];
+
+  const manga = () => {
+    const mangaData = data.data.relationships.find(
+      (item: any) => item.type === "manga"
+    );
+    const titleVi = mangaData.attributes.altTitles.find(
+      (item: any) => item.vi
+    )?.vi;
+    let title = titleVi
+      ? titleVi
+      : mangaData.attributes.title[Object.keys(mangaData.attributes.title)[0]];
+
+    if (!title) {
+      title = mangaData.attributes.altTitles.find((item: any) => item.en)?.en;
+    }
+
+    return {
+      id: mangaData.id,
+      title: title,
+    };
+  };
+
+  const { data: atHomeData } = await axiosInstance.get(`/ch/${id}`);
+  const pages = atHomeData.images.map(
+    (item: string) => `${siteConfig.suicaodex.apiURL}/${item}`
+  );
+
+  return { ...chapter, manga: manga(), pages };
+}
+
+export async function getChapterAggregate(
+  mangaID: string,
+  language: string,
+  groups: string[]
+): Promise<ChapterAggregate[]> {
+  const { data } = await axiosInstance.get(`/manga/${mangaID}/aggregate?`, {
+    params: {
+      translatedLanguage: [language],
+      groups: groups,
+    },
+  });
+
+  const result: ChapterAggregate[] = [];
+
+  for (const volumeKey in data.volumes) {
+    const volume = data.volumes[volumeKey];
+    const chaptersArray = [];
+
+    for (const chapterKey in volume.chapters) {
+      const chapter = volume.chapters[chapterKey];
+
+      chaptersArray.push({
+        id: chapter.id, // Lấy trường `id`
+        chapter: chapter.chapter,
+        other: chapter.others,
+      });
+    }
+
+    chaptersArray.sort((a, b) =>
+      b.chapter.localeCompare(a.chapter, undefined, { numeric: true })
+    );
+
+    result.push({
+      vol: volumeKey,
+      chapters: chaptersArray,
+    });
+  }
+
+  result.sort((a, b) => {
+    if (a.vol === "none") return -1;
+    if (b.vol === "none") return 1;
+
+    return b.vol.localeCompare(a.vol, undefined, { numeric: true });
+  });
+
+  return result;
 }

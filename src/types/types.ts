@@ -95,7 +95,7 @@ export type Chapter = {
   updatedAt: string;
   externalUrl?: string;
   group: Group[];
-  language?: string;
+  language: string;
   pages?: string[];
   manga: {
     id: string;
@@ -121,4 +121,13 @@ export type LastestManga = {
   info: Manga;
   lastestChap: Chapter[];
   total?: number;
+};
+
+export type ChapterAggregate = {
+  vol: string;
+  chapters: {
+    id: string;
+    chapter: string;
+    other?: string[];
+  }[];
 };

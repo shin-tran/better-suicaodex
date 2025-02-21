@@ -8,6 +8,7 @@ import { SiteHeader } from "@/components/Navbar/site-header";
 import { ThemeProvider } from "@/components/providers";
 import { ThemeSwitcher } from "@/components/Theme/theme-switcher";
 import { siteConfig } from "@/config/site";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   subsets: ["vietnamese"],
@@ -36,6 +37,15 @@ export default function RootLayout({
             <div className="border-grid flex flex-1 flex-col">
               <SiteHeader />
               <main className="py-4 mx-4 md:mx-8 lg:mx-12">{children}</main>
+              <Toaster
+                richColors
+                position="top-right"
+                closeButton
+                offset={{
+                  top: "55px",
+                  right: "65px",
+                }}
+              />
             </div>
 
             <AppSidebar side="right" />

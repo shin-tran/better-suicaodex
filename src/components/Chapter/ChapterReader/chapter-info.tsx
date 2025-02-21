@@ -1,0 +1,50 @@
+"use client";
+
+import { Chapter } from "@/types/types";
+import { Users } from "lucide-react";
+import Link from "next/link";
+
+interface ChapterInfoProps {
+  chapter: Chapter;
+}
+
+export default function ChapterInfo({ chapter }: ChapterInfoProps) {
+  return (
+    <div className="grid grid-cols-1 gap-0.5 pb-2">
+      <h1 className="text-xl">{ChapterTitle(chapter)}</h1>
+
+      <Link
+        href={`/manga/${chapter.manga.id}`}
+        className="text-primary font-semibold"
+      >
+        {chapter.manga.title}
+      </Link>
+
+      <div className="flex gap-0.5 items-center">
+        <Users size={20} className="shrink-0" />
+        {chapter.group.length === 0 ? (
+          <span className="px-1">No Group</span>
+        ) : (
+          chapter.group.map((group) => (
+            <Link
+              key={group.id}
+              href={`/group/${group.id}`}
+              className="hover:bg-secondary hover:text-primary rounded-sm px-1 line-clamp-1"
+            >
+              {group.name}
+            </Link>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ChapterTitle(chapter: Chapter) {
+  if (!chapter.chapter) {
+    return "Oneshot";
+  }
+  return chapter.title
+    ? `Ch. ${chapter.chapter} - ${chapter.title}`
+    : `Ch. ${chapter.chapter}`;
+}
