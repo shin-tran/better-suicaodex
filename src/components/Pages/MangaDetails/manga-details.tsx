@@ -228,7 +228,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
                       {!!manga.raw && (
                         <DropdownMenuItem>
                           <Link
-                            href={`${siteConfig.mangadexAPI.webURL}/title/${manga.id}`}
+                            href={manga.raw}
                             target="_blank"
                             className="flex items-center gap-2"
                           >
@@ -311,7 +311,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
                   {!!manga.raw && (
                     <DropdownMenuItem>
                       <Link
-                        href={`${siteConfig.mangadexAPI.webURL}/title/${manga.id}`}
+                        href={manga.raw}
                         target="_blank"
                         className="flex items-center gap-2"
                       >
