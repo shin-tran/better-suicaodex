@@ -11,7 +11,6 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Skeleton } from "../ui/skeleton";
 
 interface MangaCoverProps extends React.HTMLAttributes<HTMLImageElement> {
   id: string;

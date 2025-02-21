@@ -4,7 +4,7 @@ import { useConfig } from "@/hooks/use-config";
 import { FirstEnChapter, FirstViChapter } from "@/lib/mangadex/manga";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { BookOpen, BookX, Loader2, TriangleAlert } from "lucide-react";
+import { BookOpen, BookX, Loader2 } from "lucide-react";
 import { Chapter } from "@/types/types";
 import Link from "next/link";
 

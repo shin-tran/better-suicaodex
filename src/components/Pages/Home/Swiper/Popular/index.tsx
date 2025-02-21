@@ -38,7 +38,7 @@ export default function PopularSwiper() {
       <div className="absolute !p-0 !m-0 top-0 left-0 w-full">
         <div>
           <Swiper
-            className="h-[344px] md:h-[440px]"
+            className="h-[334px] md:h-[410px] lg:h-[430px]"
             onSlideChange={(swiper) => setSlideIndex(swiper.realIndex + 1)}
             autoplay={true}
             loop={true}
@@ -51,7 +51,7 @@ export default function PopularSwiper() {
             ))}
             <div
               className={cn(
-                "absolute flex gap-2 w-full bottom-1 md:bottom-9 lg:bottom-3.5 left-0 z-[3] justify-between md:justify-end items-center",
+                "absolute flex gap-2 w-full bottom-0 md:-bottom-[1.5px] lg:-bottom-1 left-0 z-[3] justify-between md:justify-end items-center",
                 "px-4 md:pr-[calc(32px+var(--sidebar-width-icon))] lg:pr-[calc(48px+var(--sidebar-width-icon))]"
               )}
             >

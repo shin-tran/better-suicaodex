@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/pagination";
 import useSWR from "swr";
 import { Loader2 } from "lucide-react";
-import { useConfig } from "@/hooks/use-config";
 
 interface ChapterListProps {
   mangaID: string;

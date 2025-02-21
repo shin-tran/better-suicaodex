@@ -1,6 +1,5 @@
 "use client";
 import { Chapter, ChapterGroup } from "@/types/types";
-import { Card } from "../../ui/card";
 import { Clock, ExternalLink, MessageSquare, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -13,6 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 
 interface ChapterCardProps {
   chapters: ChapterGroup;

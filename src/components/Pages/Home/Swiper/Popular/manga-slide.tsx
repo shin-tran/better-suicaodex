@@ -1,14 +1,13 @@
 "use client";
 
 import { siteConfig } from "@/config/site";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { Artist, Author, Manga } from "@/types/types";
 import Link from "next/link";
-import MangaCover from "../../../../Manga/manga-cover";
-import Tags from "../../../../Manga/Tags";
-// import remarkGfm from "remark-gfm";
-// import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import ReactMarkdown from "react-markdown";
+import Tags from "@/components/Manga/Tags";
+import MangaCover from "@/components/Manga/manga-cover";
 
 interface MangaSlideProps {
   manga: Manga;
@@ -21,7 +20,7 @@ export default function MangaSlide({ manga }: MangaSlideProps) {
   return (
     <>
       {/* Banner */}
-      <div className="absolute h-[344px] md:h-[440px] z-[-2] w-auto left-0 right-0 top-0 block">
+      <div className="absolute h-[324px] md:h-[400px] z-[-2] w-auto left-0 right-0 top-0 block">
         <div
           className={cn(
             "absolute h-[324px] md:h-[400px] w-full",
@@ -46,7 +45,7 @@ export default function MangaSlide({ manga }: MangaSlideProps) {
 
       <div
         className={cn(
-          "flex gap-4 pt-28 px-4 md:pl-8 lg:pl-12",
+          "flex gap-4 h-full pt-28 px-4 md:pl-8 lg:pl-12",
           "md:pr-[calc(32px+var(--sidebar-width-icon))] lg:pr-[calc(48px+var(--sidebar-width-icon))]"
         )}
       >
@@ -62,60 +61,69 @@ export default function MangaSlide({ manga }: MangaSlideProps) {
           />
         </Link>
 
-        <div className="flex flex-col justify-between">
-          <div className="flex flex-col gap-2">
-            <Link href={`/manga/${manga.id}`}>
-              <p className="drop-shadow-md font-black text-xl md:text-4xl md:min-h-11 line-clamp-5 md:line-clamp-6">
-                {manga.title}
-              </p>
-            </Link>
+        <div
+          className="grid gap-6 sm:gap-2 h-full min-h-0 md:pb-1.5 lg:pb-1"
+          style={{
+            gridTemplateRows: "max-content min-content auto max-content",
+          }}
+        >
+          <Link href={`/manga/${manga.id}`}>
+            <p className="drop-shadow-md font-black text-xl line-clamp-5 sm:line-clamp-2 lg:text-4xl overflow-hidden lg:!leading-[2.75rem]">
+              {manga.title}
+            </p>
+          </Link>
 
-            <div className="hidden md:flex flex-wrap gap-1">
-              <Tags
-                tags={manga.tags}
-                contentRating={manga.contentRating}
-                status={manga.status}
-              />
-            </div>
-
-            {/* <ReactMarkdown
-              className="hidden md:flex flex-col select-none text-sm py-1 max-h-[50%] overflow-auto"
-              remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
-              components={{
-                a: ({ href, children }) => (
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary hover:underline"
-                  >
-                    {children}
-                  </a>
-                ),
-                table: ({ children }) => (
-                  <table className="table-auto border-collapse border border-secondary rounded-md w-fit">
-                    {children}
-                  </table>
-                ),
-                thead: ({ children }) => (
-                  <thead className="border-b border-secondary">
-                    {children}
-                  </thead>
-                ),
-                tr: ({ children }) => (
-                  <tr className="even:bg-secondary">{children}</tr>
-                ),
-                th: ({ children }) => (
-                  <th className="px-2 py-1 text-left">{children}</th>
-                ),
-                td: ({ children }) => <td className="px-2 py-1">{children}</td>,
-              }}
-            >
-              {manga.description.content}
-            </ReactMarkdown> */}
+          <div className="hidden md:flex flex-wrap gap-1">
+            <Tags
+              tags={manga.tags}
+              contentRating={manga.contentRating}
+              status={manga.status}
+            />
           </div>
 
-          <p className="text-base md:text-lg italic font-medium line-clamp-1 max-w-full md:max-w-[80%]">
+          <div className="hidden md:block min-h-0 relative overflow-auto">
+            <div className="relative overflow-hidden">
+              <ReactMarkdown
+                className="text-sm"
+                remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
+                components={{
+                  a: ({ href, children }) => (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      {children}
+                    </a>
+                  ),
+                  table: ({ children }) => (
+                    <table className="table-auto border-collapse border border-secondary rounded-md w-fit">
+                      {children}
+                    </table>
+                  ),
+                  thead: ({ children }) => (
+                    <thead className="border-b border-secondary">
+                      {children}
+                    </thead>
+                  ),
+                  tr: ({ children }) => (
+                    <tr className="even:bg-secondary">{children}</tr>
+                  ),
+                  th: ({ children }) => (
+                    <th className="px-2 py-1 text-left">{children}</th>
+                  ),
+                  td: ({ children }) => (
+                    <td className="px-2 py-1">{children}</td>
+                  ),
+                }}
+              >
+                {manga.description.content}
+              </ReactMarkdown>
+            </div>
+          </div>
+
+          <p className="self-end text-base md:text-lg italic font-medium line-clamp-1 max-w-full md:max-w-[80%]">
             {[
               ...new Set([
                 ...manga.author.map((a: Author) => a.name),

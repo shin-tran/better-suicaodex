@@ -2,9 +2,8 @@
 
 import MangaCover from "@/components/Manga/manga-cover";
 import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 import { Artist, Author, Manga } from "@/types/types";
-import { Bookmark, MessageSquare, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import Link from "next/link";
 
 interface TopRatedCardProps {

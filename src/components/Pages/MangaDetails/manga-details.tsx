@@ -35,7 +35,6 @@ import { cn } from "@/lib/utils";
 import { Artist, Author, Manga } from "@/types/types";
 import {
   Archive,
-  BookOpen,
   Bug,
   Ellipsis,
   LibraryBig,

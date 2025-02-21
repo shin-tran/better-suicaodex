@@ -1,7 +1,7 @@
 "use client";
 
 import { MangaStats } from "@/types/types";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { Bookmark, MessageSquare, Star } from "lucide-react";
 import {
   HoverCard,

@@ -1,10 +1,8 @@
 "use client";
 import { MainNav } from "@/components/Navbar/main-nav";
-import { Button } from "../ui/button";
 import { SidebarTrigger } from "../ui/sidebar";
 import { cn } from "@/lib/utils";
 import { ModeSwitcher } from "./mode-switcher";
-import { Search } from "lucide-react";
 import useScrollOffset from "@/hooks/use-scroll-offset";
 import QuickSearch from "../Search/quick-search";
 
