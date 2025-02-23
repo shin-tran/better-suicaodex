@@ -17,10 +17,30 @@ import { useScrollDirection } from "@/hooks/use-scroll-direction";
 import useScrollOffset from "@/hooks/use-scroll-offset";
 import { cn } from "@/lib/utils";
 import { Chapter, ChapterAggregate } from "@/types/types";
-import { ArrowLeft, ArrowRight, ChevronsUp, Settings } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ChevronsUp,
+  File,
+  GalleryVertical,
+  MoveHorizontal,
+  MoveVertical,
+  PanelTop,
+  Settings,
+  Square,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
 interface ChapterNavProps {
   chapterData: Chapter;
@@ -148,13 +168,68 @@ export default function ChapterNav({
           </Link>
         </Button>
 
-        <Button
-          size="icon"
-          className="shrink-0 [&_svg]:size-5"
-          onClick={() => toast.info("Tính năng đang phát triển!")}
-        >
-          <Settings />
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button size="icon" className="shrink-0 [&_svg]:size-5">
+              <Settings />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="border-none">
+            <DialogHeader>
+              <DialogTitle>Reader Settings</DialogTitle>
+              <DialogDescription>
+                Các tính năng bên dưới vẫn đang phát triển!
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="grid grid-cols-1 gap-2">
+              <div className="space-y-1.5">
+                <Label className="font-semibold">Kiểu đọc</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button variant="outline">
+                    <File />
+                    <span>Từng trang</span>
+                  </Button>
+
+                  <Button variant="outline">
+                    <GalleryVertical />
+                    <span>Trượt dọc</span>
+                  </Button>
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="font-semibold">Ảnh truyện</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button variant="outline">
+                    <MoveVertical />
+                    <span>Vừa chiều dọc</span>
+                  </Button>
+
+                  <Button variant="outline">
+                    <MoveHorizontal />
+                    <span>Vừa chiều ngang</span>
+                  </Button>
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="font-semibold">Thanh Header</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button variant="outline">
+                    <Square />
+                    <span>Ẩn</span>
+                  </Button>
+
+                  <Button variant="outline">
+                    <PanelTop />
+                    <span>Hiện</span>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         <Button
           size="icon"
