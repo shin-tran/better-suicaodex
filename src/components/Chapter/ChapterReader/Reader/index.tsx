@@ -34,8 +34,7 @@ export default function Reader({ images, chapterData }: ReaderProps) {
         <Loader2 size={35} className="animate-spin text-primary" />
       </div>
     );
-  if (error) return <div>Error</div>;
-  if (!data) return <div>Not Found</div>;
+  if (error || !data) return <LongStrip images={images} />;
 
   return (
     <>

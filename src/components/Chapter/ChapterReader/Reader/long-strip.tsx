@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
@@ -22,7 +21,7 @@ export default function LongStrip({ images }: LongStripProps) {
           >
             <LazyLoadImage
               wrapperClassName="!block"
-              placeholderSrc={"/images/xidoco.webp"}
+              placeholderSrc={"/images/place-doro.webp"}
               className="h-auto w-auto mx-auto"
               onLoad={() => setLoaded(true)}
               onError={(e) => {

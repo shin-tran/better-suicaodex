@@ -3,8 +3,11 @@
 import ChapterInfo from "@/components/Chapter/ChapterReader/chapter-info";
 import Reader from "@/components/Chapter/ChapterReader/Reader";
 import LongStrip from "@/components/Chapter/ChapterReader/Reader/long-strip";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getChapterAggregate, getChapterDetail } from "@/lib/mangadex/chapter";
 import useSWR from "swr";
+import ChapterNotFound from "./chapter-notfound";
+import MangaMaintain from "@/components/Manga/manga-maintain";
 
 interface ChapterProps {
   id: string;
@@ -19,8 +22,19 @@ export default function Chapter({ id }: ChapterProps) {
       revalidateOnFocus: false,
     }
   );
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error</div>;
+  if (isLoading)
+    return (
+      <div className="grid grid-cols-1 gap-2 pb-2">
+        <Skeleton className="w-1/5 h-5 bg-gray-500 rounded-sm" />
+        <Skeleton className="w-1/3 h-5 bg-gray-500 rounded-sm" />
+        <Skeleton className="w-1/4 h-5 bg-gray-500 rounded-sm" />
+      </div>
+    );
+  if (error) {
+    if (error.status === 404) return <ChapterNotFound />;
+    if (error.status === 503) return <MangaMaintain />;
+    return <div>Lỗi mất rồi 😭</div>;
+  }
   if (!data) return <div>Not found</div>;
 
   return (
