@@ -26,6 +26,9 @@ import {
   MoveHorizontal,
   MoveVertical,
   PanelTop,
+  RefreshCcw,
+  RefreshCw,
+  Repeat,
   Settings,
   Square,
 } from "lucide-react";
@@ -41,6 +44,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { useConfig } from "@/hooks/use-config";
+import { Input } from "@/components/ui/input";
 
 interface ChapterNavProps {
   chapterData: Chapter;
@@ -93,6 +98,7 @@ export default function ChapterNav({
   const scrollDirection = useScrollDirection();
   const isMobile = useIsMobile();
   const { isAtBottom, isAtTop } = useScrollOffset();
+  const [config, setConfig] = useConfig();
 
   useKeyDown("ArrowLeft", goPrevChapter);
   useKeyDown("ArrowRight", goNextChapter);
@@ -174,39 +180,144 @@ export default function ChapterNav({
               <Settings />
             </Button>
           </DialogTrigger>
-          <DialogContent className="border-none">
-            <DialogHeader>
+          <DialogContent className="border-none [&>button]:hidden">
+            <DialogHeader className="hidden">
               <DialogTitle>Reader Settings</DialogTitle>
-              <DialogDescription>
-                Các tính năng bên dưới vẫn đang phát triển!
-              </DialogDescription>
+              <DialogDescription>Tuỳ chỉnh linh tinh</DialogDescription>
             </DialogHeader>
 
-            <div className="grid grid-cols-1 gap-2">
+            <div className="grid grid-cols-1 gap-2 transition-all duration-300">
               <div className="space-y-1.5">
                 <Label className="font-semibold">Kiểu đọc</Label>
                 <div className="grid grid-cols-2 gap-2">
-                  <Button variant="outline">
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      config.reader.type === "single" &&
+                        "border-2 border-primary"
+                    )}
+                    onClick={() => {
+                      setConfig({
+                        ...config,
+                        reader: {
+                          ...config.reader,
+                          type: "single",
+                        },
+                      });
+
+                      return toast.info("Chức năng đang phát triển!");
+                    }}
+                  >
                     <File />
                     <span>Từng trang</span>
                   </Button>
 
-                  <Button variant="outline">
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      config.reader.type === "long-strip" &&
+                        "border-2 border-primary"
+                    )}
+                    onClick={() =>
+                      setConfig({
+                        ...config,
+                        reader: {
+                          ...config.reader,
+                          type: "long-strip",
+                        },
+                      })
+                    }
+                  >
                     <GalleryVertical />
                     <span>Trượt dọc</span>
                   </Button>
                 </div>
               </div>
 
+              {config.reader.type === "long-strip" && (
+                <div className="space-y-1.5">
+                  <Label className="font-semibold">
+                    Khoảng cách giữa các ảnh (px)
+                  </Label>
+                  <div className="flex gap-2">
+                    <Input
+                      type="number"
+                      min={0}
+                      defaultValue={config.reader.imageGap || 4}
+                      autoFocus={false}
+                      autoComplete="off"
+                      onChange={(e) => {
+                        if (!e.target.value) return;
+
+                        setConfig({
+                          ...config,
+                          reader: {
+                            ...config.reader,
+                            imageGap: parseInt(e.target.value) || 4,
+                          },
+                        });
+                      }}
+                    />
+
+                    <Button
+                      variant="outline"
+                      className="shrink-0"
+                      size="icon"
+                      onClick={() => {
+                        setConfig({
+                          ...config,
+                          reader: {
+                            ...config.reader,
+                            imageGap: 4,
+                          },
+                        });
+                      }}
+                    >
+                      <Repeat />
+                    </Button>
+                  </div>
+                </div>
+              )}
+
               <div className="space-y-1.5">
                 <Label className="font-semibold">Ảnh truyện</Label>
                 <div className="grid grid-cols-2 gap-2">
-                  <Button variant="outline">
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      config.reader.imageFit === "height" &&
+                        "border-2 border-primary"
+                    )}
+                    onClick={() =>
+                      setConfig({
+                        ...config,
+                        reader: {
+                          ...config.reader,
+                          imageFit: "height",
+                        },
+                      })
+                    }
+                  >
                     <MoveVertical />
                     <span>Vừa chiều dọc</span>
                   </Button>
 
-                  <Button variant="outline">
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      config.reader.imageFit === "width" &&
+                        "border-2 border-primary"
+                    )}
+                    onClick={() =>
+                      setConfig({
+                        ...config,
+                        reader: {
+                          ...config.reader,
+                          imageFit: "width",
+                        },
+                      })
+                    }
+                  >
                     <MoveHorizontal />
                     <span>Vừa chiều ngang</span>
                   </Button>
@@ -216,12 +327,40 @@ export default function ChapterNav({
               <div className="space-y-1.5">
                 <Label className="font-semibold">Thanh Header</Label>
                 <div className="grid grid-cols-2 gap-2">
-                  <Button variant="outline">
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      !config.reader.header && "border-2 border-primary"
+                    )}
+                    onClick={() =>
+                      setConfig({
+                        ...config,
+                        reader: {
+                          ...config.reader,
+                          header: false,
+                        },
+                      })
+                    }
+                  >
                     <Square />
                     <span>Ẩn</span>
                   </Button>
 
-                  <Button variant="outline">
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      !!config.reader.header && "border-2 border-primary"
+                    )}
+                    onClick={() =>
+                      setConfig({
+                        ...config,
+                        reader: {
+                          ...config.reader,
+                          header: true,
+                        },
+                      })
+                    }
+                  >
                     <PanelTop />
                     <span>Hiện</span>
                   </Button>

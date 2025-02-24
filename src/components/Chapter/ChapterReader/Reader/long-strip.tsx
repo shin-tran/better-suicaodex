@@ -1,5 +1,7 @@
 "use client";
 
+import { useConfig } from "@/hooks/use-config";
+import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
@@ -9,9 +11,17 @@ interface LongStripProps {
 
 export default function LongStrip({ images }: LongStripProps) {
   const [loaded, setLoaded] = useState(false);
+  const [config] = useConfig();
   return (
     <div className="min-w-0 relative min-h-lvh mt-2">
-      <div className="overflow-x-auto flex flex-col gap-1 items-center h-full select-none bg-transparent">
+      <div
+        className={cn(
+          "overflow-x-auto flex flex-col items-center h-full select-none bg-transparent"
+        )}
+        style={{
+          gap: `${config.reader.imageGap}px`,
+        }}
+      >
         {images.map((image, index) => (
           <span
             key={index + 1}
@@ -22,7 +32,10 @@ export default function LongStrip({ images }: LongStripProps) {
             <LazyLoadImage
               wrapperClassName="!block"
               placeholderSrc={"/images/place-doro.webp"}
-              className="h-auto w-auto mx-auto"
+              className={cn(
+                "h-auto w-auto mx-auto",
+                config.reader.imageFit === "height" && "!max-h-screen"
+              )}
               onLoad={() => setLoaded(true)}
               onError={(e) => {
                 e.currentTarget.src = "/images/xidoco.webp";

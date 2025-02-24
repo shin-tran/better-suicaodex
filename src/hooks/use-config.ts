@@ -9,6 +9,12 @@ type Config = {
   packageManager: "npm" | "yarn" | "pnpm" | "bun";
   translatedLanguage: ["vi"] | ["en"] | ["vi", "en"];
   r18: boolean;
+  reader: {
+    type: "single" | "long-strip";
+    imageFit: "height" | "width";
+    imageGap: number;
+    header: boolean;
+  };
 };
 
 const configAtom = atomWithStorage<Config>("config", {
@@ -18,6 +24,12 @@ const configAtom = atomWithStorage<Config>("config", {
   packageManager: "bun",
   translatedLanguage: ["vi"],
   r18: false,
+  reader: {
+    type: "long-strip",
+    imageFit: "width",
+    imageGap: 4,
+    header: false,
+  },
 });
 
 export function useConfig() {

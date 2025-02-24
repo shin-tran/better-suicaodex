@@ -38,8 +38,8 @@ export default function Reader({ images, chapterData }: ReaderProps) {
 
   return (
     <>
-      <ChapterNav chapterData={chapterData} chapterAggregate={data} />
       <LongStrip images={images} />
+      <ChapterNav chapterData={chapterData} chapterAggregate={data} />
     </>
   );
 }
