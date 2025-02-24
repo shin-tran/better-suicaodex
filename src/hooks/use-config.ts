@@ -32,24 +32,18 @@ const defaultConfig: Config = {
   },
 };
 
-// const configAtom = atomWithStorage<Config>("config", {
-//   style: "new-york",
-//   theme: "zinc",
-//   radius: 0.5,
-//   packageManager: "bun",
-//   translatedLanguage: ["vi"],
-//   r18: false,
-//   reader: {
-//     type: "long-strip",
-//     imageFit: "width",
-//     imageGap: 4,
-//     header: false,
-//   },
-// });
-
-const configAtom = atomWithStorage<Config>("config", {
-  ...defaultConfig,
-  ...JSON.parse(localStorage.getItem("config") || "{}"),
+const configAtom = atomWithStorage<Config>("config", defaultConfig, {
+  getItem: (key: string) => {
+    const storedValue = localStorage.getItem(key);
+    if (!storedValue) return defaultConfig;
+    return { ...defaultConfig, ...JSON.parse(storedValue) };
+  },
+  setItem: (key: string, value: Config) => {
+    localStorage.setItem(key, JSON.stringify(value));
+  },
+  removeItem: (key: string) => {
+    localStorage.removeItem(key);
+  },
 });
 
 export function useConfig() {
