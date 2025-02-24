@@ -17,7 +17,7 @@ type Config = {
   };
 };
 
-const configAtom = atomWithStorage<Config>("config", {
+const defaultConfig: Config = {
   style: "new-york",
   theme: "zinc",
   radius: 0.5,
@@ -30,6 +30,26 @@ const configAtom = atomWithStorage<Config>("config", {
     imageGap: 4,
     header: false,
   },
+};
+
+// const configAtom = atomWithStorage<Config>("config", {
+//   style: "new-york",
+//   theme: "zinc",
+//   radius: 0.5,
+//   packageManager: "bun",
+//   translatedLanguage: ["vi"],
+//   r18: false,
+//   reader: {
+//     type: "long-strip",
+//     imageFit: "width",
+//     imageGap: 4,
+//     header: false,
+//   },
+// });
+
+const configAtom = atomWithStorage<Config>("config", {
+  ...defaultConfig,
+  ...JSON.parse(localStorage.getItem("config") || "{}"),
 });
 
 export function useConfig() {
