@@ -46,7 +46,7 @@ export function ContentCustomizer() {
       <div className="hidden items-center md:flex grow">
         <Popover>
           <PopoverTrigger asChild>
-            <SidebarMenuButton asChild tooltip="Nội dung">
+            <SidebarMenuButton asChild tooltip="Nội dung" className="cursor-pointer">
               <div>
                 <SlidersHorizontal />
                 <span>Nội dung</span>

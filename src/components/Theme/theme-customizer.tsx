@@ -50,7 +50,7 @@ export function ThemeCustomizer() {
       <div className="hidden items-center md:flex grow">
         <Popover>
           <PopoverTrigger asChild>
-            <SidebarMenuButton asChild tooltip="Giao diện">
+            <SidebarMenuButton asChild tooltip="Giao diện" className="cursor-pointer">
               <div>
                 <Palette />
                 <span>Giao diện</span>
