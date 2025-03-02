@@ -26,8 +26,6 @@ import {
   MoveHorizontal,
   MoveVertical,
   PanelTop,
-  RefreshCcw,
-  RefreshCw,
   Repeat,
   Settings,
   Square,
@@ -105,21 +103,20 @@ export default function ChapterNav({
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-2 mt-4 md:px-40">
-        {!!prevChapter && (
-          <Button asChild size="lg" className="[&>svg]:!size-5">
-            <Link href={`/chapter/${prevChapter}`}>
-              <ArrowLeft />
-              <span>Chương trước</span>
-            </Link>
-          </Button>
-        )}
-
+      <div className="grid grid-cols-1 gap-2 mt-4 mx-auto">
         {!!nextChapter && (
           <Button asChild size="lg" className="[&>svg]:!size-5">
             <Link href={`/chapter/${nextChapter}`}>
-              <span>Chương sau</span>
+              <span>Chương tiếp theo</span>
               <ArrowRight />
+            </Link>
+          </Button>
+        )}
+        {!!prevChapter && (
+          <Button asChild size="lg" className="[&>svg]:!size-5">
+            <Link href={`/chapter/${prevChapter}`}>
+              <span>Chương trước</span>
+              <ArrowLeft />
             </Link>
           </Button>
         )}
@@ -135,7 +132,7 @@ export default function ChapterNav({
 
       <Card
         className={cn(
-          `fixed bottom-0 left-1/2 transform -translate-x-1/2 z-10 transition-all duration-300`,
+          `fixed bottom-0 left-1/2 transform -translate-x-1/2 md:-translate-x-[calc(50%+var(--sidebar-width-icon)/2)] z-10 transition-all duration-300`,
           "mx-auto flex w-full translate-y-0 items-center justify-center rounded-none bg-background border-none",
           "md:rounded-lg md:w-auto md:-translate-y-2",
           isAtBottom && "translate-y-full md:translate-y-full",
@@ -283,9 +280,7 @@ export default function ChapterNav({
                             ...config,
                             reader: {
                               ...config.reader,
-                              imageGap: Number.isNaN(gap)
-                                ? 4
-                                : gap,
+                              imageGap: Number.isNaN(gap) ? 4 : gap,
                             },
                           });
                         }}
