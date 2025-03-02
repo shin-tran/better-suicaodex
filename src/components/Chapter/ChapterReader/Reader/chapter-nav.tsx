@@ -278,11 +278,14 @@ export default function ChapterNav({
                         onChange={(e) => {
                           if (!e.target.value) return;
 
+                          const gap = parseInt(e.target.value);
                           setConfig({
                             ...config,
                             reader: {
                               ...config.reader,
-                              imageGap: parseInt(e.target.value) || 4,
+                              imageGap: Number.isNaN(gap)
+                                ? 4
+                                : gap,
                             },
                           });
                         }}
