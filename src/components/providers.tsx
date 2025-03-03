@@ -5,6 +5,11 @@ import { Provider as JotaiProvider } from "jotai";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { TooltipProvider } from "./ui/tooltip";
 import { ThemeWrapper } from "./Theme/theme-wrapper";
+import {
+  Bar,
+  Progress,
+  AppProgressProvider as ProgressProvider,
+} from "@bprogress/next";
 
 export function ThemeProvider({
   children,
@@ -14,7 +19,16 @@ export function ThemeProvider({
     <JotaiProvider>
       <NextThemesProvider {...props}>
         <ThemeWrapper>
-          <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
+          <ProgressProvider
+            height="3px"
+            options={{ showSpinner: false, template: null }}
+            shallowRouting
+          >
+            <Progress>
+              <Bar className="!bg-primary" />
+            </Progress>
+            <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
+          </ProgressProvider>
         </ThemeWrapper>
       </NextThemesProvider>
     </JotaiProvider>
