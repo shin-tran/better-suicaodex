@@ -269,7 +269,7 @@ export default function ChapterNav({
                       <Input
                         type="number"
                         min={0}
-                        defaultValue={config.reader.imageGap || 4}
+                        defaultValue={config.reader.imageGap ?? 4}
                         autoFocus={false}
                         autoComplete="off"
                         onChange={(e) => {
