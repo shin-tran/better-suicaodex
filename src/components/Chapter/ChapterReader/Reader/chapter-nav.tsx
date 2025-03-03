@@ -158,12 +158,15 @@ export default function ChapterNav({
             onValueChange={(id) => router.push(`/chapter/${id}`)}
           >
             <SelectTrigger
-              className="focus:ring-0 min-w-min md:min-w-48 [&_svg]:size-5 [&[data-state=open]>svg]:rotate-180"
+              className="focus:ring-0 min-w-min md:min-w-48 [&_svg]:size-5 [&[data-state=open]>svg]:rotate-180 bg-secondary"
               disabled={!chapterData.chapter}
             >
               <SelectValue placeholder={ChapterTitle(chapterData)} />
             </SelectTrigger>
-            <SelectContent sideOffset={isMobile ? 10 : 7}>
+            <SelectContent
+              sideOffset={isMobile ? 10 : 7}
+              //className={cn("bg-secondary", `theme-${config.theme}`)}
+            >
               {chapterAggregate.map((vol) => (
                 <SelectGroup key={vol.vol}>
                   <div className="flex items-center pr-2">
