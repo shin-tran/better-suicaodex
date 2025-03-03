@@ -2,18 +2,20 @@
 
 import ChapterInfo from "@/components/Chapter/ChapterReader/chapter-info";
 import Reader from "@/components/Chapter/ChapterReader/Reader";
-import LongStrip from "@/components/Chapter/ChapterReader/Reader/long-strip";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getChapterAggregate, getChapterDetail } from "@/lib/mangadex/chapter";
+import { getChapterDetail } from "@/lib/mangadex/chapter";
 import useSWR from "swr";
 import ChapterNotFound from "./chapter-notfound";
 import MangaMaintain from "@/components/Manga/manga-maintain";
+import useReadingHistory from "@/hooks/use-reading-history";
+import { useEffect } from "react";
 
 interface ChapterProps {
   id: string;
 }
 
 export default function Chapter({ id }: ChapterProps) {
+  const { addHistory } = useReadingHistory();
   const { data, isLoading, error } = useSWR(
     ["chapter", id],
     ([, id]) => getChapterDetail(id),
@@ -22,6 +24,17 @@ export default function Chapter({ id }: ChapterProps) {
       revalidateOnFocus: false,
     }
   );
+
+  useEffect(() => {
+    if (data && data.manga) {
+      addHistory(data.manga.id, {
+        chapterId: id,
+        chapter: data.chapter,
+        updatedAt: new Date().toISOString(),
+      });
+    }
+  }, [addHistory, data, id]);
+
   if (isLoading)
     return (
       <div className="grid grid-cols-1 gap-2 pb-2">

@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { BookOpen, BookX, Loader2 } from "lucide-react";
 import { Chapter } from "@/types/types";
 import Link from "next/link";
+import useReadingHistory from "@/hooks/use-reading-history";
 
 interface MangaReadButtonProps {
   id: string;
@@ -17,6 +18,9 @@ export default function MangaReadButtons({ id }: MangaReadButtonProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [chapter, setChapter] = useState<Chapter>();
+
+  const { history } = useReadingHistory();
+  const readingHistory = history[id]; 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,6 +62,24 @@ export default function MangaReadButtons({ id }: MangaReadButtonProps) {
         className="rounded-sm md:h-10 grow md:grow-0"
       >
         <Loader2 className="animate-spin" />
+      </Button>
+    );
+  }
+
+  if(readingHistory) {
+    const label = readingHistory.chapter
+    ? `Đọc tiếp Ch. ${readingHistory.chapter}`
+    : `Đọc tiếp`;
+    return (
+      <Button
+        variant="secondary"
+        className="rounded-sm md:h-10 grow md:grow-0"
+        asChild
+      >
+        <Link href={`/chapter/${readingHistory.chapterId}`}>
+          <BookOpen />
+          {label}
+        </Link>
       </Button>
     );
   }
