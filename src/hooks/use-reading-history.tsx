@@ -7,7 +7,7 @@ type ReadingHistory = {
   updatedAt: string;
 };
 
-const MAX_HISTORY = 25;
+const MAX_HISTORY = 50;
 
 export default function useReadingHistory() {
   const [history, setHistory] = useLocalStorage<Record<string, ReadingHistory>>(
