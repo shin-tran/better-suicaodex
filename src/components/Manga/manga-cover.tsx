@@ -42,6 +42,7 @@ const MangaCover: FC<MangaCoverProps> = ({
   }
 
   const [loaded, setLoaded] = useState(false);
+  const [loadedDialog, setLoadedDialog] = useState(false);
 
   return (
     <div className="relative">
@@ -51,16 +52,16 @@ const MangaCover: FC<MangaCoverProps> = ({
             <Expand size={50} color="white" />
           </DialogTrigger>
           <DialogContent
-            className="[&>button]:hidden bg-transparent border-none border-0 shadow-none p-0 w-auto h-auto !rounded-none"
-            style={{
-              backgroundImage: `url(/images/place-doro.webp)`,
-              backgroundSize: "cover",
-            }}
+            className="[&>button]:hidden bg-black border-none border-0 shadow-none p-0 w-auto h-auto !rounded-none"
+            // style={{
+            //   backgroundImage: `url(/images/place-doro.webp)`,
+            //   backgroundSize: "cover",
+            // }}
           >
             <DialogTitle className="hidden"></DialogTitle>
             <DialogDescription className="hidden"></DialogDescription>
 
-            <div className="max-w-screen-md max-h-screen flex justify-center items-center relative ">
+            {/* <div className="max-w-screen-md max-h-screen flex justify-center items-center relative ">
               <img
                 src={
                   siteConfig.suicaodex.apiURL + "/covers/" + id + "/" + cover
@@ -70,7 +71,22 @@ const MangaCover: FC<MangaCoverProps> = ({
                 fetchPriority="high"
                 //loading="eager"
               />
-            </div>
+            </div> */}
+
+            <LazyLoadImage
+              wrapperClassName={cn("!block max-w-screen-md max-h-screen flex justify-center items-center",
+                 loadedDialog ? "min-h-0" : "min-h-[100vh]"
+              )}
+              placeholderSrc={"/images/place-doro.webp"}
+              className="max-h-full max-w-full object-cover"
+              onLoad={() => setLoadedDialog(true)}
+              onError={(e) => {
+                e.currentTarget.src = "/images/xidoco.webp";
+              }}
+              src={siteConfig.suicaodex.apiURL + "/covers/" + id + "/" + cover}
+              alt={`Ảnh bìa ${alt}`}
+              visibleByDefault={true}
+            />
           </DialogContent>
         </Dialog>
       )}
