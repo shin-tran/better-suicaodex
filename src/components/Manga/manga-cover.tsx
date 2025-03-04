@@ -50,11 +50,17 @@ const MangaCover: FC<MangaCoverProps> = ({
           <DialogTrigger className="z-10 flex opacity-0 hover:opacity-100 transition-opacity items-center justify-center absolute inset-0 bg-black bg-opacity-50 rounded-sm cursor-pointer">
             <Expand size={50} color="white" />
           </DialogTrigger>
-          <DialogContent className="[&>button]:hidden bg-transparent border-none border-0 shadow-none p-0 w-auto h-auto">
+          <DialogContent
+            className="[&>button]:hidden bg-transparent border-none border-0 shadow-none p-0 w-auto h-auto !rounded-none"
+            style={{
+              backgroundImage: `url(/images/place-doro.webp)`,
+              backgroundSize: "cover",
+            }}
+          >
             <DialogTitle className="hidden"></DialogTitle>
             <DialogDescription className="hidden"></DialogDescription>
 
-            <div className="max-w-screen-md max-h-screen flex justify-center items-center relative bg-gray-500 ease-in-out duration-300">
+            <div className="max-w-screen-md max-h-screen flex justify-center items-center relative ">
               <img
                 src={
                   siteConfig.suicaodex.apiURL + "/covers/" + id + "/" + cover
@@ -62,6 +68,7 @@ const MangaCover: FC<MangaCoverProps> = ({
                 alt={`Ảnh bìa ${alt}`}
                 className="max-h-full max-w-full object-cover"
                 fetchPriority="high"
+                loading="eager"
               />
             </div>
           </DialogContent>
