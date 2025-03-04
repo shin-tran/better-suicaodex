@@ -9,6 +9,7 @@ import {
   DialogDescription,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "../ui/dialog";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
@@ -42,7 +43,6 @@ const MangaCover: FC<MangaCoverProps> = ({
   }
 
   const [loaded, setLoaded] = useState(false);
-  const [loadedDialog, setLoadedDialog] = useState(false);
 
   return (
     <div className="relative">
@@ -51,17 +51,13 @@ const MangaCover: FC<MangaCoverProps> = ({
           <DialogTrigger className="z-10 flex opacity-0 hover:opacity-100 transition-opacity items-center justify-center absolute inset-0 bg-black bg-opacity-50 rounded-sm cursor-pointer">
             <Expand size={50} color="white" />
           </DialogTrigger>
-          <DialogContent
-            className="[&>button]:hidden bg-black border-none border-0 shadow-none p-0 w-auto h-auto !rounded-none"
-            // style={{
-            //   backgroundImage: `url(/images/place-doro.webp)`,
-            //   backgroundSize: "cover",
-            // }}
-          >
+
+          <DialogContent className="[&>button]:hidden bg-transparent border-none border-0 shadow-none p-0 w-full h-auto !rounded-none justify-center">
             <DialogTitle className="hidden"></DialogTitle>
             <DialogDescription className="hidden"></DialogDescription>
 
-            {/* <div className="max-w-screen-md max-h-screen flex justify-center items-center relative ">
+            <DialogClose className="fixed inset-0 z-0 !block cursor-default" />
+            <div className="max-w-[90vw] md:max-w-screen max-h-[90vh] lg:max-h-screen flex justify-center items-center relative z-10">
               <img
                 src={
                   siteConfig.suicaodex.apiURL + "/covers/" + id + "/" + cover
@@ -69,24 +65,11 @@ const MangaCover: FC<MangaCoverProps> = ({
                 alt={`Ảnh bìa ${alt}`}
                 className="max-h-full max-w-full object-cover"
                 fetchPriority="high"
-                //loading="eager"
+                onError={(e) => {
+                  e.currentTarget.src = "/images/xidoco.webp";
+                }}
               />
-            </div> */}
-
-            <LazyLoadImage
-              wrapperClassName={cn("!block max-w-screen-md max-h-screen flex justify-center items-center",
-                 loadedDialog ? "min-h-0" : "min-h-[100vh]"
-              )}
-              placeholderSrc={"/images/place-doro.webp"}
-              className="max-h-full max-w-full object-cover"
-              onLoad={() => setLoadedDialog(true)}
-              onError={(e) => {
-                e.currentTarget.src = "/images/xidoco.webp";
-              }}
-              src={siteConfig.suicaodex.apiURL + "/covers/" + id + "/" + cover}
-              alt={`Ảnh bìa ${alt}`}
-              visibleByDefault={true}
-            />
+            </div>
           </DialogContent>
         </Dialog>
       )}
