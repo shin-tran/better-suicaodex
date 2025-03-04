@@ -38,8 +38,8 @@ export default function Chapter({ id }: ChapterProps) {
   if (isLoading)
     return (
       <div className="grid grid-cols-1 gap-2 pb-2">
-        <Skeleton className="w-1/5 h-5 bg-gray-500 rounded-sm" />
-        <Skeleton className="w-1/3 h-5 bg-gray-500 rounded-sm" />
+        <Skeleton className="w-1/2 md:w-1/5 h-5 bg-gray-500 rounded-sm" />
+        <Skeleton className="w-3/4 md:w-1/3 h-5 bg-gray-500 rounded-sm" />
         <Skeleton className="w-1/4 h-5 bg-gray-500 rounded-sm" />
       </div>
     );
