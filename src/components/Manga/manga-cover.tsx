@@ -68,7 +68,7 @@ const MangaCover: FC<MangaCoverProps> = ({
                 alt={`Ảnh bìa ${alt}`}
                 className="max-h-full max-w-full object-cover"
                 fetchPriority="high"
-                loading="eager"
+                //loading="eager"
               />
             </div>
           </DialogContent>
