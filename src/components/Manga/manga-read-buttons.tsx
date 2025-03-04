@@ -20,10 +20,14 @@ export default function MangaReadButtons({ id }: MangaReadButtonProps) {
   const [chapter, setChapter] = useState<Chapter>();
 
   const { history } = useReadingHistory();
-  const readingHistory = history[id]; 
+  const readingHistory = history[id];
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!!readingHistory) {
+        setIsLoading(false);
+        return;
+      }
       try {
         if (
           JSON.stringify(config.translatedLanguage) === JSON.stringify(["en"])
@@ -52,7 +56,7 @@ export default function MangaReadButtons({ id }: MangaReadButtonProps) {
       }
     };
     fetchData();
-  }, [id, config.r18, config.translatedLanguage]);
+  }, [id, config.r18, config.translatedLanguage, readingHistory]);
 
   if (isLoading) {
     return (
@@ -66,10 +70,10 @@ export default function MangaReadButtons({ id }: MangaReadButtonProps) {
     );
   }
 
-  if(readingHistory) {
+  if (readingHistory) {
     const label = readingHistory.chapter
-    ? `Đọc tiếp Ch. ${readingHistory.chapter}`
-    : `Đọc tiếp`;
+      ? `Đọc tiếp Ch. ${readingHistory.chapter}`
+      : `Đọc tiếp`;
     return (
       <Button
         variant="secondary"
