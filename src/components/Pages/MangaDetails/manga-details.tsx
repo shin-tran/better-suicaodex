@@ -203,7 +203,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
                     variant="secondary"
                     onClick={() => {
                       navigator.clipboard.writeText(
-                        `${siteConfig.suicaodex.domain}/manga/${id}`
+                        `${siteConfig.suicaodex.dev_domain}/manga/${id}`
                       );
                       return toast.success("Đã sao chép link truyện!");
                     }}
@@ -295,7 +295,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
                 className="rounded-sm grow-0"
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    `${siteConfig.suicaodex.domain}/manga/${id}`
+                    `${siteConfig.suicaodex.dev_domain}/manga/${id}`
                   );
                   return toast.success("Đã sao chép link truyện!");
                 }}
