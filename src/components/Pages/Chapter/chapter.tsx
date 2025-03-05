@@ -26,12 +26,17 @@ export default function Chapter({ id }: ChapterProps) {
   );
 
   useEffect(() => {
-    if (data && data.manga) {
-      addHistory(data.manga.id, {
-        chapterId: id,
-        chapter: data.chapter,
-        updatedAt: new Date().toISOString(),
-      });
+    try {
+      if (data && data.manga) {
+        addHistory(data.manga.id, {
+          chapterId: id,
+          chapter: data.chapter,
+          updatedAt: new Date().toISOString(),
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      return;
     }
   }, [addHistory, data, id]);
 
