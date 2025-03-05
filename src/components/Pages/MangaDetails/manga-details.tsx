@@ -46,6 +46,7 @@ import {
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import MangaDetailsSkeleton from "./manga-details-skeleton";
+import { toast } from "sonner";
 
 interface MangaDetailsProps {
   id: string;
@@ -200,6 +201,12 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
                     size="icon"
                     className="rounded-sm h-10 w-10"
                     variant="secondary"
+                    onClick={() => {
+                      navigator.clipboard.writeText(
+                        `${siteConfig.suicaodex.domain}/manga/${id}`
+                      );
+                      return toast.success("Đã sao chép link truyện!");
+                    }}
                   >
                     <Share2 />
                   </Button>
@@ -283,7 +290,16 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
                 <ListPlus />
               </Button>
 
-              <Button size="icon" className="rounded-sm grow-0">
+              <Button
+                size="icon"
+                className="rounded-sm grow-0"
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    `${siteConfig.suicaodex.domain}/manga/${id}`
+                  );
+                  return toast.success("Đã sao chép link truyện!");
+                }}
+              >
                 <Share2 />
               </Button>
 
