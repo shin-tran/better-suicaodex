@@ -9,6 +9,7 @@ import { ThemeProvider } from "@/components/providers";
 import { ThemeSwitcher } from "@/components/Theme/theme-switcher";
 import { siteConfig } from "@/config/site";
 import { Toaster } from "@/components/ui/sonner";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const inter = Inter({
   subsets: ["vietnamese"],
@@ -52,6 +53,7 @@ export default function RootLayout({
           </SidebarProvider>
           <ThemeSwitcher />
         </ThemeProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
