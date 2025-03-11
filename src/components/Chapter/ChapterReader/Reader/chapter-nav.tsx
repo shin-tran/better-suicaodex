@@ -65,7 +65,13 @@ export default function ChapterNav({
       )
     );
   }
-  //TODO: currentVolIndex lỗi khi chap truyện vừa được đăng 👍 khiến bên dưới lỗi theo (chapters undefined)
+  
+  // At this point, we should have a valid volume index since
+  // the parent component ensures the chapter exists in the aggregate data
+  // console.log(chapterAggregate);
+  // console.log("vol: ", currentVolIndex);
+  // console.log(chapterAggregate[currentVolIndex]);
+ 
   const currentChapterIndex = chapterAggregate[
     currentVolIndex
   ].chapters.findIndex((chapter) => chapter.id === chapterData.id);

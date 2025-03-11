@@ -6,6 +6,7 @@ import LongStrip from "./long-strip";
 import useSWR from "swr";
 import { getChapterAggregate } from "@/lib/mangadex/chapter";
 import { Loader, Loader2 } from "lucide-react";
+import { useEffect } from "react";
 
 interface ReaderProps {
   images: string[];
@@ -13,7 +14,7 @@ interface ReaderProps {
 }
 
 export default function Reader({ images, chapterData }: ReaderProps) {
-  const { data, isLoading, error } = useSWR(
+  const { data, isLoading, error, mutate } = useSWR(
     [
       "aggregate",
       chapterData.manga.id,
@@ -28,12 +29,31 @@ export default function Reader({ images, chapterData }: ReaderProps) {
     }
   );
 
-  if (isLoading)
+  // Check if current chapter exists in the aggregate data
+  const chapterExists = data?.some(volume => 
+    volume.chapters.some(chapter => chapter.id === chapterData.id || 
+      chapter.other?.some(id => id === chapterData.id))
+  );
+
+  // If data loaded but chapter doesn't exist, try revalidating
+  useEffect(() => {
+    if (data && !chapterExists) {
+      console.log("Chapter not found in aggregate data, revalidating...");
+      mutate();
+    }
+  }, [data, chapterExists, mutate]);
+
+  if (isLoading || (data && !chapterExists)) {
     return (
-      <div className="flex w-full justify-center">
-        <Loader2 size={35} className="animate-spin text-primary" />
-      </div>
+      <>
+        <LongStrip images={images} />
+        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-background/80 p-3 rounded-lg backdrop-blur-sm">
+          <Loader2 size={35} className="animate-spin text-primary" />
+        </div>
+      </>
     );
+  }
+  
   if (error || !data) return <LongStrip images={images} />;
 
   return (
