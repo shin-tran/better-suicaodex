@@ -65,7 +65,7 @@ export default function ChapterNav({
       )
     );
   }
-  //TODO: currentVolIndex thi thoảng lỗi đéo biết tại sao 👍 khiến bên dưới lỗi theo (chapters undefined)
+  //TODO: currentVolIndex lỗi khi chap truyện vừa được đăng 👍 khiến bên dưới lỗi theo (chapters undefined)
   const currentChapterIndex = chapterAggregate[
     currentVolIndex
   ].chapters.findIndex((chapter) => chapter.id === chapterData.id);
