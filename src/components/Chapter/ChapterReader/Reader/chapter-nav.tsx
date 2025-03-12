@@ -54,6 +54,11 @@ export default function ChapterNav({
   chapterData,
   chapterAggregate,
 }: ChapterNavProps) {
+  const scrollDirection = useScrollDirection();
+  const isMobile = useIsMobile();
+  const { isAtBottom, isAtTop } = useScrollOffset();
+  const [config, setConfig] = useConfig();
+
   let currentVolIndex = chapterAggregate.findIndex((aggregate) =>
     aggregate.chapters.some((chapter) => chapter.id === chapterData.id)
   );
@@ -99,10 +104,7 @@ export default function ChapterNav({
     return toast.warning("Đây là chương đầu tiên mà!");
   };
 
-  const scrollDirection = useScrollDirection();
-  const isMobile = useIsMobile();
-  const { isAtBottom, isAtTop } = useScrollOffset();
-  const [config, setConfig] = useConfig();
+  
 
   useKeyDown("ArrowLeft", goPrevChapter);
   useKeyDown("ArrowRight", goNextChapter);
