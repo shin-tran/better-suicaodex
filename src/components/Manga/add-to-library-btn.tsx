@@ -61,7 +61,7 @@ export default function AddToLibraryBtn({
     { value: "plan", label: "Để dành đọc sau" },
     { value: "completed", label: "Đã đọc xong" },
   ];
-//TODO: mobile ui
+  //TODO: mobile ui
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -75,7 +75,7 @@ export default function AddToLibraryBtn({
       </DialogTrigger>
       <DialogContent
         className={cn(
-          "max-w-[800px] max-h-[calc(100vh-3rem)]",
+          "sm:max-w-[800px] sm:max-h-[calc(100vh-3rem)] overflow-auto",
           `theme-${config.theme}`
         )}
         onOpenAutoFocus={(e) => e.preventDefault()}
@@ -84,26 +84,74 @@ export default function AddToLibraryBtn({
           <DialogTitle>Thêm vào thư viện</DialogTitle>
           <DialogDescription className="hidden">mẹ mày béo</DialogDescription>
         </DialogHeader>
-        <div className="flex flex-row gap-4">
-          <LazyLoadImage
-            wrapperClassName={cn(
-              "!block rounded-sm object-cover max-w-[250px] w-full h-auto",
-              !loaded && "aspect-[5/7]"
-            )}
-            placeholderSrc="/images/xidoco.webp"
-            className={cn(
-              "h-auto w-full rounded-sm block object-cover shadow-md drop-shadow-md aspect-[5/7]"
-            )}
-            src={src}
-            alt={`Ảnh bìa ${manga.title}`}
-            onLoad={() => setLoaded(true)}
-            onError={(e) => {
-              e.currentTarget.src = "/images/xidoco.webp";
-            }}
-          />
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-row gap-4">
+            <LazyLoadImage
+              wrapperClassName={cn(
+                "!block rounded-sm object-cover max-w-[250px] w-full h-auto",
+                !loaded && "aspect-[5/7]"
+              )}
+              placeholderSrc="/images/xidoco.webp"
+              className={cn(
+                "h-auto w-full rounded-sm block object-cover shadow-md drop-shadow-md aspect-[5/7]"
+              )}
+              src={src}
+              alt={`Ảnh bìa ${manga.title}`}
+              onLoad={() => setLoaded(true)}
+              onError={(e) => {
+                e.currentTarget.src = "/images/xidoco.webp";
+              }}
+            />
 
-          <div className="flex flex-col gap-4 w-full">
-            <p className="font-bold text-2xl line-clamp-2">{manga.title}</p>
+            <div className="flex flex-col gap-4 w-full">
+              <p className="font-bold text-2xl line-clamp-4 sm:line-clamp-2">{manga.title}</p>
+
+              <div className="hidden sm:flex flex-row gap-2 w-full">
+                <Select defaultValue={value} onValueChange={(v) => setValue(v)}>
+                  <SelectTrigger className="h-10 font-semibold">
+                    <SelectValue placeholder="mẹ mày" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {options.map((option) => (
+                      <SelectItem
+                        key={option.value}
+                        value={option.value}
+                        className="hover:bg-secondary"
+                        disabled={option.value === value}
+                      >
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <Button
+                  size="icon"
+                  variant={isNotificationEnabled ? "default" : "outline"}
+                  className="shrink-0 size-10 [&_svg]:size-5"
+                  onClick={() => setIsNotificationEnabled((prev) => !prev)}
+                >
+                  {isNotificationEnabled ? (
+                    <BellRing className="animate-bell-shake" />
+                  ) : (
+                    <BellOff />
+                  )}
+                </Button>
+              </div>
+              <Label className="hidden sm:block" htmlFor="note">Hướng dẫn:</Label>
+              <div className="hidden sm:block -mt-2 text-base text-muted-foreground">
+                <p>- Chọn 1 trong các danh mục trên để thêm truyện.</p>
+                <p>
+                  - Chọn{" "}
+                  <span className="font-semibold">&quot;Không&quot;</span> để
+                  xoá truyện khỏi thư viện.
+                </p>
+                <p>- Nhấn chuông để nhận thông báo khi có chap mới.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="sm:hidden flex flex-col gap-4 w-full">
             <div className="flex flex-row gap-2 w-full">
               <Select defaultValue={value} onValueChange={(v) => setValue(v)}>
                 <SelectTrigger className="h-10 font-semibold">
@@ -148,15 +196,15 @@ export default function AddToLibraryBtn({
           </div>
         </div>
 
-        <DialogFooter className="justify-end flex flex-row">
+        <DialogFooter className="justify-end flex flex-col-reverse sm:flex-row gap-2 !space-x-0">
           <DialogClose asChild>
-            <Button variant="secondary" className="w-52">
+            <Button variant="secondary" className="w-full sm:w-52">
               Hủy
             </Button>
           </DialogClose>
 
           <Button
-            className="w-52"
+            className="w-full sm:w-52"
             onClick={() => toast.info("Chức năng đang phát triển!")}
           >
             Cập nhật
