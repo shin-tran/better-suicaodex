@@ -44,9 +44,6 @@ interface ReaderProps {
 }
 
 export default function Reader({ images, chapterData }: ReaderProps) {
-  const scrollDirection = useScrollDirection();
-  const { isAtBottom, isAtTop } = useScrollOffset();
-  const [config, setConfig] = useConfig();
   const [retryCount, setRetryCount] = useState(0);
   const [reachedMaxRetries, setReachedMaxRetries] = useState(false);
   const MAX_RETRIES = 3;
