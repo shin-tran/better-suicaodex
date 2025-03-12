@@ -16,7 +16,14 @@ import { siteConfig } from "@/config/site";
 import { useConfig } from "@/hooks/use-config";
 import { cn } from "@/lib/utils";
 import { Manga } from "@/types/types";
-import { Bell, ListPlus } from "lucide-react";
+import {
+  Bell,
+  BellMinus,
+  BellOff,
+  BellRing,
+  CircleHelp,
+  ListPlus,
+} from "lucide-react";
 import { useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import {
@@ -26,6 +33,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DialogClose } from "@radix-ui/react-dialog";
+import { toast } from "sonner";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface AddToLibraryBtnProps {
   isMobile: boolean;
@@ -36,9 +46,22 @@ export default function AddToLibraryBtn({
   isMobile,
   manga,
 }: AddToLibraryBtnProps) {
-  const [config, setConfig] = useConfig();
+  const [config] = useConfig();
   const [loaded, setLoaded] = useState(false);
+
+  const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
+  const [value, setValue] = useState("following");
+
   const src = `${siteConfig.suicaodex.apiURL}/covers/${manga.id}/${manga.cover}.512.jpg`;
+
+  const options = [
+    { value: "none", label: "Không" },
+    { value: "following", label: "Theo dõi" },
+    { value: "reading", label: "Đang đọc" },
+    { value: "plan", label: "Để dành đọc sau" },
+    { value: "completed", label: "Đã đọc xong" },
+  ];
+//TODO: mobile ui
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -55,6 +78,7 @@ export default function AddToLibraryBtn({
           "max-w-[800px] max-h-[calc(100vh-3rem)]",
           `theme-${config.theme}`
         )}
+        onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <DialogHeader>
           <DialogTitle>Thêm vào thư viện</DialogTitle>
@@ -68,7 +92,7 @@ export default function AddToLibraryBtn({
             )}
             placeholderSrc="/images/xidoco.webp"
             className={cn(
-              "h-auto w-full rounded-sm block object-cover shadow-md aspect-[5/7]"
+              "h-auto w-full rounded-sm block object-cover shadow-md drop-shadow-md aspect-[5/7]"
             )}
             src={src}
             alt={`Ảnh bìa ${manga.title}`}
@@ -78,32 +102,65 @@ export default function AddToLibraryBtn({
             }}
           />
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 w-full">
             <p className="font-bold text-2xl line-clamp-2">{manga.title}</p>
             <div className="flex flex-row gap-2 w-full">
-              <Select>
-                <SelectTrigger className={`theme-${config.theme}`} autoFocus={false}>
-                  <SelectValue placeholder="Theme" />
+              <Select defaultValue={value} onValueChange={(v) => setValue(v)}>
+                <SelectTrigger className="h-10 font-semibold">
+                  <SelectValue placeholder="mẹ mày" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">Không</SelectItem>
-                  <SelectItem value="following">Theo dõi</SelectItem>
-                  <SelectItem value="reading">Đang đọc</SelectItem>
-                  <SelectItem value="plan">Để dành đọc sau</SelectItem>
-                  <SelectItem value="completed">Đã đọc xong</SelectItem>
+                  {options.map((option) => (
+                    <SelectItem
+                      key={option.value}
+                      value={option.value}
+                      className="hover:bg-secondary"
+                      disabled={option.value === value}
+                    >
+                      {option.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
 
-              <Button size="icon" variant="outline" className="shrink-0">
-                <Bell />
+              <Button
+                size="icon"
+                variant={isNotificationEnabled ? "default" : "outline"}
+                className="shrink-0 size-10 [&_svg]:size-5"
+                onClick={() => setIsNotificationEnabled((prev) => !prev)}
+              >
+                {isNotificationEnabled ? (
+                  <BellRing className="animate-bell-shake" />
+                ) : (
+                  <BellOff />
+                )}
               </Button>
+            </div>
+            <Label htmlFor="note">Hướng dẫn:</Label>
+            <div className="-mt-2 text-base text-muted-foreground">
+              <p>- Chọn 1 trong các danh mục trên để thêm truyện.</p>
+              <p>
+                - Chọn <span className="font-semibold">&quot;Không&quot;</span>{" "}
+                để xoá truyện khỏi thư viện.
+              </p>
+              <p>- Nhấn chuông để nhận thông báo khi có chap mới.</p>
             </div>
           </div>
         </div>
 
-        <DialogFooter className="justify-end flex flex-row gap-2s">
-          <Button variant="outline">Hủy</Button>
-          <Button>Cập nhật</Button>
+        <DialogFooter className="justify-end flex flex-row">
+          <DialogClose asChild>
+            <Button variant="outline" className="w-80">
+              Hủy
+            </Button>
+          </DialogClose>
+
+          <Button
+            className="w-full"
+            onClick={() => toast.info("Chức năng đang phát triển!")}
+          >
+            Cập nhật
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
