@@ -47,6 +47,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import MangaDetailsSkeleton from "./manga-details-skeleton";
 import { toast } from "sonner";
+import AddToLibraryBtn from "@/components/Manga/add-to-library-btn";
 
 interface MangaDetailsProps {
   id: string;
@@ -190,10 +191,11 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
 
               <div className="pt-[0.85rem] flex flex-col gap-4">
                 <div className="flex flex-wrap gap-2">
-                  <Button size="lg" className="rounded-sm">
+                  {/* <Button size="lg" className="rounded-sm">
                     <ListPlus />
                     Thêm vào thư viện
-                  </Button>
+                  </Button> */}
+                  <AddToLibraryBtn isMobile={isMobile} manga={manga}/>
 
                   <MangaReadButtons id={id} />
 
@@ -286,9 +288,10 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
             </div>
 
             <div className="flex flex-grow gap-2 w-full">
-              <Button size="icon" className="rounded-sm grow-0">
+              {/* <Button size="icon" className="rounded-sm grow-0">
                 <ListPlus />
-              </Button>
+              </Button> */}
+              <AddToLibraryBtn isMobile={isMobile} manga={manga}/>
 
               <Button
                 size="icon"
