@@ -150,13 +150,13 @@ export default function AddToLibraryBtn({
 
         <DialogFooter className="justify-end flex flex-row">
           <DialogClose asChild>
-            <Button variant="outline" className="w-80">
+            <Button variant="secondary" className="w-52">
               Hủy
             </Button>
           </DialogClose>
 
           <Button
-            className="w-full"
+            className="w-52"
             onClick={() => toast.info("Chức năng đang phát triển!")}
           >
             Cập nhật
