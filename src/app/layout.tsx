@@ -12,8 +12,14 @@ import { Toaster } from "@/components/ui/sonner";
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const inter = Inter({
+  preload: true,
   subsets: ["vietnamese"],
 });
+
+// const leagueSpartan = League_Spartan({
+//   subsets: ["vietnamese"],
+// });
+
 
 export const metadata: Metadata = {
   title: siteConfig.name,
@@ -27,6 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      {/* <body className={`${leagueSpartan.className} antialiased`}> */}
       <body className={`${inter.className} antialiased`}>
         <ThemeProvider
           attribute="class"
