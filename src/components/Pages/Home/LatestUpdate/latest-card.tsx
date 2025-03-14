@@ -87,7 +87,7 @@ export default function LatestCard({ chapter }: LatestCardProps) {
                           asChild
                           key={group.id}
                           variant="ghost"
-                          className="whitespace-normal font-normal text-start line-clamp-1 rounded-sm h-4 py-0 px-[0.25rem] hover:text-primary"
+                          className="whitespace-normal font-normal text-start line-clamp-1 rounded-sm h-4 py-0 px-[0.25rem] hover:text-primary break-all"
                           size="sm"
                         >
                           <Link href={`/group/${group.id}`}>{group.name}</Link>

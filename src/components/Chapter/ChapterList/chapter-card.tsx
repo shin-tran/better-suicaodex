@@ -128,7 +128,7 @@ const SingleCard = ({ chapter, finalChapter, className }: SingleCardProps) => {
                   <Button
                     key={group.id}
                     variant="ghost"
-                    className="whitespace-normal font-normal text-start line-clamp-1 rounded-sm h-4 py-0 px-[0.25rem] hover:underline hover:text-primary"
+                    className="whitespace-normal font-normal text-start line-clamp-1 rounded-sm h-4 py-0 px-[0.25rem] hover:underline hover:text-primary break-all"
                     size="sm"
                     onClick={(e: React.MouseEvent) => {
                       e.preventDefault();
