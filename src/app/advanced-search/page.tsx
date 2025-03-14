@@ -1,3 +1,4 @@
+import { AdvancedSearch } from "@/components/Pages/AdvancedSearch";
 import { Metadata } from "next";
 
 interface pageProps {
@@ -27,12 +28,21 @@ export async function generateMetadata({
   };
 }
 
-export default function Page() {
+export default async function Page({ searchParams }: pageProps) {
+  const { page, limit, q, author, content, status, demos, include, exclude } =
+    await getSearchParams({ searchParams });
   return (
-    <div>
-      <hr className="w-9 h-1 bg-primary border-none" />
-      <h1 className="text-2xl font-black uppercase">Tìm kiếm nâng cao</h1>
-    </div>
+    <AdvancedSearch
+      limit={limit}
+      page={page}
+      q={q}
+      author={author}
+      content={content}
+      status={status}
+      demos={demos}
+      include={include}
+      exclude={exclude}
+    />
   );
 }
 
