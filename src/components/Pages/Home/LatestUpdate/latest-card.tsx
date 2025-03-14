@@ -34,7 +34,7 @@ export default function LatestCard({ chapter }: LatestCardProps) {
             <div className="flex flex-col justify-evenly w-full">
               <Link
                 href={`/manga/${chapter.manga.id}`}
-                className="line-clamp-1 font-bold text-lg"
+                className="line-clamp-1 font-bold text-lg break-all"
               >
                 {chapter.manga.title}
               </Link>
@@ -64,7 +64,7 @@ export default function LatestCard({ chapter }: LatestCardProps) {
                   }
                   className="hover:underline"
                 >
-                  <p className="font-semibold text-sm md:text-base line-clamp-1">
+                  <p className="font-semibold text-sm md:text-base line-clamp-1 break-all">
                     {chapter.chapter
                       ? `Ch. ${chapter.chapter}
       ${chapter.title ? ` - ${chapter.title}` : ""}`
