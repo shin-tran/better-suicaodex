@@ -61,7 +61,7 @@ export default function AddToLibraryBtn({
     { value: "plan", label: "Để dành đọc sau" },
     { value: "completed", label: "Đã đọc xong" },
   ];
-  //TODO: mobile ui
+
   return (
     <Dialog>
       <DialogTrigger asChild>
