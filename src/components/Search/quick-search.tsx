@@ -30,13 +30,27 @@ const formSchema = z.object({
   query: z.string().min(1),
 });
 
+// Hàm debounce để giảm số lượng call API
+function debounce<F extends (...args: any[]) => any>(
+  func: F,
+  wait: number
+): (...args: Parameters<F>) => void {
+  let timeout: NodeJS.Timeout | null = null;
+
+  return function (...args: Parameters<F>) {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+}
+
 export default function QuickSearch() {
   const [expanded, setExpanded] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [mangas, setMangas] = useState<Manga[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
-  //const toggleExpanded = () => setExpanded((prev) => !prev);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const mobileInputRef = useRef<HTMLInputElement>(null);
   const [config] = useConfig();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -46,9 +60,11 @@ export default function QuickSearch() {
     },
   });
 
+  const searchQuery = form.watch("query");
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
     const { query } = values;
+    if (!query.trim()) return;
 
     try {
       setIsLoading(true);
@@ -63,6 +79,17 @@ export default function QuickSearch() {
       setIsLoading(false);
     }
   }
+
+  // Sử dụng useEffect và debounce để tránh gọi API liên tục khi người dùng đang gõ
+  useEffect(() => {
+    if (!searchQuery || searchQuery.length === 0) return;
+
+    const debouncedSearch = debounce((query: string) => {
+      form.handleSubmit(onSubmit)();
+    }, 500);
+
+    debouncedSearch(searchQuery);
+  }, [searchQuery]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -87,8 +114,10 @@ export default function QuickSearch() {
       >
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            onChange={form.handleSubmit(onSubmit)}
+            onSubmit={(e) => {
+              e.preventDefault();
+              form.handleSubmit(onSubmit)();
+            }}
             className="w-full"
           >
             <FormField
@@ -109,9 +138,29 @@ export default function QuickSearch() {
                       )}
                       onFocus={() => setExpanded(true)}
                       {...field}
+                      ref={(e) => {
+                        // Kết hợp với ref từ react-hook-form
+                        field.ref(e);
+                        inputRef.current = e;
+                      }}
                     />
                   </FormControl>
-                  <Search className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4" />
+                  {searchQuery.length === 0 ? (
+                    <Search className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4" />
+                  ) : (
+                    <Button
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 bg-primary rounded-sm"
+                      size="icon"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        form.setValue("query", "");
+                        // Sử dụng ref để focus trực tiếp vào input
+                        if (inputRef.current) inputRef.current.focus();
+                      }}
+                    >
+                      <X />
+                    </Button>
+                  )}
                 </FormItem>
               )}
             />
@@ -125,7 +174,7 @@ export default function QuickSearch() {
               "transition-all animate-in fade-in slide-in-from-top-2"
             )}
           >
-            {form.getValues("query").length === 0 ? (
+            {searchQuery.length === 0 ? (
               <div className="text-gray-500">
                 Nhập từ khoá đi mới tìm được chứ...
               </div>
@@ -201,8 +250,10 @@ export default function QuickSearch() {
 
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              onChange={form.handleSubmit(onSubmit)}
+              onSubmit={(e) => {
+                e.preventDefault();
+                form.handleSubmit(onSubmit)();
+              }}
               className="w-full"
             >
               <FormField
@@ -216,13 +267,32 @@ export default function QuickSearch() {
                         placeholder="Tìm kiếm..."
                         className={cn(
                           "bg-secondary border-none h-8 shadow-sm"
-
                           // "placeholder:text-current"
                         )}
                         {...field}
+                        ref={(e) => {
+                          field.ref(e);
+                          mobileInputRef.current = e;
+                        }}
                       />
                     </FormControl>
-                    <Search className="absolute right-16 transform h-4 w-4" />
+                    {searchQuery.length === 0 ? (
+                      <Search className="absolute right-16 transform h-4 w-4" />
+                    ) : (
+                      <Button
+                        className="absolute right-16 transform h-4 w-4 bg-primary rounded-sm"
+                        size="icon"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          form.setValue("query", "");
+                          // Sử dụng ref để focus trực tiếp vào input
+                          if (mobileInputRef.current)
+                            mobileInputRef.current.focus();
+                        }}
+                      >
+                        <X />
+                      </Button>
+                    )}
 
                     <DialogClose asChild>
                       <Button
@@ -241,7 +311,7 @@ export default function QuickSearch() {
 
           <DialogFooter>
             <div>
-              {form.getValues("query").length === 0 ? (
+              {searchQuery.length === 0 ? (
                 <div className="text-gray-500">
                   Nhập từ khoá đi mới tìm được chứ...
                 </div>
