@@ -170,7 +170,7 @@ function Customizer() {
                   onClick={() => setMode("light")}
                   className={cn(unResolvedTheme === "light" && "border-2 border-primary")}
                 >
-                  <Sun className="mr-1 -translate-x-1" />
+                  <Sun />
                   Sáng
                 </Button>
                 <Button
@@ -179,7 +179,7 @@ function Customizer() {
                   onClick={() => setMode("dark")}
                   className={cn(unResolvedTheme === "dark" && "border-2 border-primary")}
                 >
-                  <Moon className="mr-1 -translate-x-1" />
+                  <Moon />
                   Tối
                 </Button>
                 <Button
