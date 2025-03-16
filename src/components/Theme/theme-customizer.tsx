@@ -115,7 +115,7 @@ function Customizer() {
             {baseColors
               .filter(
                 (theme) =>
-                  !["slate", "stone", "gray", "neutral"].includes(theme.name)
+                  !["stone", "gray", "neutral"].includes(theme.name)
               )
               .map((theme) => {
                 const isActive = config.theme === theme.name;
