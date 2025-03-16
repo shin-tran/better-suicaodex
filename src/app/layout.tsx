@@ -7,7 +7,7 @@ import { AppSidebar } from "@/components/Sidebar/app-sidebar";
 import { SiteHeader } from "@/components/Navbar/site-header";
 import { ThemeProvider } from "@/components/providers";
 import { ThemeSwitcher } from "@/components/Theme/theme-switcher";
-import { siteConfig } from "@/config/site";
+import { META_THEME_COLORS, siteConfig } from "@/config/site";
 import { Toaster } from "@/components/ui/sonner";
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
@@ -33,6 +33,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (localStorage.theme === 'dark' || ((!('theme' in localStorage) || localStorage.theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.querySelector('meta[name="theme-color"]').setAttribute('content', '${META_THEME_COLORS.dark}')
+                }
+              } catch (_) {}
+            `,
+          }}
+        />
+      </head>
       {/* <body className={`${leagueSpartan.className} antialiased`}> */}
       <body className={`${inter.className} antialiased`}>
         <ThemeProvider
@@ -40,6 +53,7 @@ export default function RootLayout({
           defaultTheme="dark"
           disableTransitionOnChange
           enableColorScheme
+          enableSystem
         >
           <SidebarProvider defaultOpen={false}>
             <div className="border-grid flex flex-1 flex-col">

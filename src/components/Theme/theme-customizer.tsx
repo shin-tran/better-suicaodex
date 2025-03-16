@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, Moon, Palette, Repeat, Sun } from "lucide-react";
+import { Check, MonitorCog, Moon, Palette, Repeat, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import { useConfig } from "@/hooks/use-config";
@@ -71,7 +71,7 @@ export function ThemeCustomizer() {
 
 function Customizer() {
   const [mounted, setMounted] = React.useState(false);
-  const { setTheme: setMode, resolvedTheme: mode } = useTheme();
+  const { setTheme: setMode, resolvedTheme: mode, theme: unResolvedTheme } = useTheme();
   const [config, setConfig] = useConfig();
 
   React.useEffect(() => {
@@ -168,7 +168,7 @@ function Customizer() {
                   variant={"outline"}
                   size="sm"
                   onClick={() => setMode("light")}
-                  className={cn(mode === "light" && "border-2 border-primary")}
+                  className={cn(unResolvedTheme === "light" && "border-2 border-primary")}
                 >
                   <Sun className="mr-1 -translate-x-1" />
                   Sáng
@@ -177,14 +177,24 @@ function Customizer() {
                   variant={"outline"}
                   size="sm"
                   onClick={() => setMode("dark")}
-                  className={cn(mode === "dark" && "border-2 border-primary")}
+                  className={cn(unResolvedTheme === "dark" && "border-2 border-primary")}
                 >
                   <Moon className="mr-1 -translate-x-1" />
                   Tối
                 </Button>
+                <Button
+                  variant={"outline"}
+                  size="sm"
+                  onClick={() => setMode("system")}
+                  className={cn(unResolvedTheme === "system" && "border-2 border-primary")}
+                >
+                  <MonitorCog />
+                  Hệ thống
+                </Button>
               </>
             ) : (
               <>
+                <Skeleton className="h-8 w-full" />
                 <Skeleton className="h-8 w-full" />
                 <Skeleton className="h-8 w-full" />
               </>
