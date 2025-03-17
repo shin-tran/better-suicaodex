@@ -1,5 +1,18 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { ChevronDown, ChevronsUpDown, Search } from "lucide-react";
+import { useState } from "react";
+import { MultiSelect } from "@/components/ui/multi-select";
+import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
+
 interface AdvancedSearchProps {
   page: number;
   limit: number;
@@ -12,7 +25,7 @@ interface AdvancedSearchProps {
   exclude: string;
 }
 
-export function AdvancedSearch({
+export default function AdvancedSearch({
   page,
   limit,
   q,
@@ -23,10 +36,165 @@ export function AdvancedSearch({
   include,
   exclude,
 }: AdvancedSearchProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<string[]>([]);
+  const [selectedDemos, setSelectedDemos] = useState<string[]>([]);
+  const [selectedContent, setSelectedContent] = useState<string[]>([]);
+  const [selectedLanguage, setSelectedLanguage] = useState<string[]>([]);
+  const statusList = [
+    { value: "completed", label: "Đã hoàn thành" },
+    { value: "ongoing", label: "Đang tiến hành" },
+    { value: "hiatus", label: "Tạm ngừng" },
+    { value: "cancelled", label: "Đã hủy" },
+  ];
+
+  const demosList = [
+    { value: "shounen", label: "Shounen" },
+    { value: "shoujo", label: "Shoujo" },
+    { value: "seinen", label: "Seinen" },
+    { value: "jousei", label: "Jousei" },
+    { value: "none", label: "None" },
+  ];
+
+  const contentList = [
+    { value: "safe", label: "Lành mạnh" },
+    { value: "suggestive", label: "Hơi hơi" },
+    { value: "erotica", label: "Cũng tạm" },
+    { value: "pornographic", label: "Segggg!" },
+  ];
+
+  const languageList = [
+    { value: "vi", label: "Tiếng Việt" },
+    { value: "en", label: "Tiếng Anh" },
+  ];
+
   return (
-    <div>
-      <hr className="w-9 h-1 bg-primary border-none" />
-      <h1 className="text-2xl font-black uppercase">Tìm kiếm nâng cao</h1>
-    </div>
+    <>
+      <div>
+        <hr className="w-9 h-1 bg-primary border-none" />
+        <h1 className="text-2xl font-black uppercase">Tìm kiếm nâng cao</h1>
+      </div>
+
+      <Collapsible
+        open={isOpen}
+        onOpenChange={setIsOpen}
+        className="mt-4 w-full"
+      >
+        <div className="grid gap-2 md:grid-cols-[1fr_12rem]">
+          <div className="relative">
+            <Search className="h-4 w-4 absolute left-2 top-1/2 transform -translate-y-1/2" />
+            <Input
+              className="bg-secondary pl-7"
+              placeholder="Nhập từ khóa..."
+              autoComplete="off"
+            />
+          </div>
+          <CollapsibleTrigger asChild>
+            <Button
+              variant={isOpen ? "secondary" : "default"}
+              className="[&[data-state=open]>svg]:rotate-180 [&_svg]:transition-transform transition-all"
+            >
+              <ChevronDown />
+              {isOpen ? "Ẩn bộ lọc" : "Mở bộ lọc"}
+            </Button>
+          </CollapsibleTrigger>
+        </div>
+
+        <CollapsibleContent
+          className={cn(
+            "mt-4  overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down",
+            "grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4"
+          )}
+        >
+          <div className="flex flex-col gap-2">
+            <Label>
+              Tình trạng
+              {selectedStatus.length > 0 && (
+                <span className="font-light text-primary">
+                  {" "}
+                  +{selectedStatus.length}
+                </span>
+              )}
+            </Label>
+            <MultiSelect
+              isCompact
+              className="shadow-none"
+              disableSearch
+              disableFooter
+              placeholder="Mặc định"
+              variant="secondary"
+              options={statusList}
+              onValueChange={setSelectedStatus}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>
+              Dành cho
+              {selectedDemos.length > 0 && (
+                <span className="font-light text-primary">
+                  {" "}
+                  +{selectedDemos.length}
+                </span>
+              )}
+            </Label>
+            <MultiSelect
+              className="shadow-none"
+              placeholder="Mặc định"
+              isCompact
+              disableSearch
+              disableFooter
+              variant="secondary"
+              options={demosList}
+              onValueChange={setSelectedDemos}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>
+              Giới hạn nội dung
+              {selectedContent.length > 0 && (
+                <span className="font-light text-primary">
+                  {" "}
+                  +{selectedContent.length}
+                </span>
+              )}
+            </Label>
+            <MultiSelect
+              className="shadow-none"
+              placeholder="Mặc định"
+              isCompact
+              disableSearch
+              disableFooter
+              variant="secondary"
+              options={contentList}
+              onValueChange={setSelectedContent}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>
+              Có bản dịch?
+              {selectedLanguage.length > 0 && (
+                <span className="font-light text-primary">
+                  {" "}
+                  +{selectedLanguage.length}
+                </span>
+              )}
+            </Label>
+            <MultiSelect
+              className="shadow-none"
+              placeholder="Mặc định"
+              isCompact
+              disableSearch
+              disableFooter
+              variant="secondary"
+              options={languageList}
+              onValueChange={setSelectedLanguage}
+            />
+          </div>
+        </CollapsibleContent>
+      </Collapsible>
+    </>
   );
 }

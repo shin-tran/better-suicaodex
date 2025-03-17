@@ -89,6 +89,22 @@ export default {
   					height: '0'
   				}
   			},
+			'collapsible-down': {
+				from: {
+					height: '0'
+				},
+				to: {
+					height: 'var(--radix-collapsible-content-height)'
+				}
+			},
+			'collapsible-up': {
+				from: {
+					height: 'var(--radix-collapsible-content-height)'
+				},
+				to: {
+					height: '0'
+				}
+			},
 			'shake': {
 				'0%': { transform: 'rotate(0deg)' },
 				'25%': { transform: 'rotate(10deg)' },
@@ -100,6 +116,8 @@ export default {
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
+			'collapsible-down': 'collapsible-down 0.2s ease-out',
+			'collapsible-up': 'collapsible-up 0.2s ease-out',
 			'bell-shake': 'shake 0.3s 2',
   		}
   	}

@@ -1,4 +1,4 @@
-import { AdvancedSearch } from "@/components/Pages/AdvancedSearch";
+import AdvancedSearch from "@/components/Pages/AdvancedSearch";
 import { Metadata } from "next";
 
 interface pageProps {
