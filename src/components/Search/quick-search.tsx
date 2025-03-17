@@ -25,6 +25,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import useKeyDown from "@/hooks/use-keydown";
+import { Badge } from "../ui/badge";
 
 const formSchema = z.object({
   query: z.string().min(1),
@@ -91,6 +93,22 @@ export default function QuickSearch() {
     debouncedSearch(searchQuery);
   }, [searchQuery]);
 
+  // Add effect to control body scrolling when search is expanded
+  useEffect(() => {
+    if (expanded) {
+      // Disable scrolling on body when expanded
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Re-enable scrolling when collapsed
+      document.body.style.overflow = '';
+    }
+    
+    // Cleanup function to ensure scroll is re-enabled when component unmounts
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [expanded]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -105,6 +123,15 @@ export default function QuickSearch() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  useKeyDown({ key: "k", ctrlKey: true }, () =>{
+    setExpanded(true);
+    if (inputRef.current) inputRef.current.focus();
+  });
+
+  useKeyDown("Escape", () => {
+    setExpanded(false);
+  });
 
   return (
     <>
@@ -146,7 +173,16 @@ export default function QuickSearch() {
                     />
                   </FormControl>
                   {searchQuery.length === 0 ? (
-                    <Search className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4" />
+                    <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2 items-center">
+                      <div className={cn("hidden xl:flex flex-row gap-1",
+                        expanded && "!hidden"
+                      )}>
+                        <Badge variant="default" className="px-1 py-0 bg-primary/10 text-secondary-foreground rounded-sm">Ctrl</Badge>
+                        <Badge variant="default" className="px-1 py-0 bg-primary/10 text-secondary-foreground rounded-sm">K</Badge>
+                      </div>
+                      <Search className="h-4 w-4" />
+                    </div>
+                    
                   ) : (
                     <Button
                       className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 bg-primary rounded-sm"
