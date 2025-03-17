@@ -131,6 +131,7 @@ export default function QuickSearch() {
 
   useKeyDown("Escape", () => {
     setExpanded(false);
+    if (inputRef.current) inputRef.current.blur();
   });
 
   return (
