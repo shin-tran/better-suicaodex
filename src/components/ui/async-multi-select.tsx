@@ -1,4 +1,4 @@
-// src/components/multi-select.tsx
+// src/components/ui/async-multi-select.tsx
 
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -8,6 +8,7 @@ import {
   ChevronsUpDown,
   XIcon,
   WandSparkles,
+  Loader2,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -53,24 +54,51 @@ const multiSelectVariants = cva(
   }
 );
 
+// Improved debounce function with proper cleanup
+function debounce<F extends (...args: any[]) => any>(
+  func: F,
+  waitFor: number
+): [(...args: Parameters<F>) => void, () => void] {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+
+  const debounced = (...args: Parameters<F>): void => {
+    if (timeout !== null) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => func(...args), waitFor);
+  };
+
+  const cancel = (): void => {
+    if (timeout !== null) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+  };
+
+  return [debounced, cancel];
+}
+
 /**
- * Props for MultiSelect component
+ * Props for AsyncMultiSelect component
  */
-interface MultiSelectProps
+interface AsyncMultiSelectProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof multiSelectVariants> {
   /**
-   * An array of option objects to be displayed in the multi-select component.
-   * Each option object has a label, value, and an optional icon.
+   * Async function to fetch options based on search query.
+   * Returns a promise that resolves to an array of options.
    */
-  options: {
-    /** The text to display for the option. */
+  loadOptions: (inputValue: string) => Promise<{
     label: string;
-    /** The unique value associated with the option. */
     value: string;
-    /** Optional icon component to display alongside the option. */
     icon?: React.ComponentType<{ className?: string }>;
-  }[];
+  }[]>;
+
+  /**
+   * Debounce time in milliseconds for the search function.
+   * Optional, defaults to 300ms.
+   */
+  debounceMs?: number;
 
   /**
    * Callback function triggered when the selected values change.
@@ -135,15 +163,35 @@ interface MultiSelectProps
    * Optional, defaults to false.
    */
   isCompact?: boolean;
+
+  /**
+   * Custom no results message when search returns empty.
+   * Optional, defaults to "No results found."
+   */
+  noResultsMessage?: string;
+
+  /**
+   * Custom loading message shown during async search.
+   * Optional, defaults to "Loading..."
+   */
+  loadingMessage?: string;
+
+  /**
+   * If true, displays all selected values as badges between search input and results list.
+   * These badges are not limited by maxCount.
+   * Optional, defaults to false.
+   */
+  showSelectedValue?: boolean;
 }
 
-export const MultiSelect = React.forwardRef<
+export const AsyncMultiSelect = React.forwardRef<
   HTMLButtonElement,
-  MultiSelectProps
+  AsyncMultiSelectProps
 >(
   (
     {
-      options,
+      loadOptions,
+      debounceMs = 300,
       onValueChange,
       variant,
       defaultValue = [],
@@ -156,20 +204,110 @@ export const MultiSelect = React.forwardRef<
       disableSearch = false,
       disableFooter = false,
       isCompact = false,
+      noResultsMessage = "No results found.",
+      loadingMessage = "Loading...",
+      showSelectedValue = false,
       ...props
     },
     ref
   ) => {
-    const [selectedValues, setSelectedValues] =
+    const [selectedValues, setSelectedValues] = 
       React.useState<string[]>(defaultValue);
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
     const [isAnimating, setIsAnimating] = React.useState(false);
+    const [options, setOptions] = React.useState<Array<{
+      label: string;
+      value: string;
+      icon?: React.ComponentType<{ className?: string }>;
+    }>>([]);
+    const [searchQuery, setSearchQuery] = React.useState("");
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [hasSearched, setHasSearched] = React.useState(false);
+
+    // Create a ref for selected options to maintain their labels
+    const selectedOptionsRef = React.useRef<Array<{
+      label: string;
+      value: string;
+      icon?: React.ComponentType<{ className?: string }>;
+    }>>([]);
+
+    // Create a ref for the timeout to handle debouncing
+    const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    // Function to actually perform the search
+    const executeSearch = React.useCallback(async (query: string) => {
+      try {
+        setIsLoading(true);
+        const results = await loadOptions(query);
+        setOptions(results);
+        setHasSearched(true);
+      } catch (error) {
+        console.error("Error loading options:", error);
+        setOptions([]);
+      } finally {
+        setIsLoading(false);
+      }
+    }, [loadOptions]);
+
+    // Load initial selected values if needed
+    React.useEffect(() => {
+      const fetchSelectedOptions = async () => {
+        if (defaultValue.length > 0) {
+          try {
+            setIsLoading(true);
+            const results = await loadOptions("");
+            const matchingOptions = results.filter(option => 
+              defaultValue.includes(option.value)
+            );
+            
+            if (matchingOptions.length > 0) {
+              selectedOptionsRef.current = matchingOptions;
+            }
+          } catch (error) {
+            console.error("Error loading default options:", error);
+          } finally {
+            setIsLoading(false);
+          }
+        }
+      };
+      
+      fetchSelectedOptions();
+    }, [defaultValue, loadOptions]);
+
+    // Update selected options when options change
+    React.useEffect(() => {
+      const newSelectedOptions = [
+        ...selectedOptionsRef.current,
+        ...options.filter(option => 
+          selectedValues.includes(option.value) && 
+          !selectedOptionsRef.current.some(o => o.value === option.value)
+        )
+      ];
+      selectedOptionsRef.current = newSelectedOptions;
+    }, [options, selectedValues]);
+
+    // Clean up timeout when component unmounts
+    React.useEffect(() => {
+      return () => {
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+      };
+    }, []);
+
+    // Automatically trigger a search when the popover opens
+    React.useEffect(() => {
+      if (isPopoverOpen && !hasSearched) {
+        executeSearch(searchQuery);
+      }
+    }, [isPopoverOpen, executeSearch, searchQuery, hasSearched]);
 
     const handleInputKeyDown = (
       event: React.KeyboardEvent<HTMLInputElement>
     ) => {
       if (event.key === "Enter") {
-        setIsPopoverOpen(true);
+        event.preventDefault();
+        executeSearch(searchQuery);
       } else if (event.key === "Backspace" && !event.currentTarget.value) {
         const newSelectedValues = [...selectedValues];
         newSelectedValues.pop();
@@ -192,7 +330,12 @@ export const MultiSelect = React.forwardRef<
     };
 
     const handleTogglePopover = () => {
-      setIsPopoverOpen((prev) => !prev);
+      const newIsOpen = !isPopoverOpen;
+      setIsPopoverOpen(newIsOpen);
+      
+      if (newIsOpen && !hasSearched) {
+        executeSearch(searchQuery);
+      }
     };
 
     const clearExtraOptions = () => {
@@ -201,15 +344,39 @@ export const MultiSelect = React.forwardRef<
       onValueChange(newSelectedValues);
     };
 
-    const toggleAll = () => {
-      if (selectedValues.length === options.length) {
-        handleClear();
-      } else {
-        const allValues = options.map((option) => option.value);
-        setSelectedValues(allValues);
-        onValueChange(allValues);
+    // Handle search input change with manual debounce
+    const handleSearchInputChange = (value: string) => {
+      setSearchQuery(value);
+      
+      // Clear any existing timeout
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
+      
+      // Setup a new debounced search
+      timeoutRef.current = setTimeout(() => {
+        executeSearch(value);
+      }, debounceMs);
     };
+
+    // Get all visible options including selected ones that might not be in current search results
+    const allVisibleOptions = React.useMemo(() => {
+      const selectedOptions = selectedOptionsRef.current;
+      const currentOptions = options;
+      
+      // Combine current options with selected options that aren't in the current results
+      const combinedOptions = [...currentOptions];
+      selectedOptions.forEach(selectedOption => {
+        if (!combinedOptions.some(option => option.value === selectedOption.value)) {
+          combinedOptions.push(selectedOption);
+        }
+      });
+      
+      return combinedOptions;
+    }, [options]);
+
+    // Determine if we should show the search input
+    const shouldShowSearch = !disableSearch;
 
     return (
       <Popover
@@ -234,7 +401,7 @@ export const MultiSelect = React.forwardRef<
                     <span className="text-sm truncate mx-3 text-muted-foreground">
                       {selectedValues
                         .slice(0, maxCount)
-                        .map((value) => options.find((o) => o.value === value)?.label)
+                        .map((value) => allVisibleOptions.find((o) => o.value === value)?.label)
                         .join(", ")}
                       {selectedValues.length > maxCount && `, +${selectedValues.length - maxCount} more`}
                     </span>
@@ -242,7 +409,7 @@ export const MultiSelect = React.forwardRef<
                 ) : (
                   <div className="flex flex-wrap items-center">
                     {selectedValues.slice(0, maxCount).map((value) => {
-                      const option = options.find((o) => o.value === value);
+                      const option = allVisibleOptions.find((o) => o.value === value);
                       const IconComponent = option?.icon;
                       return (
                         <Badge
@@ -321,57 +488,84 @@ export const MultiSelect = React.forwardRef<
           style={{ width: "var(--radix-popover-trigger-width)" }}
         >
           <Command>
-            {!disableSearch && (
+            {shouldShowSearch && (
               <CommandInput
                 placeholder="Search..."
                 onKeyDown={handleInputKeyDown}
+                value={searchQuery}
+                onValueChange={handleSearchInputChange}
+                autoComplete="off"
+                className="border-none focus:ring-0"
               />
             )}
-            <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
-              <CommandGroup>
-                <CommandItem
-                  key="all"
-                  onSelect={toggleAll}
-                  className="cursor-pointer"
-                >
-                  <div
-                    className={cn(
-                      "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                      selectedValues.length === options.length
-                        ? "bg-primary text-primary-foreground"
-                        : "opacity-50 [&_svg]:invisible"
-                    )}
-                  >
-                    <CheckIcon className="h-4 w-4" />
-                  </div>
-                  <span>(Chọn tất cả)</span>
-                </CommandItem>
-                {options.map((option) => {
-                  const isSelected = selectedValues.includes(option.value);
+            
+            {showSelectedValue && selectedValues.length > 0 && (
+              <div className="flex flex-wrap gap-1 p-2 border-t border-b">
+                {selectedValues.map((value) => {
+                  const option = allVisibleOptions.find((o) => o.value === value);
+                  const IconComponent = option?.icon;
                   return (
-                    <CommandItem
-                      key={option.value}
-                      onSelect={() => toggleOption(option.value)}
-                      className="cursor-pointer"
-                    >
-                      <div
-                        className={cn(
-                          "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
-                          isSelected
-                            ? "bg-primary text-primary-foreground"
-                            : "opacity-50 [&_svg]:invisible"
-                        )}>
-                        <CheckIcon className="h-4 w-4" />
-                      </div>
-                      {option.icon && (
-                        <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                    <Badge
+                      key={value}
+                      className={cn(
+                        "flex items-center",
+                        multiSelectVariants({ variant })
                       )}
-                      <span>{option.label}</span>
-                    </CommandItem>
+                    >
+                      {IconComponent && (
+                        <IconComponent className="h-4 w-4 mr-2" />
+                      )}
+                      {option?.label}
+                      <XCircle
+                        className="ml-2 h-4 w-4 cursor-pointer"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          toggleOption(value);
+                        }}
+                      />
+                    </Badge>
                   );
                 })}
-              </CommandGroup>
+              </div>
+            )}
+            
+            <CommandList>
+              {isLoading ? (
+                <div className="flex items-center justify-center py-6">
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <span>{loadingMessage}</span>
+                </div>
+              ) : options.length === 0 ? (
+                <CommandEmpty>{noResultsMessage}</CommandEmpty>
+              ) : (
+                <CommandGroup>
+                  {options.map((option) => {
+                    const isSelected = selectedValues.includes(option.value);
+                    return (
+                      <CommandItem
+                        key={option.value}
+                        value={option.label}
+                        onSelect={() => toggleOption(option.value)}
+                        className="cursor-pointer"
+                      >
+                        <div
+                          className={cn(
+                            "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                            isSelected
+                              ? "bg-primary text-primary-foreground"
+                              : "opacity-50 [&_svg]:invisible"
+                          )}>
+                          <CheckIcon className="h-4 w-4" />
+                        </div>
+                        {option.icon && (
+                          <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                        )}
+                        <span>{option.label}</span>
+                      </CommandItem>
+                    );
+                  })}
+                </CommandGroup>
+              )}
               <CommandSeparator />
               {!disableFooter && (
                 <CommandGroup>
@@ -416,4 +610,4 @@ export const MultiSelect = React.forwardRef<
   }
 );
 
-MultiSelect.displayName = "MultiSelect";
+AsyncMultiSelect.displayName = "AsyncMultiSelect";

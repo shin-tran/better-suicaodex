@@ -7,11 +7,16 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronsUpDown, Search } from "lucide-react";
-import { useState } from "react";
+import { ChevronDown, ChevronsUpDown, Eraser, Search } from "lucide-react";
+import { useEffect, useState } from "react";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
+import { SearchAuthor } from "@/lib/mangadex/author";
+import { AsyncMultiSelect } from "@/components/ui/async-multi-select";
+import { SearchArtist } from "@/lib/mangadex/artist";
+import { Checkbox } from "@/components/ui/checkbox";
+import { getTags } from "@/lib/mangadex/tag";
 
 interface AdvancedSearchProps {
   page: number;
@@ -41,6 +46,14 @@ export default function AdvancedSearch({
   const [selectedDemos, setSelectedDemos] = useState<string[]>([]);
   const [selectedContent, setSelectedContent] = useState<string[]>([]);
   const [selectedLanguage, setSelectedLanguage] = useState<string[]>([]);
+  const [selectedAuthor, setSelectedAuthor] = useState<string[]>([]);
+  const [selectedArtist, setSelectedArtist] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [tagOptions, setTagOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
+  const [hasAvailableChapter, setHasAvailableChapter] = useState(false);
+
   const statusList = [
     { value: "completed", label: "Đã hoàn thành" },
     { value: "ongoing", label: "Đang tiến hành" },
@@ -67,6 +80,33 @@ export default function AdvancedSearch({
     { value: "vi", label: "Tiếng Việt" },
     { value: "en", label: "Tiếng Anh" },
   ];
+
+  const tagsList = async () => {
+    const data = await getTags();
+    return data.map((item) => ({
+      value: item.id,
+      label: item.name,
+    }));
+  };
+  useEffect(() => {
+    tagsList().then((data) => setTagOptions(data));
+  }, []);
+
+  const authorOptions = async (name: string) => {
+    const data = await SearchAuthor(name);
+    return data.map((item) => ({
+      value: item.id,
+      label: item.name,
+    }));
+  };
+
+  const artistOptions = async (name: string) => {
+    const data = await SearchArtist(name);
+    return data.map((item) => ({
+      value: item.id,
+      label: item.name,
+    }));
+  };
 
   return (
     <>
@@ -102,10 +142,79 @@ export default function AdvancedSearch({
 
         <CollapsibleContent
           className={cn(
-            "mt-4  overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down",
+            "mt-4 overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down",
             "grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4"
           )}
         >
+          {/* //TODO: làm lại tags */}
+          <div className="flex flex-col gap-2">
+            <Label>
+              Thể loại
+              {selectedTags.length > 0 && (
+                <span className="font-light text-primary">
+                  {" "}
+                  +{selectedTags.length}
+                </span>
+              )}
+            </Label>
+            <MultiSelect
+              className="shadow-none"
+              placeholder="Mặc định"
+              isCompact
+              disableSearch
+              disableFooter
+              variant="secondary"
+              options={tagOptions}
+              onValueChange={setSelectedTags}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>
+              Tác giả
+              {selectedAuthor.length > 0 && (
+                <span className="font-light text-primary">
+                  {" "}
+                  +{selectedAuthor.length}
+                </span>
+              )}
+            </Label>
+            <AsyncMultiSelect
+              loadOptions={authorOptions}
+              onValueChange={setSelectedAuthor}
+              className="shadow-none"
+              disableFooter
+              isCompact
+              showSelectedValue
+              placeholder="Ai cũng được"
+              noResultsMessage="Không có kết quả"
+              loadingMessage="Đang tìm..."
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label>
+              Họa sĩ
+              {selectedArtist.length > 0 && (
+                <span className="font-light text-primary">
+                  {" "}
+                  +{selectedArtist.length}
+                </span>
+              )}
+            </Label>
+            <AsyncMultiSelect
+              loadOptions={artistOptions}
+              onValueChange={setSelectedArtist}
+              className="shadow-none"
+              disableFooter
+              isCompact
+              showSelectedValue
+              placeholder="Ai cũng được"
+              noResultsMessage="Không có kết quả"
+              loadingMessage="Đang tìm..."
+            />
+          </div>
+
           <div className="flex flex-col gap-2">
             <Label>
               Tình trạng
@@ -173,16 +282,26 @@ export default function AdvancedSearch({
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label>
-              Có bản dịch?
-              {selectedLanguage.length > 0 && (
-                <span className="font-light text-primary">
-                  {" "}
-                  +{selectedLanguage.length}
-                </span>
-              )}
-            </Label>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="hasAvailableChapter"
+                onCheckedChange={() =>
+                  setHasAvailableChapter(!hasAvailableChapter)
+                }
+              />
+              <Label htmlFor="hasAvailableChapter">
+                Có bản dịch?
+                {selectedLanguage.length > 0 && (
+                  <span className="font-light text-primary">
+                    {" "}
+                    +{selectedLanguage.length}
+                  </span>
+                )}
+              </Label>
+            </div>
+
             <MultiSelect
+              disabled={!hasAvailableChapter}
               className="shadow-none"
               placeholder="Mặc định"
               isCompact
@@ -195,6 +314,17 @@ export default function AdvancedSearch({
           </div>
         </CollapsibleContent>
       </Collapsible>
+
+      <div className="flex flex-row justify-end gap-2">
+        <Button variant="secondary">
+          <Eraser />
+          Đặt lại
+        </Button>
+        <Button>
+          <Search />
+          Tìm kiếm
+        </Button>
+      </div>
     </>
   );
 }
