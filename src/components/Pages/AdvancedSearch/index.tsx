@@ -143,7 +143,9 @@ export default function AdvancedSearch({
         <CollapsibleContent
           className={cn(
             "mt-4 overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down",
-            "grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4"
+            "grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4",
+            // "data-[state=closed]:hidden"
+            // TODO: fix this
           )}
         >
           {/* //TODO: làm lại tags */}
@@ -315,7 +317,7 @@ export default function AdvancedSearch({
         </CollapsibleContent>
       </Collapsible>
 
-      <div className="flex flex-row justify-end gap-2">
+      <div className="mt-4 flex flex-row justify-end gap-2">
         <Button variant="secondary">
           <Eraser />
           Đặt lại
