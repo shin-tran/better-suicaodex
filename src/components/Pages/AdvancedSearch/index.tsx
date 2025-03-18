@@ -13,7 +13,6 @@ import { MultiSelect } from "@/components/ui/multi-select";
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { getTags } from "@/lib/mangadex/tag";
-import { z } from "zod";
 import useContentHeight from "@/hooks/use-content-height";
 import { TagsSelector } from "./tags-selector";
 import { AuthorsSelector } from "./authors-selector";
@@ -33,18 +32,6 @@ interface AdvancedSearchProps {
   availableChapter: boolean;
   translated: string;
 }
-
-// const formSchema = z.object({
-//   page: z.number(),
-//   limit: z.number(),
-//   q: z.string(),
-//   author: z.array(z.string()),
-//   content: z.array(z.string()),
-//   status: z.array(z.string()),
-//   demos: z.array(z.string()),
-//   include: z.array(z.string()),
-//   exclude: z.array(z.string()),
-// });
 
 export default function AdvancedSearch({
   page,
