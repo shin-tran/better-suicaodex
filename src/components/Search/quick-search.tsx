@@ -178,8 +178,8 @@ export default function QuickSearch() {
                       <div className={cn("hidden xl:flex flex-row gap-1",
                         expanded && "!hidden"
                       )}>
-                        <Badge variant="default" className="px-1 py-0 bg-primary/10 text-secondary-foreground rounded-sm">Ctrl</Badge>
-                        <Badge variant="default" className="px-1 py-0 bg-primary/10 text-secondary-foreground rounded-sm">K</Badge>
+                        <Badge variant="default" className="px-1 py-0 bg-primary/10 hover:bg-primary/10 text-secondary-foreground rounded-sm">Ctrl</Badge>
+                        <Badge variant="default" className="px-1 py-0 bg-primary/10 hover:bg-primary/10 text-secondary-foreground rounded-sm">K</Badge>
                       </div>
                       <Search className="h-4 w-4" />
                     </div>
