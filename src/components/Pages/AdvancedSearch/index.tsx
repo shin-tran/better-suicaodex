@@ -12,14 +12,12 @@ import { useEffect, useState } from "react";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
-import { SearchAuthor, SearchAuthorByIds } from "@/lib/mangadex/author";
-import { AsyncMultiSelect } from "@/components/ui/async-multi-select";
-import { SearchArtist } from "@/lib/mangadex/artist";
-import { Checkbox } from "@/components/ui/checkbox";
 import { getTags } from "@/lib/mangadex/tag";
 import { z } from "zod";
 import useContentHeight from "@/hooks/use-content-height";
 import { TagsSelector } from "./tags-selector";
+import { AuthorsSelector } from "./authors-selector";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface AdvancedSearchProps {
   page: number;
@@ -126,15 +124,13 @@ export default function AdvancedSearch({
     tagsList().then((data) => setTagOptions(data));
   }, []);
 
-  const authorOptions = async (name: string) => {
-    const data = await SearchAuthor(name);
-    return data.map((item) => ({
-      value: item.id,
-      label: item.name,
-    }));
-  };
-
-  //TODO: author
+  // Parse author string to array of IDs on component mount
+  useEffect(() => {
+    if (author && author.length > 0) {
+      const authorIds = author.split(',');
+      setSelectedAuthor(authorIds);
+    }
+  }, [author]);
 
   return (
     <section className="flex flex-col gap-4 transition-all">
@@ -221,17 +217,13 @@ export default function AdvancedSearch({
                     </span>
                   )}
                 </Label>
-                <AsyncMultiSelect
-                  loadOptions={authorOptions}
-                  onValueChange={setSelectedAuthor}
+                <AuthorsSelector
                   defaultValue={selectedAuthor}
-                  className="shadow-none"
-                  disableFooter
-                  isCompact
-                  showSelectedValue
+                  onValueChange={setSelectedAuthor}
                   placeholder="Ai cũng được"
-                  noResultsMessage="Không có kết quả"
-                  loadingMessage="Đang tìm..."
+                  isCompact
+                  disableFooter
+                  showSelectedValue
                 />
               </div>
 

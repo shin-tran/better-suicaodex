@@ -182,6 +182,17 @@ interface AsyncMultiSelectProps
    * Optional, defaults to false.
    */
   showSelectedValue?: boolean;
+
+  /**
+   * Pre-loaded options to display initially without needing to search.
+   * Useful for displaying default values immediately.
+   * Optional.
+   */
+  preloadedOptions?: {
+    label: string;
+    value: string;
+    icon?: React.ComponentType<{ className?: string }>;
+  }[];
 }
 
 export const AsyncMultiSelect = React.forwardRef<
@@ -207,6 +218,7 @@ export const AsyncMultiSelect = React.forwardRef<
       noResultsMessage = "No results found.",
       loadingMessage = "Loading...",
       showSelectedValue = false,
+      preloadedOptions = [],
       ...props
     },
     ref
@@ -219,17 +231,17 @@ export const AsyncMultiSelect = React.forwardRef<
       label: string;
       value: string;
       icon?: React.ComponentType<{ className?: string }>;
-    }>>([]);
+    }>>(preloadedOptions);
     const [searchQuery, setSearchQuery] = React.useState("");
     const [isLoading, setIsLoading] = React.useState(false);
-    const [hasSearched, setHasSearched] = React.useState(false);
+    const [hasSearched, setHasSearched] = React.useState(preloadedOptions.length > 0);
 
     // Create a ref for selected options to maintain their labels
     const selectedOptionsRef = React.useRef<Array<{
       label: string;
       value: string;
       icon?: React.ComponentType<{ className?: string }>;
-    }>>([]);
+    }>>(preloadedOptions);
 
     // Create a ref for the timeout to handle debouncing
     const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -252,7 +264,7 @@ export const AsyncMultiSelect = React.forwardRef<
     // Load initial selected values if needed
     React.useEffect(() => {
       const fetchSelectedOptions = async () => {
-        if (defaultValue.length > 0) {
+        if (defaultValue.length > 0 && preloadedOptions.length === 0) {
           try {
             setIsLoading(true);
             const results = await loadOptions("");
@@ -262,17 +274,24 @@ export const AsyncMultiSelect = React.forwardRef<
             
             if (matchingOptions.length > 0) {
               selectedOptionsRef.current = matchingOptions;
+              setOptions(matchingOptions);
+              setHasSearched(true);
             }
           } catch (error) {
             console.error("Error loading default options:", error);
           } finally {
             setIsLoading(false);
           }
+        } else if (preloadedOptions.length > 0) {
+          // Use preloaded options if available
+          selectedOptionsRef.current = preloadedOptions;
+          setOptions(preloadedOptions);
+          setHasSearched(true);
         }
       };
       
       fetchSelectedOptions();
-    }, [defaultValue, loadOptions]);
+    }, [defaultValue, loadOptions, preloadedOptions]);
 
     // Update selected options when options change
     React.useEffect(() => {

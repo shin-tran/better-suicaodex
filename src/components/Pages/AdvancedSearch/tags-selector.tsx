@@ -148,7 +148,10 @@ interface TagsSelectorProps
   isCompact?: boolean;
 }
 
-export const TagsSelector = React.forwardRef<HTMLButtonElement, TagsSelectorProps>(
+export const TagsSelector = React.forwardRef<
+  HTMLButtonElement,
+  TagsSelectorProps
+>(
   (
     {
       options,
@@ -169,44 +172,48 @@ export const TagsSelector = React.forwardRef<HTMLButtonElement, TagsSelectorProp
     ref
   ) => {
     // Store the state of each tag as a map of tag value to TagState
-    const [tagStates, setTagStates] = React.useState<Record<string, TagState>>(() => {
-      const states: Record<string, TagState> = {};
-      
-      // Set initial states based on default included and excluded values
-      options.forEach(option => {
-        if (defaultIncluded.includes(option.value)) {
-          states[option.value] = TagState.INCLUDE;
-        } else if (defaultExcluded.includes(option.value)) {
-          states[option.value] = TagState.EXCLUDE;
-        } else {
-          states[option.value] = TagState.NONE;
-        }
-      });
-      
-      return states;
-    });
+    const [tagStates, setTagStates] = React.useState<Record<string, TagState>>(
+      () => {
+        const states: Record<string, TagState> = {};
+
+        // Set initial states based on default included and excluded values
+        options.forEach((option) => {
+          if (defaultIncluded.includes(option.value)) {
+            states[option.value] = TagState.INCLUDE;
+          } else if (defaultExcluded.includes(option.value)) {
+            states[option.value] = TagState.EXCLUDE;
+          } else {
+            states[option.value] = TagState.NONE;
+          }
+        });
+
+        return states;
+      }
+    );
 
     const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
     const [isAnimating, setIsAnimating] = React.useState(false);
 
     // Calculate included and excluded tags based on tag states
-    const includedTags = React.useMemo(() => 
-      Object.entries(tagStates)
-        .filter(([_, state]) => state === TagState.INCLUDE)
-        .map(([value]) => value),
+    const includedTags = React.useMemo(
+      () =>
+        Object.entries(tagStates)
+          .filter(([_, state]) => state === TagState.INCLUDE)
+          .map(([value]) => value),
       [tagStates]
     );
 
-    const excludedTags = React.useMemo(() => 
-      Object.entries(tagStates)
-        .filter(([_, state]) => state === TagState.EXCLUDE)
-        .map(([value]) => value),
+    const excludedTags = React.useMemo(
+      () =>
+        Object.entries(tagStates)
+          .filter(([_, state]) => state === TagState.EXCLUDE)
+          .map(([value]) => value),
       [tagStates]
     );
 
     // Calculate all selected tags (both included and excluded)
-    const selectedTags = React.useMemo(() => 
-      [...includedTags, ...excludedTags], 
+    const selectedTags = React.useMemo(
+      () => [...includedTags, ...excludedTags],
       [includedTags, excludedTags]
     );
 
@@ -234,7 +241,7 @@ export const TagsSelector = React.forwardRef<HTMLButtonElement, TagsSelectorProp
     const cycleTagState = (tagValue: string) => {
       const currentState = tagStates[tagValue] || TagState.NONE;
       const newTagStates = { ...tagStates };
-      
+
       // Cycle through states: NONE -> INCLUDE -> EXCLUDE -> NONE
       switch (currentState) {
         case TagState.NONE:
@@ -247,7 +254,7 @@ export const TagsSelector = React.forwardRef<HTMLButtonElement, TagsSelectorProp
           newTagStates[tagValue] = TagState.NONE;
           break;
       }
-      
+
       setTagStates(newTagStates);
     };
 
@@ -264,7 +271,7 @@ export const TagsSelector = React.forwardRef<HTMLButtonElement, TagsSelectorProp
 
     const handleClear = () => {
       const newTagStates: Record<string, TagState> = {};
-      options.forEach(option => {
+      options.forEach((option) => {
         newTagStates[option.value] = TagState.NONE;
       });
       setTagStates(newTagStates);
@@ -277,10 +284,10 @@ export const TagsSelector = React.forwardRef<HTMLButtonElement, TagsSelectorProp
     // Clear extra options exceeding maxCount
     const clearExtraOptions = () => {
       const newTagStates = { ...tagStates };
-      
+
       // Keep only the first maxCount selected tags
       let count = 0;
-      
+
       for (const [value, state] of Object.entries(newTagStates)) {
         if (state !== TagState.NONE) {
           count++;
@@ -289,7 +296,7 @@ export const TagsSelector = React.forwardRef<HTMLButtonElement, TagsSelectorProp
           }
         }
       }
-      
+
       setTagStates(newTagStates);
     };
 
@@ -319,11 +326,13 @@ export const TagsSelector = React.forwardRef<HTMLButtonElement, TagsSelectorProp
                         .map((value) => {
                           const option = options.find((o) => o.value === value);
                           const state = tagStates[value];
-                          const statePrefix = state === TagState.INCLUDE ? '+' : '-';
+                          const statePrefix =
+                            state === TagState.INCLUDE ? "+" : "-";
                           return `${statePrefix}${option?.label}`;
                         })
                         .join(", ")}
-                      {selectedTags.length > maxCount && `, +${selectedTags.length - maxCount} more`}
+                      {selectedTags.length > maxCount &&
+                        `, +${selectedTags.length - maxCount} more`}
                     </span>
                   </div>
                 ) : (
@@ -421,8 +430,43 @@ export const TagsSelector = React.forwardRef<HTMLButtonElement, TagsSelectorProp
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup>
                 {/* <div className="px-2 py-1.5 text-xs text-muted-foreground">
-                  Click to toggle: None → Include → Exclude → None
+                  Click to toggle: None → Include → Exclude → None  
                 </div> */}
+                {selectedTags.length > 0 && (
+                    <div className="flex flex-wrap items-center border-b pb-0.5">
+                    {selectedTags.map((value) => {
+                      const option = options.find((o) => o.value === value);
+                      const state = tagStates[value];
+                      const IconComponent = option?.icon;
+                      return (
+                        <Badge
+                          key={value}
+                          className={cn(
+                            isAnimating ? "animate-bounce" : "",
+                            tagSelectorVariants({ state })
+                          )}
+                          style={{ animationDuration: `${animation}s` }}
+                        >
+                          {/* {getStateIcon(state)}
+                          {IconComponent && (
+                            <IconComponent className="h-4 w-4 mx-1" />
+                          )} */}
+                          {option?.label}
+                          <XCircle
+                            className="ml-2 h-4 w-4 cursor-pointer"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              const newTagStates = { ...tagStates };
+                              newTagStates[value] = TagState.NONE;
+                              setTagStates(newTagStates);
+                            }}
+                          />
+                        </Badge>
+                      );
+                    })}
+                  </div>
+                )}
+                
                 {options.map((option) => {
                   const state = tagStates[option.value] || TagState.NONE;
                   return (
@@ -445,11 +489,15 @@ export const TagsSelector = React.forwardRef<HTMLButtonElement, TagsSelectorProp
                       {option.icon && (
                         <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
                       )}
-                      <span className={cn(
-                        state === TagState.INCLUDE && "text-primary",
-                        state === TagState.EXCLUDE && "text-destructive",
-                        state === TagState.NONE && "text-muted-foreground"
-                      )}>{option.label}</span>
+                      <span
+                        className={cn(
+                          state === TagState.INCLUDE && "text-primary",
+                          state === TagState.EXCLUDE && "text-destructive",
+                          state === TagState.NONE && "text-muted-foreground"
+                        )}
+                      >
+                        {option.label}
+                      </span>
                     </CommandItem>
                   );
                 })}
