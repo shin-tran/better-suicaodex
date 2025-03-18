@@ -12,13 +12,14 @@ import { useEffect, useState } from "react";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
-import { SearchAuthor } from "@/lib/mangadex/author";
+import { SearchAuthor, SearchAuthorByIds } from "@/lib/mangadex/author";
 import { AsyncMultiSelect } from "@/components/ui/async-multi-select";
 import { SearchArtist } from "@/lib/mangadex/artist";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getTags } from "@/lib/mangadex/tag";
 import { z } from "zod";
 import useContentHeight from "@/hooks/use-content-height";
+import { TagsSelector } from "./tags-selector";
 
 interface AdvancedSearchProps {
   page: number;
@@ -56,21 +57,24 @@ export default function AdvancedSearch({
   exclude,
 }: AdvancedSearchProps) {
   const [isOpen, setIsOpen] = useState(false);
-  
+
   // Use custom hook for content height management
   const { contentRef, fullHeight } = useContentHeight({
     expanded: isOpen,
     initialDelay: 100,
-    dependencies: [isOpen]
+    dependencies: [isOpen],
   });
 
   const [selectedStatus, setSelectedStatus] = useState<string[]>([]);
   const [selectedDemos, setSelectedDemos] = useState<string[]>([]);
   const [selectedContent, setSelectedContent] = useState<string[]>([]);
   const [selectedLanguage, setSelectedLanguage] = useState<string[]>([]);
-  const [selectedOriginLanguage, setSelectedOriginLanguage] = useState<string[]>([]);
+  const [selectedOriginLanguage, setSelectedOriginLanguage] = useState<
+    string[]
+  >([]);
   const [selectedAuthor, setSelectedAuthor] = useState<string[]>([]);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedInclude, setSelectedInclude] = useState<string[]>([]);
+  const [selectedExclude, setSelectedExclude] = useState<string[]>([]);
   const [tagOptions, setTagOptions] = useState<
     { value: string; label: string }[]
   >([]);
@@ -111,7 +115,6 @@ export default function AdvancedSearch({
     { value: "en", label: "Tiếng Anh" },
   ];
 
-
   const tagsList = async () => {
     const data = await getTags();
     return data.map((item) => ({
@@ -130,6 +133,8 @@ export default function AdvancedSearch({
       label: item.name,
     }));
   };
+
+  //TODO: author
 
   return (
     <section className="flex flex-col gap-4 transition-all">
@@ -163,8 +168,8 @@ export default function AdvancedSearch({
           </CollapsibleTrigger>
         </div>
 
-        <div 
-          style={{ height: isOpen ? fullHeight : 0 }} 
+        <div
+          style={{ height: isOpen ? fullHeight : 0 }}
           className="overflow-hidden transition-[height] duration-200 ease-out"
         >
           <div ref={contentRef}>
@@ -175,26 +180,34 @@ export default function AdvancedSearch({
                 "transition-opacity duration-200"
               )}
             >
-              {/* //TODO: làm lại tags */}
               <div className="flex flex-col gap-2">
                 <Label>
                   Thể loại
-                  {selectedTags.length > 0 && (
+                  {selectedInclude.length > 0 && (
                     <span className="font-light text-primary">
                       {" "}
-                      +{selectedTags.length}
+                      +{selectedInclude.length}
+                    </span>
+                  )}
+                  {selectedExclude.length > 0 && (
+                    <span className="font-light text-primary">
+                      {" "}
+                      -{selectedExclude.length}
                     </span>
                   )}
                 </Label>
-                <MultiSelect
+                <TagsSelector
                   className="shadow-none"
-                  placeholder="Mặc định"
-                  isCompact
-                  disableSearch
                   disableFooter
-                  variant="secondary"
+                  isCompact
                   options={tagOptions}
-                  onValueChange={setSelectedTags}
+                  onValueChange={(includedTags, excludedTags) => {
+                    setSelectedInclude(includedTags);
+                    setSelectedExclude(excludedTags);
+                  }}
+                  placeholder="Gì cũng được"
+                  defaultExcluded={selectedExclude}
+                  defaultIncluded={selectedInclude}
                 />
               </div>
 
@@ -211,6 +224,7 @@ export default function AdvancedSearch({
                 <AsyncMultiSelect
                   loadOptions={authorOptions}
                   onValueChange={setSelectedAuthor}
+                  defaultValue={selectedAuthor}
                   className="shadow-none"
                   disableFooter
                   isCompact
@@ -240,6 +254,7 @@ export default function AdvancedSearch({
                   variant="secondary"
                   options={statusList}
                   onValueChange={setSelectedStatus}
+                  defaultValue={selectedStatus}
                 />
               </div>
 
@@ -262,6 +277,7 @@ export default function AdvancedSearch({
                   variant="secondary"
                   options={demosList}
                   onValueChange={setSelectedDemos}
+                  defaultValue={selectedDemos}
                 />
               </div>
 
@@ -284,6 +300,7 @@ export default function AdvancedSearch({
                   variant="secondary"
                   options={contentList}
                   onValueChange={setSelectedContent}
+                  defaultValue={selectedContent}
                 />
               </div>
 
@@ -306,6 +323,7 @@ export default function AdvancedSearch({
                   variant="secondary"
                   options={originLanguageList}
                   onValueChange={setSelectedOriginLanguage}
+                  defaultValue={selectedOriginLanguage}
                 />
               </div>
 
@@ -316,6 +334,7 @@ export default function AdvancedSearch({
                     onCheckedChange={() =>
                       setHasAvailableChapter(!hasAvailableChapter)
                     }
+                    defaultChecked={hasAvailableChapter}
                   />
                   <Label htmlFor="hasAvailableChapter">
                     Có bản dịch?
@@ -338,6 +357,7 @@ export default function AdvancedSearch({
                   variant="secondary"
                   options={languageList}
                   onValueChange={setSelectedLanguage}
+                  defaultValue={selectedLanguage}
                 />
               </div>
             </CollapsibleContent>
@@ -357,4 +377,4 @@ export default function AdvancedSearch({
       </div>
     </section>
   );
-};
+}
