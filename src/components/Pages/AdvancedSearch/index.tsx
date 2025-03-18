@@ -7,7 +7,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronsUpDown, Eraser, Search } from "lucide-react";
+import { ChevronDown, Eraser, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { cn } from "@/lib/utils";
@@ -68,6 +68,8 @@ export default function AdvancedSearch({
     initialDelay: 100,
     dependencies: [isOpen],
   });
+
+  const [query, setQuery] = useState(q);
 
   const [selectedStatus, setSelectedStatus] = useState<string[]>(
     toArray(status) || []
@@ -151,6 +153,20 @@ export default function AdvancedSearch({
     }
   }, [author]);
 
+  const resetForm = () => {
+    setQuery("");
+    setSelectedStatus([]);
+    setSelectedDemos([]);
+    setSelectedContent([]);
+    setSelectedLanguage([]);
+    setSelectedOriginLanguage([]);
+    setSelectedAuthor([]);
+    setSelectedInclude([]);
+    setSelectedExclude([]);
+    setHasAvailableChapter(false);
+  }
+
+
   return (
     <section className="flex flex-col gap-4 transition-all">
       <div>
@@ -170,6 +186,8 @@ export default function AdvancedSearch({
               className="bg-secondary pl-7"
               placeholder="Nhập từ khóa..."
               autoComplete="off"
+              defaultValue={query}
+              onChange={(e) => setQuery(e.target.value)}
             />
           </div>
           <CollapsibleTrigger asChild>
@@ -345,7 +363,7 @@ export default function AdvancedSearch({
                     onCheckedChange={() =>
                       setHasAvailableChapter(!hasAvailableChapter)
                     }
-                    defaultChecked={hasAvailableChapter}
+                    checked={hasAvailableChapter}
                   />
                   <Label htmlFor="hasAvailableChapter">
                     Có bản dịch?
@@ -377,7 +395,7 @@ export default function AdvancedSearch({
       </Collapsible>
 
       <div className="flex flex-row justify-end gap-2">
-        <Button variant="secondary">
+        <Button variant="secondary" onClick={resetForm}>
           <Eraser />
           Đặt lại
         </Button>
