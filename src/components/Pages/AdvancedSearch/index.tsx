@@ -17,6 +17,8 @@ import { AsyncMultiSelect } from "@/components/ui/async-multi-select";
 import { SearchArtist } from "@/lib/mangadex/artist";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getTags } from "@/lib/mangadex/tag";
+import { z } from "zod";
+import useContentHeight from "@/hooks/use-content-height";
 
 interface AdvancedSearchProps {
   page: number;
@@ -30,6 +32,18 @@ interface AdvancedSearchProps {
   exclude: string;
 }
 
+const formSchema = z.object({
+  page: z.number(),
+  limit: z.number(),
+  q: z.string(),
+  author: z.array(z.string()),
+  content: z.array(z.string()),
+  status: z.array(z.string()),
+  demos: z.array(z.string()),
+  include: z.array(z.string()),
+  exclude: z.array(z.string()),
+});
+
 export default function AdvancedSearch({
   page,
   limit,
@@ -42,12 +56,20 @@ export default function AdvancedSearch({
   exclude,
 }: AdvancedSearchProps) {
   const [isOpen, setIsOpen] = useState(false);
+  
+  // Use custom hook for content height management
+  const { contentRef, fullHeight } = useContentHeight({
+    expanded: isOpen,
+    initialDelay: 100,
+    dependencies: [isOpen]
+  });
+
   const [selectedStatus, setSelectedStatus] = useState<string[]>([]);
   const [selectedDemos, setSelectedDemos] = useState<string[]>([]);
   const [selectedContent, setSelectedContent] = useState<string[]>([]);
   const [selectedLanguage, setSelectedLanguage] = useState<string[]>([]);
+  const [selectedOriginLanguage, setSelectedOriginLanguage] = useState<string[]>([]);
   const [selectedAuthor, setSelectedAuthor] = useState<string[]>([]);
-  const [selectedArtist, setSelectedArtist] = useState<string[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [tagOptions, setTagOptions] = useState<
     { value: string; label: string }[]
@@ -76,10 +98,19 @@ export default function AdvancedSearch({
     { value: "pornographic", label: "Segggg!" },
   ];
 
+  const originLanguageList = [
+    { value: "vi", label: "Tiếng Việt" },
+    { value: "en", label: "Tiếng Anh" },
+    { value: "ja", label: "Tiếng Nhật" },
+    { value: "ko", label: "Tiếng Hàn" },
+    { value: "zh", label: "Tiếng Trung" },
+  ];
+
   const languageList = [
     { value: "vi", label: "Tiếng Việt" },
     { value: "en", label: "Tiếng Anh" },
   ];
+
 
   const tagsList = async () => {
     const data = await getTags();
@@ -100,16 +131,8 @@ export default function AdvancedSearch({
     }));
   };
 
-  const artistOptions = async (name: string) => {
-    const data = await SearchArtist(name);
-    return data.map((item) => ({
-      value: item.id,
-      label: item.name,
-    }));
-  };
-
   return (
-    <>
+    <section className="flex flex-col gap-4 transition-all">
       <div>
         <hr className="w-9 h-1 bg-primary border-none" />
         <h1 className="text-2xl font-black uppercase">Tìm kiếm nâng cao</h1>
@@ -118,7 +141,7 @@ export default function AdvancedSearch({
       <Collapsible
         open={isOpen}
         onOpenChange={setIsOpen}
-        className="mt-4 w-full"
+        className="w-full space-y-4"
       >
         <div className="grid gap-2 md:grid-cols-[1fr_12rem]">
           <div className="relative">
@@ -140,184 +163,189 @@ export default function AdvancedSearch({
           </CollapsibleTrigger>
         </div>
 
-        <CollapsibleContent
-          className={cn(
-            "mt-4 overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down",
-            "grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4",
-            // "data-[state=closed]:hidden"
-            // TODO: fix this
-          )}
+        <div 
+          style={{ height: isOpen ? fullHeight : 0 }} 
+          className="overflow-hidden transition-[height] duration-200 ease-out"
         >
-          {/* //TODO: làm lại tags */}
-          <div className="flex flex-col gap-2">
-            <Label>
-              Thể loại
-              {selectedTags.length > 0 && (
-                <span className="font-light text-primary">
-                  {" "}
-                  +{selectedTags.length}
-                </span>
+          <div ref={contentRef}>
+            <CollapsibleContent
+              className={cn(
+                "grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 py-4",
+                "data-[state=closed]:opacity-0 data-[state=open]:opacity-100",
+                "transition-opacity duration-200"
               )}
-            </Label>
-            <MultiSelect
-              className="shadow-none"
-              placeholder="Mặc định"
-              isCompact
-              disableSearch
-              disableFooter
-              variant="secondary"
-              options={tagOptions}
-              onValueChange={setSelectedTags}
-            />
-          </div>
+            >
+              {/* //TODO: làm lại tags */}
+              <div className="flex flex-col gap-2">
+                <Label>
+                  Thể loại
+                  {selectedTags.length > 0 && (
+                    <span className="font-light text-primary">
+                      {" "}
+                      +{selectedTags.length}
+                    </span>
+                  )}
+                </Label>
+                <MultiSelect
+                  className="shadow-none"
+                  placeholder="Mặc định"
+                  isCompact
+                  disableSearch
+                  disableFooter
+                  variant="secondary"
+                  options={tagOptions}
+                  onValueChange={setSelectedTags}
+                />
+              </div>
 
-          <div className="flex flex-col gap-2">
-            <Label>
-              Tác giả
-              {selectedAuthor.length > 0 && (
-                <span className="font-light text-primary">
-                  {" "}
-                  +{selectedAuthor.length}
-                </span>
-              )}
-            </Label>
-            <AsyncMultiSelect
-              loadOptions={authorOptions}
-              onValueChange={setSelectedAuthor}
-              className="shadow-none"
-              disableFooter
-              isCompact
-              showSelectedValue
-              placeholder="Ai cũng được"
-              noResultsMessage="Không có kết quả"
-              loadingMessage="Đang tìm..."
-            />
-          </div>
+              <div className="flex flex-col gap-2">
+                <Label>
+                  Tác giả
+                  {selectedAuthor.length > 0 && (
+                    <span className="font-light text-primary">
+                      {" "}
+                      +{selectedAuthor.length}
+                    </span>
+                  )}
+                </Label>
+                <AsyncMultiSelect
+                  loadOptions={authorOptions}
+                  onValueChange={setSelectedAuthor}
+                  className="shadow-none"
+                  disableFooter
+                  isCompact
+                  showSelectedValue
+                  placeholder="Ai cũng được"
+                  noResultsMessage="Không có kết quả"
+                  loadingMessage="Đang tìm..."
+                />
+              </div>
 
-          <div className="flex flex-col gap-2">
-            <Label>
-              Họa sĩ
-              {selectedArtist.length > 0 && (
-                <span className="font-light text-primary">
-                  {" "}
-                  +{selectedArtist.length}
-                </span>
-              )}
-            </Label>
-            <AsyncMultiSelect
-              loadOptions={artistOptions}
-              onValueChange={setSelectedArtist}
-              className="shadow-none"
-              disableFooter
-              isCompact
-              showSelectedValue
-              placeholder="Ai cũng được"
-              noResultsMessage="Không có kết quả"
-              loadingMessage="Đang tìm..."
-            />
-          </div>
+              <div className="flex flex-col gap-2">
+                <Label>
+                  Tình trạng
+                  {selectedStatus.length > 0 && (
+                    <span className="font-light text-primary">
+                      {" "}
+                      +{selectedStatus.length}
+                    </span>
+                  )}
+                </Label>
+                <MultiSelect
+                  isCompact
+                  className="shadow-none"
+                  disableSearch
+                  disableFooter
+                  placeholder="Mặc định"
+                  variant="secondary"
+                  options={statusList}
+                  onValueChange={setSelectedStatus}
+                />
+              </div>
 
-          <div className="flex flex-col gap-2">
-            <Label>
-              Tình trạng
-              {selectedStatus.length > 0 && (
-                <span className="font-light text-primary">
-                  {" "}
-                  +{selectedStatus.length}
-                </span>
-              )}
-            </Label>
-            <MultiSelect
-              isCompact
-              className="shadow-none"
-              disableSearch
-              disableFooter
-              placeholder="Mặc định"
-              variant="secondary"
-              options={statusList}
-              onValueChange={setSelectedStatus}
-            />
-          </div>
+              <div className="flex flex-col gap-2">
+                <Label>
+                  Dành cho
+                  {selectedDemos.length > 0 && (
+                    <span className="font-light text-primary">
+                      {" "}
+                      +{selectedDemos.length}
+                    </span>
+                  )}
+                </Label>
+                <MultiSelect
+                  className="shadow-none"
+                  placeholder="Mặc định"
+                  isCompact
+                  disableSearch
+                  disableFooter
+                  variant="secondary"
+                  options={demosList}
+                  onValueChange={setSelectedDemos}
+                />
+              </div>
 
-          <div className="flex flex-col gap-2">
-            <Label>
-              Dành cho
-              {selectedDemos.length > 0 && (
-                <span className="font-light text-primary">
-                  {" "}
-                  +{selectedDemos.length}
-                </span>
-              )}
-            </Label>
-            <MultiSelect
-              className="shadow-none"
-              placeholder="Mặc định"
-              isCompact
-              disableSearch
-              disableFooter
-              variant="secondary"
-              options={demosList}
-              onValueChange={setSelectedDemos}
-            />
-          </div>
+              <div className="flex flex-col gap-2">
+                <Label>
+                  Giới hạn nội dung
+                  {selectedContent.length > 0 && (
+                    <span className="font-light text-primary">
+                      {" "}
+                      +{selectedContent.length}
+                    </span>
+                  )}
+                </Label>
+                <MultiSelect
+                  className="shadow-none"
+                  placeholder="Mặc định"
+                  isCompact
+                  disableSearch
+                  disableFooter
+                  variant="secondary"
+                  options={contentList}
+                  onValueChange={setSelectedContent}
+                />
+              </div>
 
-          <div className="flex flex-col gap-2">
-            <Label>
-              Giới hạn nội dung
-              {selectedContent.length > 0 && (
-                <span className="font-light text-primary">
-                  {" "}
-                  +{selectedContent.length}
-                </span>
-              )}
-            </Label>
-            <MultiSelect
-              className="shadow-none"
-              placeholder="Mặc định"
-              isCompact
-              disableSearch
-              disableFooter
-              variant="secondary"
-              options={contentList}
-              onValueChange={setSelectedContent}
-            />
-          </div>
+              <div className="flex flex-col gap-2">
+                <Label>
+                  Ngôn ngữ gốc
+                  {selectedOriginLanguage.length > 0 && (
+                    <span className="font-light text-primary">
+                      {" "}
+                      +{selectedOriginLanguage.length}
+                    </span>
+                  )}
+                </Label>
+                <MultiSelect
+                  className="shadow-none"
+                  placeholder="Mặc định"
+                  isCompact
+                  disableSearch
+                  disableFooter
+                  variant="secondary"
+                  options={originLanguageList}
+                  onValueChange={setSelectedOriginLanguage}
+                />
+              </div>
 
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="hasAvailableChapter"
-                onCheckedChange={() =>
-                  setHasAvailableChapter(!hasAvailableChapter)
-                }
-              />
-              <Label htmlFor="hasAvailableChapter">
-                Có bản dịch?
-                {selectedLanguage.length > 0 && (
-                  <span className="font-light text-primary">
-                    {" "}
-                    +{selectedLanguage.length}
-                  </span>
-                )}
-              </Label>
-            </div>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="hasAvailableChapter"
+                    onCheckedChange={() =>
+                      setHasAvailableChapter(!hasAvailableChapter)
+                    }
+                  />
+                  <Label htmlFor="hasAvailableChapter">
+                    Có bản dịch?
+                    {selectedLanguage.length > 0 && (
+                      <span className="font-light text-primary">
+                        {" "}
+                        +{selectedLanguage.length}
+                      </span>
+                    )}
+                  </Label>
+                </div>
 
-            <MultiSelect
-              disabled={!hasAvailableChapter}
-              className="shadow-none"
-              placeholder="Mặc định"
-              isCompact
-              disableSearch
-              disableFooter
-              variant="secondary"
-              options={languageList}
-              onValueChange={setSelectedLanguage}
-            />
+                <MultiSelect
+                  disabled={!hasAvailableChapter}
+                  className="shadow-none"
+                  placeholder="Mặc định"
+                  isCompact
+                  disableSearch
+                  disableFooter
+                  variant="secondary"
+                  options={languageList}
+                  onValueChange={setSelectedLanguage}
+                />
+              </div>
+            </CollapsibleContent>
           </div>
-        </CollapsibleContent>
+        </div>
       </Collapsible>
 
-      <div className="mt-4 flex flex-row justify-end gap-2">
+      <div className="flex flex-row justify-end gap-2">
         <Button variant="secondary">
           <Eraser />
           Đặt lại
@@ -327,6 +355,6 @@ export default function AdvancedSearch({
           Tìm kiếm
         </Button>
       </div>
-    </>
+    </section>
   );
-}
+};
