@@ -175,7 +175,7 @@ export default function QuickSearch() {
                   </FormControl>
                   {searchQuery.length === 0 ? (
                     <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2 items-center">
-                      <div className={cn("hidden xl:flex flex-row gap-1",
+                      <div className={cn("hidden lg:flex flex-row gap-1",
                         expanded && "!hidden"
                       )}>
                         <Badge variant="default" className="px-1 py-0 bg-primary/10 hover:bg-primary/10 text-secondary-foreground rounded-sm">Ctrl</Badge>
