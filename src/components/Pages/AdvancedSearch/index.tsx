@@ -34,17 +34,17 @@ interface AdvancedSearchProps {
   translated: string;
 }
 
-const formSchema = z.object({
-  page: z.number(),
-  limit: z.number(),
-  q: z.string(),
-  author: z.array(z.string()),
-  content: z.array(z.string()),
-  status: z.array(z.string()),
-  demos: z.array(z.string()),
-  include: z.array(z.string()),
-  exclude: z.array(z.string()),
-});
+// const formSchema = z.object({
+//   page: z.number(),
+//   limit: z.number(),
+//   q: z.string(),
+//   author: z.array(z.string()),
+//   content: z.array(z.string()),
+//   status: z.array(z.string()),
+//   demos: z.array(z.string()),
+//   include: z.array(z.string()),
+//   exclude: z.array(z.string()),
+// });
 
 export default function AdvancedSearch({
   page,
@@ -70,6 +70,8 @@ export default function AdvancedSearch({
   });
 
   const [query, setQuery] = useState(q);
+  // Reset keys to force re-render of MultiSelect components
+  const [resetKey, setResetKey] = useState(0);
 
   const [selectedStatus, setSelectedStatus] = useState<string[]>(
     toArray(status) || []
@@ -164,6 +166,8 @@ export default function AdvancedSearch({
     setSelectedInclude([]);
     setSelectedExclude([]);
     setHasAvailableChapter(false);
+    // Increment reset key to force re-render of MultiSelect components
+    setResetKey(prev => prev + 1);
   }
 
 
@@ -186,7 +190,8 @@ export default function AdvancedSearch({
               className="bg-secondary pl-7"
               placeholder="Nhập từ khóa..."
               autoComplete="off"
-              defaultValue={query}
+              //defaultValue={query}
+              value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
           </div>
@@ -230,6 +235,7 @@ export default function AdvancedSearch({
                   )}
                 </Label>
                 <TagsSelector
+                  key={`tags-selector-${resetKey}`}
                   className="shadow-none"
                   disableFooter
                   isCompact
@@ -255,6 +261,7 @@ export default function AdvancedSearch({
                   )}
                 </Label>
                 <AuthorsSelector
+                  key={`authors-selector-${resetKey}`}
                   defaultValue={selectedAuthor}
                   onValueChange={setSelectedAuthor}
                   placeholder="Ai cũng được"
@@ -275,6 +282,7 @@ export default function AdvancedSearch({
                   )}
                 </Label>
                 <MultiSelect
+                  key={`status-${resetKey}`}
                   isCompact
                   className="shadow-none"
                   disableSearch
@@ -298,6 +306,7 @@ export default function AdvancedSearch({
                   )}
                 </Label>
                 <MultiSelect
+                  key={`demos-${resetKey}`}
                   className="shadow-none"
                   placeholder="Mặc định"
                   isCompact
@@ -321,6 +330,7 @@ export default function AdvancedSearch({
                   )}
                 </Label>
                 <MultiSelect
+                  key={`content-${resetKey}`}
                   className="shadow-none"
                   placeholder="Mặc định"
                   isCompact
@@ -344,6 +354,7 @@ export default function AdvancedSearch({
                   )}
                 </Label>
                 <MultiSelect
+                  key={`origin-language-${resetKey}`}
                   className="shadow-none"
                   placeholder="Mặc định"
                   isCompact
@@ -377,6 +388,7 @@ export default function AdvancedSearch({
                 </div>
 
                 <MultiSelect
+                  key={`translated-${resetKey}`}
                   disabled={!hasAvailableChapter}
                   className="shadow-none"
                   placeholder="Mặc định"
