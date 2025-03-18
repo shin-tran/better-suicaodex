@@ -500,7 +500,7 @@ export const AsyncMultiSelect = React.forwardRef<
             )}
             
             {showSelectedValue && selectedValues.length > 0 && (
-              <div className="flex flex-wrap gap-1 p-2 border-t border-b">
+              <div className="flex flex-wrap gap-0.5 p-2 border-t border-b">
                 {selectedValues.map((value) => {
                   const option = allVisibleOptions.find((o) => o.value === value);
                   const IconComponent = option?.icon;
