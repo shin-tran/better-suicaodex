@@ -29,8 +29,20 @@ export async function generateMetadata({
 }
 
 export default async function Page({ searchParams }: pageProps) {
-  const { page, limit, q, author, content, status, demos, include, exclude } =
-    await getSearchParams({ searchParams });
+  const {
+    page,
+    limit,
+    q,
+    author,
+    content,
+    status,
+    demos,
+    include,
+    exclude,
+    origin,
+    availableChapter,
+    translated,
+  } = await getSearchParams({ searchParams });
   return (
     <AdvancedSearch
       limit={limit}
@@ -42,6 +54,9 @@ export default async function Page({ searchParams }: pageProps) {
       demos={demos}
       include={include}
       exclude={exclude}
+      origin={origin}
+      availableChapter={availableChapter}
+      translated={translated}
     />
   );
 }
@@ -59,6 +74,9 @@ const getSearchParams = async ({ searchParams }: pageProps) => {
   const demos = params["demos"] || "";
   const include = params["include"] || "";
   const exclude = params["exclude"] || "";
+  const origin = params["origin"] || "";
+  const availableChapter = params["availableChapter"] === "true";
+  const translated = params["translated"] || "";
 
   return {
     page,
@@ -70,5 +88,8 @@ const getSearchParams = async ({ searchParams }: pageProps) => {
     demos,
     include,
     exclude,
+    origin,
+    availableChapter,
+    translated,
   };
 };

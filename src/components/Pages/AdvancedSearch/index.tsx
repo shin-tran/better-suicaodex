@@ -29,6 +29,9 @@ interface AdvancedSearchProps {
   demos: string;
   include: string;
   exclude: string;
+  origin: string;
+  availableChapter: boolean;
+  translated: string;
 }
 
 const formSchema = z.object({
@@ -53,6 +56,9 @@ export default function AdvancedSearch({
   demos,
   include,
   exclude,
+  origin,
+  availableChapter,
+  translated,
 }: AdvancedSearchProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -63,20 +69,33 @@ export default function AdvancedSearch({
     dependencies: [isOpen],
   });
 
-  const [selectedStatus, setSelectedStatus] = useState<string[]>([]);
-  const [selectedDemos, setSelectedDemos] = useState<string[]>([]);
-  const [selectedContent, setSelectedContent] = useState<string[]>([]);
-  const [selectedLanguage, setSelectedLanguage] = useState<string[]>([]);
+  const [selectedStatus, setSelectedStatus] = useState<string[]>(
+    toArray(status) || []
+  );
+  const [selectedDemos, setSelectedDemos] = useState<string[]>(
+    toArray(demos) || []
+  );
+  const [selectedContent, setSelectedContent] = useState<string[]>(
+    toArray(content) || []
+  );
+  const [selectedLanguage, setSelectedLanguage] = useState<string[]>(
+    toArray(translated) || []
+  );
   const [selectedOriginLanguage, setSelectedOriginLanguage] = useState<
     string[]
-  >([]);
+  >(toArray(origin) || []);
   const [selectedAuthor, setSelectedAuthor] = useState<string[]>([]);
-  const [selectedInclude, setSelectedInclude] = useState<string[]>([]);
-  const [selectedExclude, setSelectedExclude] = useState<string[]>([]);
+  const [selectedInclude, setSelectedInclude] = useState<string[]>(
+    toArray(include) || []
+  );
+  const [selectedExclude, setSelectedExclude] = useState<string[]>(
+    toArray(exclude) || []
+  );
   const [tagOptions, setTagOptions] = useState<
     { value: string; label: string }[]
   >([]);
-  const [hasAvailableChapter, setHasAvailableChapter] = useState(false);
+  const [hasAvailableChapter, setHasAvailableChapter] =
+    useState(availableChapter);
 
   const statusList = [
     { value: "completed", label: "Đã hoàn thành" },
@@ -127,7 +146,7 @@ export default function AdvancedSearch({
   // Parse author string to array of IDs on component mount
   useEffect(() => {
     if (author && author.length > 0) {
-      const authorIds = author.split(',');
+      const authorIds = author.split(",");
       setSelectedAuthor(authorIds);
     }
   }, [author]);
@@ -369,4 +388,8 @@ export default function AdvancedSearch({
       </div>
     </section>
   );
+}
+
+function toArray(str: string): string[] {
+  return str ? str.split(",") : [];
 }
