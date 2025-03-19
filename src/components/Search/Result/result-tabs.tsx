@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import RecentlyCard from "@/components/Pages/Home/Recently/recently-card";
 import Link from "next/link";
 import DetailsCard from "./details-card";
+import MangaCompletedCard from "@/components/Pages/Home/Swiper/Completed/manga-completed-card";
 
 interface ResultTabProps {
   isError: any;
@@ -62,9 +63,10 @@ export default function ResultTabs({
   const coverView = (
     <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
       {mangas.map((manga) => (
-        <Link key={manga.id} href={`/manga/${manga.id}`}>
-          <RecentlyCard manga={manga} />
-        </Link>
+        // <Link key={manga.id} href={`/manga/${manga.id}`}>
+        //   <RecentlyCard manga={manga} />
+        // </Link>
+        <MangaCompletedCard key={manga.id} manga={manga} />
       ))}
     </div>
   );

@@ -46,7 +46,6 @@ export default function DetailsCard({ manga }: DetailsCardProps) {
               </NormalTag>
             ))}
           </div>
-          {/* <MangaDescription content={manga.description.content} language={manga.description.language} maxHeight={60} /> */}
           <div
             style={{
               maskImage:
