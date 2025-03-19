@@ -8,6 +8,7 @@ import RecentlyCard from "@/components/Pages/Home/Recently/recently-card";
 import Link from "next/link";
 import DetailsCard from "./details-card";
 import MangaCompletedCard from "@/components/Pages/Home/Swiper/Completed/manga-completed-card";
+import SemiCard from "./semi-card";
 
 interface ResultTabProps {
   isError: any;
@@ -33,7 +34,7 @@ export default function ResultTabs({
   if (isError) {
     return (
       <DefaultTabs>
-        <Card className="rounded-sm justify-center items-center flex h-16 w-full">
+        <Card className="mt-4 rounded-sm justify-center items-center flex h-16 w-full">
           Lỗi mất rồi 😭
         </Card>
       </DefaultTabs>
@@ -43,7 +44,7 @@ export default function ResultTabs({
   if (mangas.length === 0) {
     return (
       <DefaultTabs>
-        <Card className="rounded-sm justify-center items-center flex h-16 w-full">
+        <Card className="mt-4 rounded-sm justify-center items-center flex h-16 w-full">
           <p className="italic">Không có kết quả!</p>
         </Card>
       </DefaultTabs>
@@ -51,14 +52,20 @@ export default function ResultTabs({
   }
 
   const detailView = (
-    <div className="flex flex-col gap-2 w-full">
+    <div className="mt-4 flex flex-col gap-2 w-full">
       {mangas.map((manga) => (
         <DetailsCard key={manga.id} manga={manga} />
       ))}
     </div>
   );
 
-  const semiView = <div>mẹ mày</div>;
+  const semiView = (
+    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+      {mangas.map((manga) => (
+        <SemiCard key={manga.id} manga={manga} />
+      ))}
+    </div>
+  )
 
   const coverView = (
     <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">

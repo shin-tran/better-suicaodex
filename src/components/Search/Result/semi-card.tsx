@@ -3,16 +3,17 @@ import ContentRatingChip from "@/components/Manga/Tags/content-rating-tag";
 import NormalTag from "@/components/Manga/Tags/normal-tag";
 import StatusChip from "@/components/Manga/Tags/status-tag";
 import { Card, CardContent } from "@/components/ui/card";
-import { Manga } from "@/types/types";
+import { Artist, Author, Manga } from "@/types/types";
 import Link from "next/link";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
-interface DetailsCardProps {
+interface SemiCardProps {
   manga: Manga;
 }
 
-export default function DetailsCard({ manga }: DetailsCardProps) {
+export default function SemiCard({ manga }: SemiCardProps) {
   return (
     <Card className="rounded-sm shadow-sm transition-colors duration-200">
       <CardContent className="flex gap-2 p-1">
@@ -22,23 +23,30 @@ export default function DetailsCard({ manga }: DetailsCardProps) {
             cover={manga.cover}
             alt={manga.title}
             placeholder="/images/xidoco.webp"
-            wrapper="w-20 h-auto border"
-            className="!w-20 !h-28 !object-cover"
+            wrapper="w-[130px] md:w-[150px] h-auto border"
+            className="!w-[130px] md:!w-[150px] !h-[185px] md:!h-[214px] !object-cover"
+            // wrapper="w-[130px] md:w-[150px] h-auto border"
             quality="256"
             //isExpandable
           />
         </Link>
         <div className="flex flex-col gap-1 w-full pr-2">
-          <div className="flex items-center justify-between">
-            <Link
-              href={`/manga/${manga.id}`}
-              className="line-clamp-1 font-bold text-xl break-all"
-            >
-              {manga.title}
-            </Link>
+          <Link
+            href={`/manga/${manga.id}`}
+            className="line-clamp-1 font-bold text-xl break-all"
+          >
+            {manga.title}
+          </Link>
+          <p className="text-sm line-clamp-1 break-all -mt-2">
+            {[
+              ...new Set([
+                ...manga.author.map((a: Author) => a.name).slice(0, 1),
+                ...manga.artist.map((a: Artist) => a.name).slice(0, 1),
+              ]),
+            ].join(", ")}
+          </p>
+          <div className="mt-1 flex flex-wrap items-center gap-1 max-h-4 overflow-y-hidden">
             <StatusChip status={manga.status} />
-          </div>
-          <div className="flex flex-wrap items-center gap-1 max-h-4 overflow-y-hidden">
             <ContentRatingChip rating={manga.contentRating} />
             {manga.tags.map((tag) => (
               <NormalTag key={tag.id} className="uppercase">
@@ -46,14 +54,9 @@ export default function DetailsCard({ manga }: DetailsCardProps) {
               </NormalTag>
             ))}
           </div>
-          <div
-            style={{
-              maskImage:
-                "linear-gradient(black 0%, black 60%, transparent 100%)",
-            }}
-          >
+          <ScrollArea className="mt-1 max-h-[109px] md:max-h-[141px]">
             <ReactMarkdown
-              className="flex flex-col gap-0 text-sm max-h-[60px] overflow-y-hidden"
+              className="flex flex-col gap-0 text-sm"
               remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
               components={{
                 a: ({ href, children }) => (
@@ -87,7 +90,7 @@ export default function DetailsCard({ manga }: DetailsCardProps) {
             >
               {manga.description.content}
             </ReactMarkdown>
-          </div>
+          </ScrollArea>
         </div>
       </CardContent>
     </Card>
