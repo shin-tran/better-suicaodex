@@ -52,7 +52,7 @@ export default function ResultTabs({
   }
 
   const detailView = (
-    <div className="mt-4 flex flex-col gap-2 w-full">
+    <div className="mt-4 flex flex-col gap-3 w-full">
       {mangas.map((manga) => (
         <DetailsCard key={manga.id} manga={manga} />
       ))}
