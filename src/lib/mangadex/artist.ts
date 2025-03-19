@@ -8,7 +8,7 @@ export function ArtistParser(data: any): Artist[] {
   return artists.map((item: any) => {
     return {
       id: item.id,
-      name: item.attributes.name,
+      name: item.attributes?.name || 'Unknown Author'
     };
   });
 }
@@ -20,7 +20,7 @@ export async function SearchArtist(artist: string): Promise<Artist[]> {
   return data.data.map((item: any) => {
     return {
       id: item.id,
-      name: item.attributes.name,
+      name: item.attributes?.name || 'Unknown Author'
     };
   });
 }

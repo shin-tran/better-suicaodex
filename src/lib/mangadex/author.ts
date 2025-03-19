@@ -8,7 +8,7 @@ export function AuthorParser(data: any[]): Author[] {
   return authors.map((item: any) => {
     return {
       id: item.id,
-      name: item.attributes.name,
+      name: item.attributes?.name || 'Unknown Author'
     };
   });
 }
@@ -20,7 +20,7 @@ export async function SearchAuthor(author: string): Promise<Author[]> {
   return data.data.map((item: any) => {
     return {
       id: item.id,
-      name: item.attributes.name,
+      name: item.attributes?.name || 'Unknown Author',
     };
   });
 }
@@ -38,7 +38,7 @@ export async function SearchAuthorByIds(ids: string[]): Promise<Author[]> {
     return data.data.map((item: any) => {
       return {
         id: item.id,
-        name: item.attributes.name,
+        name: item.attributes?.name || 'Unknown Author',
       };
     });
   } catch (error) {
