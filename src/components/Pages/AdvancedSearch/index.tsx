@@ -17,6 +17,7 @@ import useContentHeight from "@/hooks/use-content-height";
 import { TagsSelector } from "./tags-selector";
 import { AuthorsSelector } from "./authors-selector";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useRouter } from "next/navigation";
 
 interface AdvancedSearchProps {
   page: number;
@@ -48,6 +49,7 @@ export default function AdvancedSearch({
   translated,
 }: AdvancedSearchProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   // Use custom hook for content height management
   const { contentRef, fullHeight } = useContentHeight({
@@ -154,9 +156,9 @@ export default function AdvancedSearch({
     setSelectedExclude([]);
     setHasAvailableChapter(false);
     // Increment reset key to force re-render of MultiSelect components
-    setResetKey(prev => prev + 1);
-  }
-
+    setResetKey((prev) => prev + 1);
+    router.replace("/advanced-search");
+  };
 
   return (
     <section className="flex flex-col gap-4 transition-all">

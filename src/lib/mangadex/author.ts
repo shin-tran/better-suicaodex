@@ -23,21 +23,25 @@ export async function SearchAuthor(author: string): Promise<Author[]> {
       name: item.attributes.name,
     };
   });
-};
+}
 
 export async function SearchAuthorByIds(ids: string[]): Promise<Author[]> {
   if (ids.length === 0) return [];
-  const { data } = await axiosInstance.get(`/author?`, {
-    params: {
-      limit: ids.length,
-      ids: ids,
-    },
-  });
+  try {
+    const { data } = await axiosInstance.get(`/author?`, {
+      params: {
+        limit: ids.length,
+        ids: ids,
+      },
+    });
 
-  return data.data.map((item: any) => {
-    return {
-      id: item.id,
-      name: item.attributes.name,
-    };
-  });
-};
+    return data.data.map((item: any) => {
+      return {
+        id: item.id,
+        name: item.attributes.name,
+      };
+    });
+  } catch (error) {
+    return [];
+  }
+}
