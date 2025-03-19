@@ -6,6 +6,7 @@ import { LayoutGrid, List, Loader2, StretchHorizontal } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import RecentlyCard from "@/components/Pages/Home/Recently/recently-card";
 import Link from "next/link";
+import DetailsCard from "./details-card";
 
 interface ResultTabProps {
   isError: any;
@@ -49,21 +50,23 @@ export default function ResultTabs({
   }
 
   const detailView = (
-    <div>bố mày</div>
+    <div className="flex flex-col gap-2 w-full">
+      {mangas.map((manga) => (
+        <DetailsCard key={manga.id} manga={manga} />
+      ))}
+    </div>
   );
 
-  const semiView = (
-    <div>mẹ mày</div>
-  );
+  const semiView = <div>mẹ mày</div>;
 
   const coverView = (
     <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
-    {mangas.map((manga) => (
-      <Link key={manga.id} href={`/manga/${manga.id}`}>
-        <RecentlyCard manga={manga} />
-      </Link>
-    ))}
-  </div>
+      {mangas.map((manga) => (
+        <Link key={manga.id} href={`/manga/${manga.id}`}>
+          <RecentlyCard manga={manga} />
+        </Link>
+      ))}
+    </div>
   );
 
   return (
@@ -82,7 +85,12 @@ interface DefaultTabsProps {
   coverView?: React.ReactNode;
 }
 
-function DefaultTabs({ children, detailView, semiView, coverView }: DefaultTabsProps) {
+function DefaultTabs({
+  children,
+  detailView,
+  semiView,
+  coverView,
+}: DefaultTabsProps) {
   const tabValues = [
     { value: "detail", icon: <List /> },
     { value: "semi", icon: <LayoutGrid /> },
@@ -99,22 +107,13 @@ function DefaultTabs({ children, detailView, semiView, coverView }: DefaultTabsP
         ))}
       </TabsList>
 
-      <TabsContent
-        className="w-full justify-items-center"
-        value="detail"
-      >
+      <TabsContent className="w-full justify-items-center" value="detail">
         {detailView || children}
       </TabsContent>
-      <TabsContent
-        className="w-full justify-items-center"
-        value="semi"
-      >
+      <TabsContent className="w-full justify-items-center" value="semi">
         {semiView || children}
       </TabsContent>
-      <TabsContent
-        className="w-full justify-items-center"
-        value="cover"
-      >
+      <TabsContent className="w-full justify-items-center" value="cover">
         {coverView || children}
       </TabsContent>
     </Tabs>

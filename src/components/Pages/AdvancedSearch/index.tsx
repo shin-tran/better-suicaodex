@@ -540,18 +540,6 @@ export default function AdvancedSearch({
           isError={error}
           mangas={data?.mangas}
         />
-
-        {/* {data && data.mangas.length === 0 && <NoResult />}
-
-        {data && data.mangas.length > 0 && (
-          <div className="flex flex-col gap-2">
-            {data.mangas.map((manga) => (
-              <div key={manga.id} className="flex flex-col gap-2">
-                <p>{manga.title}</p>
-              </div>
-            ))}
-          </div>
-        )} */}
       </section>
     </>
   );
