@@ -18,6 +18,7 @@ import { TagsSelector } from "./tags-selector";
 import { AuthorsSelector } from "./authors-selector";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
+import { ContentRating, Status, OriginLanguge, Demosgraphic, TranslatedLanguage } from "@/types/types";
 
 interface AdvancedSearchProps {
   page: number;
@@ -32,6 +33,18 @@ interface AdvancedSearchProps {
   origin: string;
   availableChapter: boolean;
   translated: string;
+}
+
+// Function to filter array values based on their type
+function filterByType<T extends string>(values: string[], allowedValues: readonly T[]): T[] {
+  return values.filter((value): value is T => 
+    allowedValues.includes(value as T)
+  ) as T[];
+}
+
+// Convert comma-separated string to array and optionally filter by allowed values
+function toArray(str: string): string[] {
+  return str ? str.split(",") : [];
 }
 
 export default function AdvancedSearch({
@@ -62,21 +75,29 @@ export default function AdvancedSearch({
   // Reset keys to force re-render of MultiSelect components
   const [resetKey, setResetKey] = useState(0);
 
+  // Define allowed values for each filter type
+  const allowedContentRatings: ContentRating[] = ["safe", "suggestive", "erotica", "pornographic"];
+  const allowedStatuses: Status[] = ["ongoing", "completed", "cancelled", "hiatus"];
+  const allowedDemos: Demosgraphic[] = ["shounen", "shoujo", "jousei", "seinen"];
+  const allowedOriginLanguages: OriginLanguge[] = ["en", "vi", "ja", "ko", "zh"];
+  const allowedTranslatedLanguages: TranslatedLanguage[] = ["en", "vi"];
+
+  // Filter and set the selected values based on their types
   const [selectedStatus, setSelectedStatus] = useState<string[]>(
-    toArray(status) || []
+    filterByType(toArray(status), allowedStatuses)
   );
   const [selectedDemos, setSelectedDemos] = useState<string[]>(
-    toArray(demos) || []
+    filterByType(toArray(demos), allowedDemos)
   );
   const [selectedContent, setSelectedContent] = useState<string[]>(
-    toArray(content) || []
+    filterByType(toArray(content), allowedContentRatings)
   );
   const [selectedLanguage, setSelectedLanguage] = useState<string[]>(
-    toArray(translated) || []
+    filterByType(toArray(translated), allowedTranslatedLanguages)
   );
   const [selectedOriginLanguage, setSelectedOriginLanguage] = useState<
     string[]
-  >(toArray(origin) || []);
+  >(filterByType(toArray(origin), allowedOriginLanguages));
   const [selectedAuthor, setSelectedAuthor] = useState<string[]>([]);
   const [selectedInclude, setSelectedInclude] = useState<string[]>(
     toArray(include) || []
@@ -407,8 +428,4 @@ export default function AdvancedSearch({
       </div>
     </section>
   );
-}
-
-function toArray(str: string): string[] {
-  return str ? str.split(",") : [];
 }

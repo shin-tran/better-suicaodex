@@ -32,6 +32,9 @@ export type Group = {
 
 export type ContentRating = "safe" | "suggestive" | "erotica" | "pornographic";
 export type Status = "ongoing" | "completed" | "cancelled" | "hiatus";
+export type OriginLanguge = "en" | "vi" | "ja" | "ko" | "zh";
+export type Demosgraphic = "shounen" | "shoujo" | "jousei" | "seinen";
+export type TranslatedLanguage = "en" | "vi";
 
 export type Manga = {
   id: string;
