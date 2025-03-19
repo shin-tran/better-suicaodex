@@ -97,15 +97,15 @@ export default function QuickSearch() {
   useEffect(() => {
     if (expanded) {
       // Disable scrolling on body when expanded
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
       // Re-enable scrolling when collapsed
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
-    
+
     // Cleanup function to ensure scroll is re-enabled when component unmounts
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [expanded]);
 
@@ -124,7 +124,7 @@ export default function QuickSearch() {
     };
   }, []);
 
-  useKeyDown({ key: "k", ctrlKey: true }, () =>{
+  useKeyDown({ key: "k", ctrlKey: true }, () => {
     setExpanded(true);
     if (inputRef.current) inputRef.current.focus();
   });
@@ -175,15 +175,27 @@ export default function QuickSearch() {
                   </FormControl>
                   {searchQuery.length === 0 ? (
                     <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2 items-center">
-                      <div className={cn("hidden lg:flex flex-row gap-1",
-                        expanded && "!hidden"
-                      )}>
-                        <Badge variant="default" className="px-1 py-0 bg-primary/10 hover:bg-primary/10 text-secondary-foreground rounded-sm">Ctrl</Badge>
-                        <Badge variant="default" className="px-1 py-0 bg-primary/10 hover:bg-primary/10 text-secondary-foreground rounded-sm">K</Badge>
+                      <div
+                        className={cn(
+                          "hidden lg:flex flex-row gap-1",
+                          expanded && "!hidden"
+                        )}
+                      >
+                        <Badge
+                          variant="default"
+                          className="px-1 py-0 bg-primary/10 hover:bg-primary/10 text-secondary-foreground rounded-sm"
+                        >
+                          Ctrl
+                        </Badge>
+                        <Badge
+                          variant="default"
+                          className="px-1 py-0 bg-primary/10 hover:bg-primary/10 text-secondary-foreground rounded-sm"
+                        >
+                          K
+                        </Badge>
                       </div>
                       <Search className="h-4 w-4" />
                     </div>
-                    
                   ) : (
                     <Button
                       className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 bg-primary rounded-sm"
@@ -230,11 +242,15 @@ export default function QuickSearch() {
                   <p className="font-black text-xl">Manga</p>
                   <Button
                     asChild
-                    size="icon"
+                    size="sm"
                     variant="ghost"
-                    className="[&_svg]:size-6"
+                    className="hover:text-primary hover:bg-transparent hover:underline"
                   >
-                    <Link href={`/advanced-search`}>
+                    <Link
+                      href={`/advanced-search?q=${searchQuery}`}
+                      onClick={() => setExpanded(false)}
+                    >
+                      Tìm kiếm nâng cao
                       <ArrowRight />
                     </Link>
                   </Button>
@@ -335,7 +351,7 @@ export default function QuickSearch() {
                       <Button
                         variant="secondary"
                         size="icon"
-                        className="h-8 w-8"
+                        className="h-8 w-8 shrink-0"
                       >
                         <X />
                       </Button>
@@ -365,16 +381,19 @@ export default function QuickSearch() {
                 <>
                   <div className="mb-2 flex justify-between items-center">
                     <p className="font-black text-xl">Manga</p>
-                    <Button
-                      asChild
-                      size="icon"
-                      variant="ghost"
-                      className="[&_svg]:size-6"
-                    >
-                      <Link href={`/advanced-search`}>
-                        <ArrowRight />
-                      </Link>
-                    </Button>
+                    <DialogClose asChild>
+                      <Button
+                        asChild
+                        size="sm"
+                        variant="ghost"
+                        className="hover:text-primary hover:bg-transparent hover:underline"
+                      >
+                        <Link href={`/advanced-search?q=${searchQuery}`}>
+                          Tìm kiếm nâng cao
+                          <ArrowRight />
+                        </Link>
+                      </Button>
+                    </DialogClose>
                   </div>
                   <div className="flex flex-col gap-2 max-h-lvh overflow-y-scroll pb-2">
                     {mangas.map((manga) => (
