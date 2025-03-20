@@ -21,6 +21,7 @@ export default function ResultTabs({
   isError,
   isLoading,
 }: ResultTabProps) {
+
   if (isLoading || !mangas) {
     return (
       <DefaultTabs>

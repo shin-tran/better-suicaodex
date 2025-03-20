@@ -39,7 +39,7 @@ export default function DetailsCard({ manga }: DetailsCardProps) {
             <StatusChip status={manga.status} />
           </div>
           <div className="flex flex-wrap items-center gap-1 max-h-4 overflow-y-hidden">
-            <ContentRatingChip rating={manga.contentRating} />
+            <ContentRatingChip rating={manga.contentRating} disabledLink />
             {manga.tags.map((tag) => (
               <NormalTag key={tag.id} className="uppercase">
                 {tag.name}

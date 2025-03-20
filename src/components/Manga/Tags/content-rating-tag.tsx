@@ -2,9 +2,13 @@ import NormalTag from "./normal-tag";
 
 interface ContentRatingChipProps {
   rating: string;
+  disabledLink?: boolean;
 }
 
-const ContentRatingChip = ({ rating }: ContentRatingChipProps) => {
+const ContentRatingChip = ({
+  rating,
+  disabledLink = false,
+}: ContentRatingChipProps) => {
   if (rating === "safe") {
     return null;
   }
@@ -16,12 +20,16 @@ const ContentRatingChip = ({ rating }: ContentRatingChipProps) => {
 
   return (
     <NormalTag className={`uppercase text-white ${ratingColor}`}>
-      <a
-        href={`/advanced-search?content=${rating}`}
-        className="hover:underline"
-      >
-        {rating}
-      </a>
+      {disabledLink ? (
+        rating
+      ) : (
+        <a
+          href={`/advanced-search?content=${rating}`}
+          className="hover:underline"
+        >
+          {rating}
+        </a>
+      )}
     </NormalTag>
   );
 };

@@ -51,6 +51,9 @@ export async function AdvancedSearchManga(
   if (origin.length > 0) {
     searchParams["originalLanguage"] = origin;
   }
+  if (available_chapter) {
+    searchParams["hasAvailableChapters"] = "true";
+  }
   if (available_chapter && translated.length > 0) {
     searchParams["availableTranslatedLanguage"] = translated;
   }

@@ -47,7 +47,7 @@ export default function SemiCard({ manga }: SemiCardProps) {
           </p>
           <div className="mt-1 flex flex-wrap items-center gap-1 max-h-4 overflow-y-hidden">
             <StatusChip status={manga.status} />
-            <ContentRatingChip rating={manga.contentRating} />
+            <ContentRatingChip rating={manga.contentRating} disabledLink/>
             {manga.tags.map((tag) => (
               <NormalTag key={tag.id} className="uppercase">
                 {tag.name}
