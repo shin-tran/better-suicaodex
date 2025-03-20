@@ -60,7 +60,7 @@ export default function LeaderBoard() {
               : "linear-gradient(to bottom, black 0%, black 60%, transparent 100%)",
         }}
       >
-        <TabsList className="rounded-sm w-full ">
+        <TabsList className="rounded-sm w-full">
           <TabsTrigger value="follow" className="rounded-sm w-full flex gap-1">
             <Bookmark size={20} />
             Lượt theo dõi

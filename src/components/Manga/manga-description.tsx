@@ -1,10 +1,11 @@
 import { ChevronsDown, ChevronsUp, Loader2, Undo2 } from "lucide-react";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import { SiGoogletranslate } from "@icons-pack/react-simple-icons";
 import { Button } from "../ui/button";
+import useContentHeight from "@/hooks/use-content-height";
 
 interface MangaDescriptionProps {
   content: string;
@@ -22,41 +23,13 @@ const MangaDescription = ({
     translated: false,
     translatedDesc: null as string | null,
     isLoading: false,
-    fullHeight: 0,
   });
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  const updateFullHeight = useCallback(() => {
-    if (contentRef.current) {
-      setState((prev) => ({
-        ...prev,
-        fullHeight: contentRef.current?.scrollHeight || 0,
-      }));
-    }
-  }, []);
-
-  useEffect(() => {
-    const observer = new ResizeObserver(() => {
-      updateFullHeight();
-    });
-
-    if (contentRef.current) {
-      observer.observe(contentRef.current);
-    }
-
-    const handleResize = () => {
-      updateFullHeight();
-    };
-
-    window.addEventListener("resize", handleResize);
-    const timer = setTimeout(updateFullHeight, 100);
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", handleResize);
-      clearTimeout(timer);
-    };
-  }, [state.translated, state.expanded, updateFullHeight]);
+  
+  // Use the new useContentHeight hook
+  const { contentRef, fullHeight } = useContentHeight({
+    expanded: state.expanded,
+    dependencies: [state.translated, state.translatedDesc]
+  });
 
   const handleTranslate = async () => {
     if (state.translatedDesc) {
@@ -94,10 +67,9 @@ const MangaDescription = ({
       <div
         className="overflow-hidden transition-[max-height,height] text-sm h-auto"
         style={{
-          maxHeight: state.expanded ? state.fullHeight : maxHeight,
-          //height: state.expanded ? state.fullHeight : "auto",
+          maxHeight: state.expanded ? fullHeight : maxHeight,
           maskImage:
-            state.expanded || state.fullHeight <= maxHeight
+            state.expanded || fullHeight <= maxHeight
               ? "none"
               : "linear-gradient(black 0%, black 60%, transparent 100%)",
         }}
@@ -159,7 +131,7 @@ const MangaDescription = ({
         </div>
       </div>
 
-      {state.fullHeight > maxHeight && (
+      {fullHeight > maxHeight && (
         <div
           className={cn(
             "flex justify-center w-full h-full border-t transition-[border-color]",
