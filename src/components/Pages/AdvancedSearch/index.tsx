@@ -141,7 +141,7 @@ export default function AdvancedSearch({
   const [selectedOriginLanguage, setSelectedOriginLanguage] = useState<
     string[]
   >(filterByType(toArray(origin), allowedOriginLanguages));
-  const [selectedAuthor, setSelectedAuthor] = useState<string[]>([]);
+  const [selectedAuthor, setSelectedAuthor] = useState<string[]>(toArray(author));
   const [selectedInclude, setSelectedInclude] = useState<string[]>(
     toArray(include) || []
   );
@@ -201,12 +201,12 @@ export default function AdvancedSearch({
   }, []);
 
   // Parse author string to array of IDs on component mount
-  useEffect(() => {
-    if (author && author.length > 0) {
-      const authorIds = author.split(",");
-      setSelectedAuthor(authorIds);
-    }
-  }, [author]);
+  // useEffect(() => {
+  //   if (author && author.length > 0) {
+  //     const authorIds = author.split(",");
+  //     setSelectedAuthor(authorIds);
+  //   }
+  // }, [author]);
 
   const resetFilter = () => {
     setQuery("");
