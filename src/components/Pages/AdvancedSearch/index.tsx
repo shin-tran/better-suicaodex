@@ -7,7 +7,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, Eraser, Loader2, Search } from "lucide-react";
+import { ChevronDown, CircleHelp, Eraser, Loader2, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { cn } from "@/lib/utils";
@@ -563,6 +563,10 @@ export default function AdvancedSearch({
         </Collapsible>
 
         <div className="flex flex-wrap justify-end gap-2">
+          {/* <Button className="rounded-full" size="icon" variant="secondary">
+            <CircleHelp />
+          </Button> */}
+
           <Button
             className="bg-[#FF4040]/20 hover:bg-[#FF4040]/10 text-[#FF4040]"
             variant="default"
@@ -583,6 +587,7 @@ export default function AdvancedSearch({
             <Eraser />
             Đặt lại
           </Button>
+
           <Button onClick={handleSearch} disabled={isMutating}>
             {isMutating ? <Loader2 className="animate-spin" /> : <Search />}
             Tìm kiếm
