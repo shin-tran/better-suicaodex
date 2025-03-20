@@ -13,7 +13,9 @@ export default function LongStrip({ images }: LongStripProps) {
   const [loaded, setLoaded] = useState(false);
   const [config] = useConfig();
   return (
-    <div className="min-w-0 relative min-h-lvh mt-2">
+    <div className={cn("min-w-0 relative mt-2",
+      loaded ? "min-h-0" : "min-h-lvh" 
+    )}>
       <div
         className={cn(
           "overflow-x-auto flex flex-col items-center h-full select-none bg-transparent"
