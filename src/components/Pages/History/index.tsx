@@ -62,7 +62,7 @@ export default function History() {
       </DefaultTabs>
     );
   }
-  console.log(data);
+
   const compactView = (
     <div className="flex flex-col gap-3 w-full">
       {data.map((chapter) => (
