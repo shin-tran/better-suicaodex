@@ -4,8 +4,6 @@ import { Manga } from "@/types/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LayoutGrid, List, Loader2, StretchHorizontal } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import RecentlyCard from "@/components/Pages/Home/Recently/recently-card";
-import Link from "next/link";
 import DetailsCard from "./details-card";
 import MangaCompletedCard from "@/components/Pages/Home/Swiper/Completed/manga-completed-card";
 import SemiCard from "./semi-card";
