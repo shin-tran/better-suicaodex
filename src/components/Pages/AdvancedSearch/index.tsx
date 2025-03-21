@@ -7,7 +7,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, CircleHelp, Eraser, Loader2, Search } from "lucide-react";
+import { Airplay, ChevronDown, CircleHelp, Eraser, Loader2, LucideAArrowUp, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { cn } from "@/lib/utils";
@@ -39,6 +39,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import AdvancedSearchGuide from "./advanded-search-guide";
+import { CN, GB, JP, KR, US, VN } from 'country-flag-icons/react/3x2';
 
 interface AdvancedSearchProps {
   page: number;
@@ -178,16 +179,16 @@ export default function AdvancedSearch({
   ];
 
   const originLanguageList = [
-    { value: "vi", label: "Tiếng Việt" },
-    { value: "en", label: "Tiếng Anh" },
-    { value: "ja", label: "Tiếng Nhật" },
-    { value: "ko", label: "Tiếng Hàn" },
-    { value: "zh", label: "Tiếng Trung" },
+    { value: "vi", label: "Tiếng Việt", icon: VN },
+    { value: "en", label: "Tiếng Anh", icon: GB },
+    { value: "ja", label: "Tiếng Nhật", icon: JP },
+    { value: "ko", label: "Tiếng Hàn", icon: KR },
+    { value: "zh", label: "Tiếng Trung", icon: CN},
   ];
 
   const languageList = [
-    { value: "vi", label: "Tiếng Việt" },
-    { value: "en", label: "Tiếng Anh" },
+    { value: "vi", label: "Tiếng Việt", icon: VN },
+    { value: "en", label: "Tiếng Anh", icon: GB },
   ];
 
   const tagsList = async () => {
