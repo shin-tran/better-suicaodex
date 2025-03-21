@@ -29,6 +29,30 @@ export function ChaptersParser(data: any[]): Chapter[] {
   });
 }
 
+export function ChapterParser(data: any): Chapter {
+  const mangaData = data.relationships.find(
+      (item: any) => item.type === "manga"
+    );
+
+    const groups = data.relationships
+      .filter((item: any) => item.type === "scanlation_group")
+      .map((item: any) => GroupParser(item));
+
+    return {
+      id: data.id,
+      vol: data.attributes.volume,
+      chapter: data.attributes.chapter,
+      title: data.attributes.title,
+      updatedAt: data.attributes.updatedAt,
+      externalUrl: data.attributes.externalUrl,
+      language: data.attributes.translatedLanguage,
+      group: groups,
+      manga: {
+        id: mangaData.id,
+      },
+    };
+}
+
 export function groupChaptersByVolume(chapters: Chapter[]): Volume[] {
   const volumeMap: { [key: string]: Volume } = {};
 
