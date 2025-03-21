@@ -38,6 +38,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import AdvancedSearchGuide from "./advanded-search-guide";
 
 interface AdvancedSearchProps {
   page: number;
@@ -563,9 +564,7 @@ export default function AdvancedSearch({
         </Collapsible>
 
         <div className="flex flex-wrap justify-end gap-2">
-          {/* <Button className="rounded-full" size="icon" variant="secondary">
-            <CircleHelp />
-          </Button> */}
+          <AdvancedSearchGuide />
 
           <Button
             className="bg-[#FF4040]/20 hover:bg-[#FF4040]/10 text-[#FF4040]"
