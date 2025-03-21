@@ -143,7 +143,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
                     {manga.altTitle}
                   </h2>
                 )}
-                <p className="drop-shadow-md text-sm line-clamp-1 max-w-[80%]">
+                <p className="drop-shadow-md text-sm line-clamp-1 break-all">
                   {[
                     ...new Set([
                       ...manga.author.map((a: Author) => a.name),
