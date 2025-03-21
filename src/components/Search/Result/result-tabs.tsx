@@ -19,7 +19,6 @@ export default function ResultTabs({
   isError,
   isLoading,
 }: ResultTabProps) {
-
   if (isLoading || !mangas) {
     return (
       <DefaultTabs>
@@ -64,7 +63,7 @@ export default function ResultTabs({
         <SemiCard key={manga.id} manga={manga} />
       ))}
     </div>
-  )
+  );
 
   const coverView = (
     <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
@@ -101,8 +100,8 @@ function DefaultTabs({
 }: DefaultTabsProps) {
   const tabValues = [
     { value: "detail", icon: <List /> },
-    { value: "semi", icon: <LayoutGrid /> },
-    { value: "cover", icon: <StretchHorizontal /> },
+    { value: "semi", icon: <StretchHorizontal /> },
+    { value: "cover", icon: <LayoutGrid /> },
   ];
 
   return (
