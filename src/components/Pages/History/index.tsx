@@ -1,17 +1,18 @@
 "use client";
 
 import useReadingHistory from "@/hooks/use-reading-history";
-import { LayoutGrid, List, Loader2, StretchHorizontal } from "lucide-react";
+import { LayoutGrid, List, Loader2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import useSWR from "swr";
-import { fetchHistory, getMangasByIDs } from "@/lib/mangadex/history";
+import { fetchHistory } from "@/lib/mangadex/history";
 import HistoryCompactCard from "./history-compact-card";
+import HistoryCoverCard from "./history-cover-card";
 
 export default function History() {
   const [isLoading, setIsLoading] = useState(true);
-  const { history, removeHistory } = useReadingHistory();
+  const { history } = useReadingHistory();
 
   useEffect(() => {
     if (history) {
@@ -70,9 +71,14 @@ export default function History() {
     </div>
   );
 
-  return (
-    <DefaultTabs compactView={compactView} />
+  const coverView = (
+    <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
+      {data.map((chapter) => (
+        <HistoryCoverCard key={chapter.id} chapter={chapter} />
+      ))}
+    </div>
   );
+  return <DefaultTabs compactView={compactView} coverView={coverView} />;
 }
 
 interface DefaultTabsProps {

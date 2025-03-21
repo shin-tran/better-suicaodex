@@ -18,20 +18,20 @@ export default function HistoryCompactCard({
   const title = ChapterTitle(chapter);
   const router = useRouter();
   return (
-    <Card className="rounded-sm shadow-sm transition-colors duration-200">
-      <CardHeader className="px-2 pt-2 pb-0 border-b font-bold line-clamp-2 md:line-clamp-1 break-all">
+    <Card className="rounded-sm shadow-sm transition-colors duration-200 w-full">
+      <CardHeader className="px-2 py-1 border-b font-bold line-clamp-2 md:line-clamp-1 break-all">
         <Link href={`/manga/${chapter.manga.id}`}>{chapter.manga.title}</Link>
       </CardHeader>
-      <CardFooter className="py-1 px-2 w-full">
+      <CardFooter className="py-1 px-2 w-full hover:bg-secondary">
         <Link
           className="flex flex-col gap-1 w-full"
           href={`/chapter/${chapter.id}`}
         >
           <div className="items-center flex gap-1">
             {chapter.language === "vi" ? (
-              <VN className="size-4" />
+              <VN className="size-4 shrink-0" />
             ) : (
-              <GB className="size-4" />
+              <GB className="size-4 shrink-0" />
             )}
             <span className="font-bold text-sm">{title}</span>
           </div>

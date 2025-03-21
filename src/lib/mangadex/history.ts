@@ -1,7 +1,7 @@
 import { Chapter, Manga } from "@/types/types";
 import axiosInstance from "../axios";
 import { MangaParser } from "./manga";
-import { ChapterParser, ChaptersParser } from "./chapter";
+import { ChapterParser } from "./chapter";
 
 export async function fetchHistory(
   m_ids: string[],
@@ -42,6 +42,7 @@ export async function getMangasByIDs(ids: string[]): Promise<Manga[]> {
   const requests = chunks.map((chunk) =>
     axiosInstance.get(`/manga?`, {
       params: {
+        limit: chunk.length,
         ids: chunk,
         includes: ["cover_art", "author", "artist"],
         contentRating: ["safe", "suggestive", "erotica", "pornographic"],
@@ -68,10 +69,14 @@ export async function getChaptersByIds(ids: string[]): Promise<Chapter[]> {
   const requests = chunks.map((chunk) =>
     axiosInstance.get(`/chapter`, {
       params: {
+        limit: chunk.length,
         ids: chunk,
         contentRating: ["safe", "suggestive", "erotica", "pornographic"],
         translatedLanguage: ["vi", "en"],
         includes: ["scanlation_group"],
+        order:{
+          readableAt: "desc"
+        }
       },
     })
   );

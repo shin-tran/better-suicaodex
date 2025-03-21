@@ -22,7 +22,7 @@ export default function Page() {
 
       <Alert className="mt-4 rounded-sm bg-secondary">
         <Terminal size={18} />
-        <AlertTitle>Có thể bạn cần biết!</AlertTitle>
+        <AlertTitle>Có thể bạn cần biết:</AlertTitle>
         <AlertDescription>
           Lịch sử đọc được lưu trên chính thiết bị của bạn, nên nếu bạn xóa dữ
           liệu trình duyệt, lịch sử cũng sẽ bị xóa theo.
