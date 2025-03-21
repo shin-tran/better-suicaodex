@@ -53,7 +53,7 @@ export default function AdvancedSearchGuide() {
                 </span>
               </div>
               <div className="flex items-center gap-1">
-                Click 2 lần để thêm
+                Click 2 lần để loại trừ
                 <span className="flex items-center text-destructive">
                   <Minus size={18} /> Tag
                 </span>
