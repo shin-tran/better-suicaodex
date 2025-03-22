@@ -23,7 +23,7 @@ export default function LatestCard({ chapter }: LatestCardProps) {
                 id={chapter.manga.id}
                 cover={chapter.manga.cover}
                 alt={chapter.manga.title}
-                placeholder="/images/xidoco.webp"
+                placeholder="/images/place-doro.webp"
                 wrapper="w-20 h-auto border"
                 className="!w-20 !h-28 !object-cover"
                 quality="256"

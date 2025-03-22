@@ -91,7 +91,7 @@ export default function AddToLibraryBtn({
                 "!block rounded-sm object-cover max-w-[250px] w-full h-auto",
                 !loaded && "aspect-[5/7]"
               )}
-              placeholderSrc="/images/xidoco.webp"
+              placeholderSrc="/images/place-doro.webp"
               className={cn(
                 "h-auto w-full rounded-sm block object-cover shadow-md drop-shadow-md aspect-[5/7]"
               )}

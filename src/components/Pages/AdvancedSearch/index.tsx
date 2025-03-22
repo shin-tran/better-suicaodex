@@ -7,7 +7,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Airplay, ChevronDown, CircleHelp, Eraser, Loader2, LucideAArrowUp, Search } from "lucide-react";
+import { ChevronDown, CircleHelp, Eraser, Loader2, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { cn } from "@/lib/utils";
@@ -87,6 +87,8 @@ export default function AdvancedSearch({
 }: AdvancedSearchProps) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+
+  //TODO: more filter
 
   // Use custom hook for content height management
   const { contentRef, fullHeight } = useContentHeight({

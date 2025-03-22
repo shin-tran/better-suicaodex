@@ -83,7 +83,7 @@ export default function MangaCompletedCard({ manga }: MangaCompletedCardProps) {
             "!block rounded-sm object-cover w-full h-full",
             !loaded && "aspect-[5/7]"
           )}
-          placeholderSrc="/images/xidoco.webp"
+          placeholderSrc="/images/place-doro.webp"
           className={cn(
             "h-auto w-full rounded-sm block object-cover aspect-[5/7]"
           )}

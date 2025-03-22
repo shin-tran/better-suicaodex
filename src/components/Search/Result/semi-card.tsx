@@ -22,7 +22,7 @@ export default function SemiCard({ manga }: SemiCardProps) {
             id={manga.id}
             cover={manga.cover}
             alt={manga.title}
-            placeholder="/images/xidoco.webp"
+            placeholder="/images/place-doro.webp"
             wrapper="w-[130px] md:w-[150px] h-auto border"
             className="!w-[130px] md:!w-[150px] !h-[185px] md:!h-[214px] !object-cover"
             // wrapper="w-[130px] md:w-[150px] h-auto border"

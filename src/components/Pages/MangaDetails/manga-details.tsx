@@ -61,6 +61,8 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
   const [loading, setLoading] = useState(true);
   const [statusCode, setStatusCode] = useState<number>(200);
 
+  //TODO: author, artist, cover
+
   useEffect(() => {
     const fetchData = async () => {
       const { manga, status } = await getMangaData(id);
@@ -125,7 +127,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
               id={manga.id}
               cover={manga.cover}
               alt={manga.title}
-              placeholder="/images/xidoco.webp"
+              placeholder="/images/place-doro.webp"
               className="shadow-md drop-shadow-md"
               wrapper="w-[130px] md:w-[200px] h-auto"
               isExpandable
@@ -191,10 +193,6 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
 
               <div className="pt-[0.85rem] flex flex-col gap-4">
                 <div className="flex flex-wrap gap-2">
-                  {/* <Button size="lg" className="rounded-sm">
-                    <ListPlus />
-                    Thêm vào thư viện
-                  </Button> */}
                   <AddToLibraryBtn isMobile={isMobile} manga={manga}/>
 
                   <MangaReadButtons id={id} />
