@@ -1,7 +1,7 @@
 "use client";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
-import { Expand } from "lucide-react";
+import { Expand, Loader2 } from "lucide-react";
 import { FC, useState } from "react";
 import {
   Dialog,
@@ -58,12 +58,15 @@ const MangaCover: FC<MangaCoverProps> = ({
 
             <DialogClose className="fixed inset-0 z-0 !block cursor-default" />
             <div className="max-w-[90vw] md:max-w-screen max-h-[90vh] lg:max-h-screen flex justify-center items-center relative z-10">
+              <div className="absolute bg-secondary p-5 rounded-sm">
+                <Loader2 className="animate-spin" size={50} />
+              </div>
               <img
                 src={
                   siteConfig.suicaodex.apiURL + "/covers/" + id + "/" + cover
                 }
                 alt={`Ảnh bìa ${alt}`}
-                className="max-h-full max-w-full object-cover"
+                className="max-h-full max-w-full object-cover z-20"
                 fetchPriority="high"
                 onError={(e) => {
                   e.currentTarget.src = "/images/xidoco.webp";
