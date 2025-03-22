@@ -100,17 +100,17 @@ export default function MangaCoversTab({ id }: MangaCoversTabProps) {
             <LazyLoadImage
               wrapperClassName={cn(
                 "!block rounded-sm object-cover w-full h-full",
-                !loaded && "aspect-[7/10]"
+                !loaded && "aspect-[3/5]"
               )}
               placeholderSrc="/images/place-doro.webp"
-              className={cn("h-full w-full rounded-sm block object-cover")}
+              className={cn("h-full w-full rounded-sm block object-cover aspect-[3/5]")}
               src={`${siteConfig.suicaodex.apiURL}/covers/${id}/${cover.fileName}.512.jpg`}
               alt={`Ảnh bìa tập ${cover.volume}`}
               onLoad={() => setLoaded(true)}
               onError={(e) => {
                 e.currentTarget.src = "/images/xidoco.webp";
               }}
-              visibleByDefault
+              //visibleByDefault
             />
           </CardContent>
           <CardFooter className="absolute bottom-0 p-2 bg-gradient-to-t from-black w-full rounded-b-sm dark:rounded-b-none max-h-full items-end">
