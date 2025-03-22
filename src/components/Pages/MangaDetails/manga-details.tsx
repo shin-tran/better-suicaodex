@@ -37,6 +37,7 @@ import {
   Archive,
   Bug,
   Ellipsis,
+  ImagesIcon,
   LibraryBig,
   List,
   ListPlus,
@@ -48,6 +49,8 @@ import { useEffect, useState } from "react";
 import MangaDetailsSkeleton from "./manga-details-skeleton";
 import { toast } from "sonner";
 import AddToLibraryBtn from "@/components/Manga/add-to-library-btn";
+import { Card } from "@/components/ui/card";
+import MangaCoversTab from "@/components/Manga/manga-covers-tab";
 
 interface MangaDetailsProps {
   id: string;
@@ -193,7 +196,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
 
               <div className="pt-[0.85rem] flex flex-col gap-4">
                 <div className="flex flex-wrap gap-2">
-                  <AddToLibraryBtn isMobile={isMobile} manga={manga}/>
+                  <AddToLibraryBtn isMobile={isMobile} manga={manga} />
 
                   <MangaReadButtons id={id} />
 
@@ -289,7 +292,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
               {/* <Button size="icon" className="rounded-sm grow-0">
                 <ListPlus />
               </Button> */}
-              <AddToLibraryBtn isMobile={isMobile} manga={manga}/>
+              <AddToLibraryBtn isMobile={isMobile} manga={manga} />
 
               <Button
                 size="icon"
@@ -372,17 +375,22 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
           <TabsList className="rounded-sm w-full md:w-auto">
             <TabsTrigger
               value="chapter"
-              className="rounded-sm w-full flex gap-1"
+              className="rounded-sm w-full flex gap-1 px-2"
             >
               <List size={20} />
-              Danh sách chương
+              DS Chương
             </TabsTrigger>
             <TabsTrigger
               value="comment"
-              className="rounded-sm w-full flex gap-1"
+              className="rounded-sm w-full flex gap-1 px-2"
             >
               <MessageSquare size={20} />
               Bình luận
+            </TabsTrigger>
+
+            <TabsTrigger value="art" className="rounded-sm w-full flex gap-1 px-2">
+              <ImagesIcon size={20} />
+              Ảnh bìa
             </TabsTrigger>
           </TabsList>
           <TabsContent value="chapter">
@@ -394,7 +402,15 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
               r18={config.r18}
             />
           </TabsContent>
-          <TabsContent value="comment">Tính năng đang phát triển!</TabsContent>
+          <TabsContent value="comment">
+            <Card className="mt-4 rounded-sm justify-center items-center flex h-16 w-full">
+              <p className="italic">Tính năng đang phát triển!</p>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="art">
+            <MangaCoversTab id={manga.id} />
+          </TabsContent>
         </Tabs>
       </div>
     </>
