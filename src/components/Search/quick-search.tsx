@@ -93,19 +93,50 @@ export default function QuickSearch() {
     debouncedSearch(searchQuery);
   }, [searchQuery]);
 
-  // Add effect to control body scrolling when search is expanded
+  // useEffect(() => {
+  //   if (expanded) {
+  //     // Lưu vị trí scroll hiện tại
+  //     const scrollY = window.scrollY;
+      
+  //     // Thêm CSS custom để giữ scrollbar nhưng không cho scroll
+  //     document.body.style.cssText = `
+  //       position: fixed;
+  //       top: -${scrollY}px;
+  //       left: 0;
+  //       right: 0;
+  //       bottom: 0;
+  //       overflow-y: scroll;
+  //       width: 100%;
+  //     `;
+  //   } else {
+  //     // Khôi phục scroll
+  //     const scrollY = document.body.style.top;
+  //     document.body.style.cssText = '';
+      
+  //     if (scrollY) {
+  //       window.scrollTo(0, parseInt(scrollY || '0') * -1);
+  //     }
+  //   }
+
+  //   // Cleanup function
+  //   return () => {
+  //     const scrollY = document.body.style.top;
+  //     document.body.style.cssText = '';
+      
+  //     if (scrollY) {
+  //       window.scrollTo(0, parseInt(scrollY || '0') * -1);
+  //     }
+  //   };
+  // }, [expanded]);
+
   useEffect(() => {
     if (expanded) {
-      // Disable scrolling on body when expanded
-      document.body.style.overflow = "hidden";
+      document.addEventListener("wheel", scrollLock, { passive: false });
     } else {
-      // Re-enable scrolling when collapsed
-      document.body.style.overflow = "";
+      document.removeEventListener("wheel", scrollLock);
     }
-
-    // Cleanup function to ensure scroll is re-enabled when component unmounts
     return () => {
-      document.body.style.overflow = "";
+      document.removeEventListener("wheel", scrollLock);
     };
   }, [expanded]);
 
@@ -216,8 +247,10 @@ export default function QuickSearch() {
           </form>
         </Form>
 
+        {/* result popup */}
         {expanded && (
           <div
+            id="expanded"
             className={cn(
               "absolute top-full mt-1 md:w-full lg:w-2/3 bg-background p-2 rounded-lg shadow-md z-50",
               "transition-all animate-in fade-in slide-in-from-top-2"
@@ -414,4 +447,31 @@ export default function QuickSearch() {
       </Dialog>
     </>
   );
+}
+
+function scrollLock(event: WheelEvent) {
+  // Kiểm tra xem sự kiện wheel có xuất phát từ #expanded (kết quả tìm kiếm) hay không
+  let target = event.target as Node;
+  let isInResultPopup = false;
+
+  while (target != null) {
+    if (
+      target.nodeName === "DIV" &&
+      (target as HTMLElement).id === "expanded"
+    ) {
+      isInResultPopup = true;
+      break;
+    }
+    target = target.parentNode as Node;
+  }
+
+  // Nếu là trong kết quả tìm kiếm thì cho phép scroll bình thường
+  if (isInResultPopup) {
+    // Không làm gì cả, để sự kiện scroll diễn ra bình thường trong kết quả popup
+    return;
+  }
+
+  // Nếu là nơi khác thì chặn scroll
+  event.preventDefault();
+  event.stopPropagation();
 }

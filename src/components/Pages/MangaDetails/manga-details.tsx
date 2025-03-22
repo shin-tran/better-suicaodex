@@ -64,7 +64,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
   const [loading, setLoading] = useState(true);
   const [statusCode, setStatusCode] = useState<number>(200);
 
-  //TODO: author, artist, cover
+  //TODO: author, artist
 
   useEffect(() => {
     const fetchData = async () => {
