@@ -134,3 +134,11 @@ export type ChapterAggregate = {
     other?: string[];
   }[];
 };
+
+export type Cover = {
+  id: string;
+  volume: string;
+  description: string;
+  locale: string;
+  fileName: string;
+}
