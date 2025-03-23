@@ -130,17 +130,65 @@ export async function fetchMangaDetail(id: string): Promise<Manga> {
 }
 
 export async function getMangaStats(id: string): Promise<MangaStats> {
-  const { data } = await axiosInstance.get(`/statistics/manga/${id}`);
-  return MangaStatsParser(data, id);
+  try {
+    const { data } = await axiosInstance.get(`/statistics/manga/${id}`);
+    return MangaStatsParser(data, id);
+  } catch (error) {
+    console.log(error);
+    return {
+      rating: {
+        bayesian: 0,
+        distribution: {
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0,
+          "10": 0,
+        },
+        max: 0,
+      },
+      follows: 0,
+      comments: 0,
+    };
+  }
 }
 
 export async function getMangasStats(ids: string[]): Promise<MangasStats[]> {
-  const { data } = await axiosInstance.get(`/statistics/manga?`, {
-    params: {
-      manga: ids,
-    },
-  });
-  return ids.map((id: any) => MangasStatsParser(data, id));
+  try {
+    const { data } = await axiosInstance.get(`/statistics/manga?`, {
+      params: {
+        manga: ids,
+      },
+    });
+    return ids.map((id: any) => MangasStatsParser(data, id));
+  } catch (error) {
+    console.log(error);
+    return ids.map(() => ({
+      rating: {
+        bayesian: 0,
+        distribution: {
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0,
+          "10": 0,
+        },
+        max: 0,
+      },
+      follows: 0,
+      comments: 0,
+    }));
+  }
 }
 
 export function MangasStatsParser(data: any, id: string): MangasStats {
