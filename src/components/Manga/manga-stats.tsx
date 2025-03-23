@@ -22,7 +22,7 @@ interface MangaStatsProps {
 export const MangaStatsComponent: FC<MangaStatsProps> = ({ stats, size }) => {
   const [config] = useConfig();
   const isMobile = useIsMobile();
-
+  //TODO: fetch
   return (
     <div className="flex flex-row gap-2">
       {isMobile ? (
