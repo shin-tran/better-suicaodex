@@ -413,8 +413,14 @@ export async function getTopRatedMangas(
 }
 
 export async function getStaffPickMangas(r18: boolean): Promise<Manga[]> {
+  const staffPickList = siteConfig.mangadexAPI.staffPickList;
+  const seasonalList = siteConfig.mangadexAPI.seasonalList;
+
+  // Randomly choose between staffPickList and seasonalList
+  const selectedList = Math.random() < 0.5 ? staffPickList : seasonalList;
+
   const StaffPickID = await axiosInstance
-    .get(`/list/${siteConfig.mangadexAPI.staffPickList}`)
+    .get(`/list/${selectedList}`)
     .then((res) =>
       res.data.data.relationships
         .filter((item: any) => item.type === "manga")
@@ -424,12 +430,16 @@ export async function getStaffPickMangas(r18: boolean): Promise<Manga[]> {
   const { data } = await axiosInstance.get(`/manga?`, {
     params: {
       limit: 32,
+      offset:
+        selectedList === seasonalList
+          ? Math.floor(Math.random() * (StaffPickID.length - 32))
+          : 0,
       includes: ["cover_art", "author", "artist"],
       // hasAvailableChapters: "true",
       // availableTranslatedLanguage: ["vi"],
       contentRating: r18
-        ? ["safe", "suggestive", "erotica"]
-        : ["safe", "suggestive", "erotica", "pornographic"],
+        ? ["safe", "suggestive", "erotica", "pornographic"]
+        : ["safe", "suggestive", "erotica"],
       ids: StaffPickID,
       order: {
         rating: "desc",
@@ -437,7 +447,16 @@ export async function getStaffPickMangas(r18: boolean): Promise<Manga[]> {
     },
   });
 
-  return data.data.map((item: any) => MangaParser(item));
+  // Parse the data and then shuffle the results before returning
+  const mangaResults = data.data.map((item: any) => MangaParser(item));
+
+  // Fisher-Yates shuffle algorithm to randomize the order
+  for (let i = mangaResults.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [mangaResults[i], mangaResults[j]] = [mangaResults[j], mangaResults[i]];
+  }
+
+  return mangaResults;
 }
 
 export async function getCompletedMangas(
