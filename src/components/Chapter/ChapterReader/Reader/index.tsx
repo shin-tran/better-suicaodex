@@ -122,9 +122,9 @@ export default function Reader({ images, chapterData }: ReaderProps) {
               className="w-full md:min-w-48 justify-start"
               variant="outline"
             >
-              <Loader2 className="animate-spin mr-2" />
+              <Loader2 className="animate-spin" />
               {retryCount > 0
-                ? `Đang tải dữ liệu (${retryCount}/${MAX_RETRIES})...`
+                ? `Đang tải dữ liệu (${retryCount}/${MAX_RETRIES})`
                 : "Đang tải dữ liệu..."}
             </Button>
           }
