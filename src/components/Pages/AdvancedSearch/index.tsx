@@ -7,7 +7,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, CircleHelp, Eraser, Loader2, Search } from "lucide-react";
+import { ChevronDown, Eraser, Loader2, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { cn } from "@/lib/utils";
@@ -24,7 +24,6 @@ import {
   OriginLanguge,
   Demosgraphic,
   TranslatedLanguage,
-  Manga,
 } from "@/types/types";
 import { AdvancedSearchManga } from "@/lib/mangadex/search";
 import useSWRMutation from "swr/mutation";
@@ -39,7 +38,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import AdvancedSearchGuide from "./advanded-search-guide";
-import { CN, GB, JP, KR, US, VN } from 'country-flag-icons/react/3x2';
+import { CN, GB, JP, KR, VN } from 'country-flag-icons/react/3x2';
 
 interface AdvancedSearchProps {
   page: number;
