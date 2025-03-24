@@ -140,6 +140,7 @@ export default function ChapterNav({
 
       <Card
         className={cn(
+          "overflow-x-auto",
           `fixed bottom-0 left-1/2 transform -translate-x-1/2 md:-translate-x-[calc(50%+var(--sidebar-width-icon)/2)] z-10 transition-all duration-300`,
           "mx-auto flex w-full translate-y-0 items-center justify-center rounded-none bg-background border-none",
           "md:rounded-lg md:w-auto md:-translate-y-2",
@@ -162,7 +163,7 @@ export default function ChapterNav({
           </Button>
 
           <Select
-            defaultValue={chapterData.id}
+            // defaultValue={chapterData.id}
             onValueChange={(id) => router.push(`/chapter/${id}`)}
           >
             <SelectTrigger
