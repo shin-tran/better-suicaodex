@@ -2,12 +2,11 @@ import { Metadata } from "next";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";
 import History from "@/components/Pages/History";
-import { getChaptersByIds, getMangasByIDs } from "@/lib/mangadex/history";
 
 
 export function generateMetadata(): Metadata {
   return {
-    title: "Lịch sử đọc truyện- SuicaoDex",
+    title: "Lịch sử đọc truyện - SuicaoDex",
     description: "Lịch sử đọc truyện",
     keywords: ["Lịch sử", "History", "SuicaoDex"],
   };
