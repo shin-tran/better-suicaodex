@@ -337,11 +337,21 @@ export async function getPopularMangas(
 export async function getRecentlyMangas(
   limit: number,
   language: ("vi" | "en")[],
-  r18: boolean
-): Promise<Manga[]> {
+  r18: boolean,
+  offset?: number
+): Promise<{
+  mangas:Manga[],
+  total:number
+}> {
+  const max_total = 10000;
+  const safeOffset = offset || 0;
+  if (limit + safeOffset > max_total) {
+    limit = max_total - safeOffset;
+  }
   const { data } = await axiosInstance.get(`/manga?`, {
     params: {
       limit: limit,
+      offset: safeOffset,
       includes: ["cover_art", "author", "artist"],
       availableTranslatedLanguage: language,
       contentRating: r18
@@ -352,8 +362,12 @@ export async function getRecentlyMangas(
       },
     },
   });
+  const total = data.total > max_total ? max_total : data.total;
 
-  return data.data.map((item: any) => MangaParser(item));
+  return {
+    mangas: data.data.map((item: any) => MangaParser(item)),
+    total: total,
+  }
 }
 
 export async function getTopFollowedMangas(
