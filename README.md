@@ -2,7 +2,7 @@
 
 > [suicaodex](https://github.com/TNTKien/suicaodex) vốn dĩ là 1 đống hổ lốn, better-suicaodex sinh ra để giải quyết đống hổ lốn đó (hoặc không 🐧).
 
-> SuicaoDex chỉ xây dựng giao diện, trừ một số tính năng liên quan đến người dùng, mọi dữ liệu khác đều thuộc về MangaDex.
+> SuicaoDex chỉ xây dựng giao diện, trừ một số chức năng liên quan đến người dùng, mọi dữ liệu khác đều thuộc về MangaDex.
 
 Như đã nói, SuicaoDex chỉ là 1 dự án "cho vui", phục vụ sở thích của cá nhân tôi, và tôi cũng chả cao siêu gì, nên nó sẽ không thể trọn vẹn như các web truyện chuyên nghiệp khác.
 Đổi lại, SuicaoDex sẽ luôn:
@@ -11,12 +11,28 @@ Như đã nói, SuicaoDex chỉ là 1 dự án "cho vui", phục vụ sở thíc
 - Thân thiện với độc giả Việt Nam (cụ thể là tôi).
 
 ## Tiến độ hiện tại
-Tạm đã hoàn thành phần lớn các tính năng từ SuicaoDex cũ, chỉ còn lại các tính năng liên quan đến người dùng (đăng nhập, đăng ký, lưu truyện, ...) và vài tính năng phụ chưa quá cần thiết.
+Tạm đã hoàn thành phần lớn các chức năng từ SuicaoDex cũ, chỉ còn lại các chức năng liên quan đến người dùng (đăng nhập, đăng ký, lưu truyện, ...) và vài chức năng phụ chưa quá cần thiết.
 
-Có thể sẽ làm lại hoàn toàn chức năng bình luận (chắc thế 🐧).
+| Chức năng | URL | suicaodex.com | dev.suicaodex.com |
+| --- | --- | :---: | :---: |
+| Trang chủ | / | ✅ | ✅ |
+| Tìm kiếm | | ✅ | ✅ |
+| Tìm kiếm nâng cao | /advanced-search | ✅ | ✅ |
+| Manga | /manga/:id | ✅ | ✅ |
+| Chapter | /chapter/:id | ✅ | ✅ |
+| Mới cập nhật | /latest | ✅ | ⬛ |
+| Lịch sử đọc | /history | ✅ | ✅ |
+| Nhóm dịch | /groups | ✅ | ⬛ |
+| Chi tiết nhóm dịch | /groups/:id | ✅ | ⬛ |
+| Đăng ký/Đăng nhập | /login | ✅ | ⬛ |
+| Thư viện | /my-library | ✅ | ⬛ |
+| Bình luận |  | ✅ | ⬛ |
+| Built-in API | /api/mangadex/ | ✅ | deprecated |
+
+Và thêm một số chức năng mới, sẽ cập nhật sau...
 
 ## Góp ý/Báo lỗi
-Cần góp ý, thêm tính năng mới, báo lỗi hoặc bất cứ lý do gì bạn nghĩ ra được, hãy tìm tôi qua [Facebook](https://www.facebook.com/suicaodex), Discord: `@iam_neyk_7719`, hoặc tạo issue/pull request/discussion ngay trên repo này. Tôi rất hoan nghênh và thậm chí là khuyến khích cmn luôn, làm một mình oải vcl thề 🐧.
+Cần góp ý, thêm chức năng mới, báo lỗi hoặc bất cứ lý do gì bạn nghĩ ra được, hãy tìm tôi qua [Facebook](https://www.facebook.com/suicaodex), Discord: `@iam_neyk_7719`, hoặc tạo issue/pull request/discussion ngay trên repo này. Tôi rất hoan nghênh và thậm chí là khuyến khích cmn luôn, làm một mình oải vcl thề 🐧.
 
 ## Cài đặt
 
