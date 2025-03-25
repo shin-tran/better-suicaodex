@@ -9,16 +9,15 @@ import { toast } from "sonner";
 import GroupStats from "./group-stats";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
+import { cn, isFacebookUrl } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "../ui/label";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
-import { SiDiscord, SiX } from "@icons-pack/react-simple-icons";
+import { SiDiscord, SiFacebook, SiX } from "@icons-pack/react-simple-icons";
 import { CN, GB, JP, KR, VN } from "country-flag-icons/react/3x2";
 import GroupTitles from "./GroupTitles";
-
 
 interface GroupInfoProps {
   id: string;
@@ -212,8 +211,17 @@ export default function GroupInfo({ id }: GroupInfoProps) {
                         variant="secondary"
                       >
                         <Link href={data.website} target="_blank">
-                          <Globe />
-                          Website
+                          {isFacebookUrl(data.website) ? (
+                            <>
+                              <SiFacebook />
+                              Facebook
+                            </>
+                          ) : (
+                            <>
+                              <Globe />
+                              Website
+                            </>
+                          )}
                         </Link>
                       </Button>
                     )}

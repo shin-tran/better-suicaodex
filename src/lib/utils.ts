@@ -55,3 +55,7 @@ export function formatTimeToNow(date: Date | number): string {
     },
   });
 }
+
+export function isFacebookUrl(url: string): boolean {
+  return /facebook\.com/.test(url);
+}
