@@ -64,7 +64,7 @@ export default function GroupInfo({ id }: GroupInfoProps) {
     );
   if (error || !data) return <div>Lỗi mất rồi 😭</div>;
 
-  console.log(data);
+  // console.log(data);
   return (
     <>
       <div className="absolute h-[12.5rem] md:h-[16rem] z-[-2] w-auto left-0 right-0 top-0 block">

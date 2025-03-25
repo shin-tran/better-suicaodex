@@ -133,7 +133,7 @@ const SingleCard = ({ chapter, finalChapter, className }: SingleCardProps) => {
                     onClick={(e: React.MouseEvent) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      router.push(`/groups/${group.id}`);
+                      router.push(`/group/${group.id}`);
                     }}
                   >
                     {group.name}
