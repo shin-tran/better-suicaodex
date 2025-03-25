@@ -51,6 +51,7 @@ import { toast } from "sonner";
 import AddToLibraryBtn from "@/components/Manga/add-to-library-btn";
 import { Card } from "@/components/ui/card";
 import MangaCoversTab from "@/components/Manga/manga-covers-tab";
+import MangaSubInfo from "@/components/Manga/manga-subinfo";
 
 interface MangaDetailsProps {
   id: string;
@@ -63,8 +64,6 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
   const [manga, setManga] = useState<Manga>();
   const [loading, setLoading] = useState(true);
   const [statusCode, setStatusCode] = useState<number>(200);
-
-  //TODO: author, artist
 
   useEffect(() => {
     const fetchData = async () => {
@@ -368,6 +367,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
             content={manga.description.content}
             language={manga.description.language}
             maxHeight={isMobile ? 78 : 234}
+            manga={manga}
           />
         )}
 
@@ -388,19 +388,29 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
               Bình luận
             </TabsTrigger>
 
-            <TabsTrigger value="art" className="rounded-sm w-full flex gap-1 px-2">
+            <TabsTrigger
+              value="art"
+              className="rounded-sm w-full flex gap-1 px-2"
+            >
               <ImagesIcon size={20} />
               Ảnh bìa
             </TabsTrigger>
           </TabsList>
           <TabsContent value="chapter">
-            <ChapterList
-              language={config.translatedLanguage}
-              limit={100}
-              mangaID={manga.id}
-              finalChapter={manga.finalChapter}
-              r18={config.r18}
-            />
+            <div className="flex flex-row gap-4 w-full">
+              <div className="hidden xl:block pt-4 min-w-[25%] max-w-[400px]">
+                <MangaSubInfo manga={manga} />
+              </div>
+              <div className="w-full">
+                <ChapterList
+                  language={config.translatedLanguage}
+                  limit={100}
+                  mangaID={manga.id}
+                  finalChapter={manga.finalChapter}
+                  r18={config.r18}
+                />
+              </div>
+            </div>
           </TabsContent>
           <TabsContent value="comment">
             <Card className="mt-4 rounded-sm justify-center items-center flex h-16 w-full">

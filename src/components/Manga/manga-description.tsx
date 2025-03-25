@@ -6,17 +6,21 @@ import ReactMarkdown from "react-markdown";
 import { SiGoogletranslate } from "@icons-pack/react-simple-icons";
 import { Button } from "../ui/button";
 import useContentHeight from "@/hooks/use-content-height";
+import { Manga } from "@/types/types";
+import MangaSubInfo from "./manga-subinfo";
 
 interface MangaDescriptionProps {
   content: string;
   language: "en" | "vi";
   maxHeight: number;
+  manga?: Manga;
 }
 
 const MangaDescription = ({
   content,
   language,
   maxHeight,
+  manga,
 }: MangaDescriptionProps) => {
   const [state, setState] = useState({
     expanded: false,
@@ -127,6 +131,12 @@ const MangaDescription = ({
               )}
               {state.translated ? "Xem bản gốc" : "Dịch sang tiếng Việt"}
             </Button>
+          )}
+
+          {!!manga && (
+            <div className="py-4 xl:hidden">
+              <MangaSubInfo manga={manga} />
+            </div>
           )}
         </div>
       </div>
