@@ -144,7 +144,7 @@ export default function MangaCoversTab({ id }: MangaCoversTabProps) {
             </CardContent>
             <CardFooter className="absolute bottom-0 p-2 bg-gradient-to-t from-black w-full rounded-b-sm dark:rounded-b-none max-h-full items-end">
               <p className="text-base font-semibold line-clamp-1 break-all hover:line-clamp-none text-white drop-shadow-sm">
-                Volume {cover.volume}
+                {!!cover.volume ? `Volume ${cover.volume}` : "No Volume"}
               </p>
             </CardFooter>
           </Card>
@@ -155,8 +155,6 @@ export default function MangaCoversTab({ id }: MangaCoversTabProps) {
 }
 
 function filterByLocale(locales: string[], covers: Cover[]): Cover[] {
-  //remove covers with volume = null
-  covers = covers.filter((cover) => cover.volume !== null);
   if (locales.length === 0)
     return covers.filter((cover) => {
       const coverLocale = cover.locale;
