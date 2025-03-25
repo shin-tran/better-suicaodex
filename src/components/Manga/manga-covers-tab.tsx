@@ -155,6 +155,8 @@ export default function MangaCoversTab({ id }: MangaCoversTabProps) {
 }
 
 function filterByLocale(locales: string[], covers: Cover[]): Cover[] {
+  //remove covers with volume = null
+  covers = covers.filter((cover) => cover.volume !== null);
   if (locales.length === 0)
     return covers.filter((cover) => {
       const coverLocale = cover.locale;
