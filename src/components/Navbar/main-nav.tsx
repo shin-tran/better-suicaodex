@@ -31,6 +31,7 @@ export function MainNav() {
           className={cn(
             "h-[22px] w-auto drop-shadow-md dark:invert hidden xs:flex",
             pathname.includes("/manga") && "md:invert",
+            // pathname.includes("/group/") && "md:invert",
             !isAtTop && "filter-none md:filter-none"
           )}
         />

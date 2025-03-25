@@ -21,7 +21,7 @@ export type Group = {
   discord: string | null;
   email: string | null;
   twitter: string | null;
-  //   language: string[];
+  language: string[];
   leader?: {
     id: string;
     username: string;
@@ -29,6 +29,11 @@ export type Group = {
   repliesCount?: number;
   totalUploaded?: number;
 };
+
+export type GroupStats = {
+  repliesCount: number;
+  totalUploaded: number;
+}
 
 export type ContentRating = "safe" | "suggestive" | "erotica" | "pornographic";
 export type Status = "ongoing" | "completed" | "cancelled" | "hiatus";
@@ -141,4 +146,4 @@ export type Cover = {
   description: string;
   locale: string;
   fileName: string;
-}
+};

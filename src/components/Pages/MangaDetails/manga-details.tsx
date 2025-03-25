@@ -404,7 +404,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
           </TabsContent>
           <TabsContent value="comment">
             <Card className="mt-4 rounded-sm justify-center items-center flex h-16 w-full">
-              <p className="italic">Tính năng đang phát triển!</p>
+              <p className="italic">Chức năng đang phát triển!</p>
             </Card>
           </TabsContent>
 
