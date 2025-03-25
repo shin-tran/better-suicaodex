@@ -40,7 +40,6 @@ import {
   ImagesIcon,
   LibraryBig,
   List,
-  ListPlus,
   MessageSquare,
   Share2,
 } from "lucide-react";
@@ -362,14 +361,20 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
           </>
         )}
 
-        {!!manga.description.content && (
+        {/* {!!manga.description.content && (
           <MangaDescription
             content={manga.description.content}
             language={manga.description.language}
             maxHeight={isMobile ? 78 : 234}
             manga={manga}
           />
-        )}
+        )} */}
+        <MangaDescription
+          content={manga.description.content}
+          language={manga.description.content ? manga.description.language : "vi"}
+          maxHeight={isMobile ? 78 : 234}
+          manga={manga}
+        />
 
         <Tabs defaultValue="chapter">
           <TabsList className="rounded-sm w-full md:w-auto">

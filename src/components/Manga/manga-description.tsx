@@ -28,11 +28,11 @@ const MangaDescription = ({
     translatedDesc: null as string | null,
     isLoading: false,
   });
-  
+
   // Use the new useContentHeight hook
   const { contentRef, fullHeight } = useContentHeight({
     expanded: state.expanded,
-    dependencies: [state.translated, state.translatedDesc]
+    dependencies: [state.translated, state.translatedDesc],
   });
 
   const handleTranslate = async () => {
@@ -79,41 +79,45 @@ const MangaDescription = ({
         }}
       >
         <div ref={contentRef}>
-          <ReactMarkdown
-            className="flex flex-col gap-3"
-            remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
-            components={{
-              a: ({ href, children }) => (
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline"
-                >
-                  {children}
-                </a>
-              ),
-              table: ({ children }) => (
-                <table className="table-auto border-collapse border border-secondary rounded-md w-fit">
-                  {children}
-                </table>
-              ),
-              thead: ({ children }) => (
-                <thead className="border-b border-secondary">{children}</thead>
-              ),
-              tr: ({ children }) => (
-                <tr className="even:bg-secondary">{children}</tr>
-              ),
-              th: ({ children }) => (
-                <th className="px-2 py-1 text-left">{children}</th>
-              ),
-              td: ({ children }) => <td className="px-2 py-1">{children}</td>,
-            }}
-          >
-            {state.translated && state.translatedDesc
-              ? state.translatedDesc
-              : content}
-          </ReactMarkdown>
+          {!!content && (
+            <ReactMarkdown
+              className="flex flex-col gap-3"
+              remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
+              components={{
+                a: ({ href, children }) => (
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    {children}
+                  </a>
+                ),
+                table: ({ children }) => (
+                  <table className="table-auto border-collapse border border-secondary rounded-md w-fit">
+                    {children}
+                  </table>
+                ),
+                thead: ({ children }) => (
+                  <thead className="border-b border-secondary">
+                    {children}
+                  </thead>
+                ),
+                tr: ({ children }) => (
+                  <tr className="even:bg-secondary">{children}</tr>
+                ),
+                th: ({ children }) => (
+                  <th className="px-2 py-1 text-left">{children}</th>
+                ),
+                td: ({ children }) => <td className="px-2 py-1">{children}</td>,
+              }}
+            >
+              {state.translated && state.translatedDesc
+                ? state.translatedDesc
+                : content}
+            </ReactMarkdown>
+          )}
 
           {language === "en" && (
             <Button
@@ -134,7 +138,7 @@ const MangaDescription = ({
           )}
 
           {!!manga && (
-            <div className="py-4 xl:hidden">
+            <div className={cn("xl:hidden", !!content ? "py-4" : "pb-2")}>
               <MangaSubInfo manga={manga} />
             </div>
           )}

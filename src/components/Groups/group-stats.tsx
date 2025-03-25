@@ -38,10 +38,10 @@ export default function GroupStats({ id }: GroupStatsProps) {
   return (
     <div className="flex flex-row items-center gap-4">
       <span className="flex flex-row items-center gap-1">
-        <Upload size={18} /> {data.totalUploaded}
+        <Upload size={18} /> {data.totalUploaded.toLocaleString("en-US")}
       </span>
       <span className="flex flex-row items-center gap-1">
-        <MessageSquare size={18} /> {data.repliesCount}
+        <MessageSquare size={18} /> {data.repliesCount.toLocaleString("en-US")}
       </span>
     </div>
   );
