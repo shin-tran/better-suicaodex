@@ -23,7 +23,7 @@ Tạm đã hoàn thành phần lớn các chức năng từ SuicaoDex cũ, chỉ
 | Mới cập nhật | /latest | ✅ | ⬛ |
 | Lịch sử đọc | /history | ✅ | ✅ |
 | Nhóm dịch | /groups | ✅ | ⬛ |
-| Chi tiết nhóm dịch | /groups/:id | ✅ | ⬛ |
+| Chi tiết nhóm dịch | /group/:id | ✅ | 50% |
 | Đăng ký/Đăng nhập | /login | ✅ | ⬛ |
 | Thư viện | /my-library | ✅ | ⬛ |
 | Bình luận |  | ✅ | ⬛ |
