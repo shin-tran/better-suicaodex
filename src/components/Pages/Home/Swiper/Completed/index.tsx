@@ -47,7 +47,7 @@ export default function CompletedSwiper() {
         </div>
 
         <Button asChild size="icon" variant="ghost" className="[&_svg]:size-6">
-          <Link href={`/completed`}>
+          <Link href={`/advanced-search?status=completed`}>
             <ArrowRight />
           </Link>
         </Button>
