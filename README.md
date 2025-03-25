@@ -27,7 +27,7 @@ Tạm đã hoàn thành phần lớn các chức năng từ SuicaoDex cũ, chỉ
 | Đăng ký/Đăng nhập | /login | ✅ | ⬛ |
 | Thư viện | /my-library | ✅ | ⬛ |
 | Bình luận |  | ✅ | ⬛ |
-| Built-in API | /api/mangadex/ | ✅ | deprecated |
+| Built-in API | /api/mangadex/ | ✅ | ❌ |
 
 Và thêm một số chức năng mới, sẽ cập nhật sau...
 
