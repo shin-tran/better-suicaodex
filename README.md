@@ -5,7 +5,8 @@
 > SuicaoDex chỉ xây dựng giao diện, trừ một số chức năng liên quan đến người dùng, mọi dữ liệu khác đều thuộc về MangaDex.
 
 Như đã nói, SuicaoDex chỉ là 1 dự án "cho vui", phục vụ sở thích của cá nhân tôi, và tôi cũng chả cao siêu gì, nên nó sẽ không thể trọn vẹn như các web truyện chuyên nghiệp khác.
-Đổi lại, SuicaoDex sẽ luôn:
+
+Tuy vậy, SuicaoDex sẽ luôn:
 - Không quảng cáo & phi lợi nhuận.
 - Tôn trọng nguồn dịch.
 - Thân thiện với độc giả Việt Nam (cụ thể là tôi).
@@ -23,7 +24,7 @@ Tạm đã hoàn thành phần lớn các chức năng từ SuicaoDex cũ, chỉ
 | Mới cập nhật | /latest | ✅ | ⬛ |
 | Lịch sử đọc | /history | ✅ | ✅ |
 | Nhóm dịch | /groups | ✅ | ⬛ |
-| Chi tiết nhóm dịch | /group/:id | ✅ | 50% |
+| Chi tiết nhóm dịch | /group/:id | ✅ | ✅ |
 | Đăng ký/Đăng nhập | /login | ✅ | ⬛ |
 | Thư viện | /my-library | ✅ | ⬛ |
 | Bình luận |  | ✅ | ⬛ |
