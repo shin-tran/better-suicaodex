@@ -1,5 +1,7 @@
-import { Group, GroupStats } from "@/types/types";
+import { Group, GroupStats, Manga } from "@/types/types";
 import axiosInstance from "../axios";
+import { includes } from "lodash";
+import { MangaParser } from "./manga";
 
 export function GroupParser(data: any): Group {
   const id = data.id;
@@ -50,15 +52,46 @@ export async function getGroupStats(id: string): Promise<GroupStats> {
           groups: [id],
           contentRating: ["safe", "suggestive", "erotica", "pornographic"],
         },
-      })
+      }),
     ]);
-    
-    const totalReplied = statsResponse.data?.statistics?.[id]?.comments?.repliesCount || 0;
+
+    const totalReplied =
+      statsResponse.data?.statistics?.[id]?.comments?.repliesCount || 0;
     const totalUploaded = uploadedResponse.data?.total || 0;
 
     return { repliesCount: totalReplied, totalUploaded };
   } catch (error) {
-    console.error('Error fetching group stats:', error);
+    console.error("Error fetching group stats:", error);
     return { repliesCount: 0, totalUploaded: 0 };
   }
+}
+
+export async function getGroupTitles(
+  id: string,
+  limit: number,
+  offset: number
+): Promise<{
+  mangas: Manga[];
+  total: number;
+}> {
+  const max_total = 10000;
+
+  if (limit + offset > max_total) {
+    limit = max_total - offset;
+  }
+  const { data } = await axiosInstance.get(`/manga?`, {
+    params: {
+      limit,
+      offset,
+      group: id,
+      contentRating: ["safe", "suggestive", "erotica", "pornographic"],
+      includes: ["cover_art", "author", "artist"],
+    },
+  });
+  const total = data.total > max_total ? max_total : data.total;
+
+  return {
+      mangas: data.data.map((item: any) => MangaParser(item)),
+      total: total,
+    }
 }

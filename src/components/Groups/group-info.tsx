@@ -17,7 +17,8 @@ import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import { SiDiscord, SiX } from "@icons-pack/react-simple-icons";
 import { CN, GB, JP, KR, VN } from "country-flag-icons/react/3x2";
-import { Card } from "../ui/card";
+import GroupTitles from "./GroupTitles";
+
 
 interface GroupInfoProps {
   id: string;
@@ -333,9 +334,7 @@ export default function GroupInfo({ id }: GroupInfoProps) {
               )}
             </TabsContent>
             <TabsContent value="title">
-              <Card className="rounded-sm justify-center items-center flex h-16 w-full">
-                <p className="italic">Chức năng đang phát triển!</p>
-              </Card>
+              <GroupTitles id={id} />
             </TabsContent>
           </Tabs>
         </div>
