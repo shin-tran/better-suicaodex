@@ -148,7 +148,7 @@ export default function GroupInfo({ id }: GroupInfoProps) {
           <Tabs defaultValue="info">
             <TabsList className="rounded-md">
               <TabsTrigger className="rounded-md" value="info">
-                Thông tin{" "}
+                Thông tin
               </TabsTrigger>
               <TabsTrigger className="rounded-md" value="title">
                 Truyện đã đăng
