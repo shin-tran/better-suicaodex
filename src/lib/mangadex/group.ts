@@ -95,3 +95,35 @@ export async function getGroupTitles(
       total: total,
     }
 }
+
+export async function searchGroups(
+  query: string,
+  limit: number,
+  offset: number
+): Promise<{
+  groups: Group[];
+  total: number;
+}> {
+  const max_total = 10000;
+
+  if (limit + offset > max_total) {
+    limit = max_total - offset;
+  }
+  const params: any = {
+    limit: limit,
+    offset: offset,
+    includes: ["leader"],
+  };
+  
+  if (query) {
+    params.name = query;
+  }
+
+  const { data } = await axiosInstance.get(`/group?`, { params });
+  const total = data.total > max_total ? max_total : data.total;
+  
+  return {
+    groups: data.data.map((item: any) => GroupParser(item)),
+    total: total,
+  };
+}
