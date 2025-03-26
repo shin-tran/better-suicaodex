@@ -42,6 +42,7 @@ export default async function Page({ searchParams }: pageProps) {
     origin,
     availableChapter,
     translated,
+    year,
   } = await getSearchParams({ searchParams });
   return (
     <AdvancedSearch
@@ -57,6 +58,7 @@ export default async function Page({ searchParams }: pageProps) {
       origin={origin}
       availableChapter={availableChapter}
       translated={translated}
+      year={year}
     />
   );
 }
@@ -77,6 +79,7 @@ const getSearchParams = async ({ searchParams }: pageProps) => {
   const origin = params["origin"] || "";
   const availableChapter = params["availableChapter"] === "true";
   const translated = params["translated"] || "";
+  const year = params["year"] || "";
 
   return {
     page,
@@ -91,5 +94,6 @@ const getSearchParams = async ({ searchParams }: pageProps) => {
     origin,
     availableChapter,
     translated,
+    year,
   };
 };

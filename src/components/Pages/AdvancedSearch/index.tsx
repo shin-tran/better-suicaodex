@@ -7,7 +7,14 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, Eraser, Loader2, Search } from "lucide-react";
+import {
+  ChevronDown,
+  Eraser,
+  Loader2,
+  Minus,
+  Plus,
+  Search,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { cn } from "@/lib/utils";
@@ -38,7 +45,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import AdvancedSearchGuide from "./advanded-search-guide";
-import { CN, GB, JP, KR, VN } from 'country-flag-icons/react/3x2';
+import { CN, GB, JP, KR, VN } from "country-flag-icons/react/3x2";
 
 interface AdvancedSearchProps {
   page: number;
@@ -53,6 +60,7 @@ interface AdvancedSearchProps {
   origin: string;
   availableChapter: boolean;
   translated: string;
+  year: string;
 }
 
 // Function to filter array values based on their type
@@ -83,6 +91,7 @@ export default function AdvancedSearch({
   origin,
   availableChapter,
   translated,
+  year,
 }: AdvancedSearchProps) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
@@ -144,7 +153,9 @@ export default function AdvancedSearch({
   const [selectedOriginLanguage, setSelectedOriginLanguage] = useState<
     string[]
   >(filterByType(toArray(origin), allowedOriginLanguages));
-  const [selectedAuthor, setSelectedAuthor] = useState<string[]>(toArray(author));
+  const [selectedAuthor, setSelectedAuthor] = useState<string[]>(
+    toArray(author)
+  );
   const [selectedInclude, setSelectedInclude] = useState<string[]>(
     toArray(include) || []
   );
@@ -156,6 +167,8 @@ export default function AdvancedSearch({
   >([]);
   const [hasAvailableChapter, setHasAvailableChapter] =
     useState(availableChapter);
+
+  const [selectedYear, setSelectedYear] = useState(year);
 
   const statusList = [
     { value: "completed", label: "Đã hoàn thành" },
@@ -184,7 +197,7 @@ export default function AdvancedSearch({
     { value: "en", label: "Tiếng Anh", icon: GB },
     { value: "ja", label: "Tiếng Nhật", icon: JP },
     { value: "ko", label: "Tiếng Hàn", icon: KR },
-    { value: "zh", label: "Tiếng Trung", icon: CN},
+    { value: "zh", label: "Tiếng Trung", icon: CN },
   ];
 
   const languageList = [
@@ -222,6 +235,7 @@ export default function AdvancedSearch({
     setSelectedInclude([]);
     setSelectedExclude([]);
     setHasAvailableChapter(false);
+    setSelectedYear("");
     // Increment reset key to force re-render of MultiSelect components
     setResetKey((prev) => prev + 1);
     router.replace("/advanced-search");
@@ -243,6 +257,7 @@ export default function AdvancedSearch({
       selectedOriginLanguage,
       hasAvailableChapter,
       selectedLanguage,
+      selectedYear,
     ],
     ([
       ,
@@ -258,6 +273,8 @@ export default function AdvancedSearch({
       origin,
       availableChapter,
       translated,
+
+      year,
     ]) =>
       AdvancedSearchManga(
         q,
@@ -271,7 +288,8 @@ export default function AdvancedSearch({
         graphic,
         origin,
         availableChapter,
-        translated
+        translated,
+        year
       )
   );
 
@@ -291,6 +309,7 @@ export default function AdvancedSearch({
       origin: selectedOriginLanguage.join(","),
       availableChapter: hasAvailableChapter,
       translated: selectedLanguage.join(","),
+      year: selectedYear,
     });
 
     // Update the URL with search parameters
@@ -315,6 +334,7 @@ export default function AdvancedSearch({
       origin: selectedOriginLanguage.join(","),
       availableChapter: hasAvailableChapter,
       translated: selectedLanguage.join(","),
+      year: selectedYear,
     });
     router.push(`/advanced-search?${params.toString()}`);
     trigger();
@@ -372,7 +392,7 @@ export default function AdvancedSearch({
             <div ref={contentRef}>
               <CollapsibleContent
                 className={cn(
-                  "grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 py-4",
+                  "grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 py-4 px-0.5",
                   "data-[state=closed]:opacity-0 data-[state=open]:opacity-100",
                   "transition-opacity duration-200"
                 )}
@@ -527,9 +547,46 @@ export default function AdvancedSearch({
                 </div>
 
                 <div className="flex flex-col gap-2">
+                  <Label>Năm phát hành</Label>
+                  <div className="flex relative">
+                    <Input
+                      className="min-h-10 shadow-none font-medium text-sm pl-4 pr-14"
+                      type="number"
+                      placeholder="Mặc định"
+                      value={selectedYear}
+                      onChange={(e) => setSelectedYear(e.target.value)}
+                    />
+                    <div className="flex absolute right-3 top-1/2 transform -translate-y-1/2">
+                      <Button
+                        className="h-10 w-5 bg-transparent hover:bg-transparent text-muted-foreground hover:text-primary"
+                        size="icon"
+                        variant="ghost"
+                        onClick={() => {
+                          if (Number(selectedYear) <= 0) return;
+                          setSelectedYear((prev) => String(Number(prev) - 1));
+                        }}
+                      >
+                        <Minus />
+                      </Button>
+                      <Button
+                        className="h-10 w-5 bg-transparent hover:bg-transparent text-muted-foreground hover:text-primary"
+                        size="icon"
+                        variant="ghost"
+                        onClick={() =>
+                          setSelectedYear((prev) => String(Number(prev) + 1))
+                        }
+                      >
+                        <Plus />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id="hasAvailableChapter"
+                      className="w-[14px] h-[14px] [&_svg]:w-[14px] [&_svg]:h-[14px]"
                       onCheckedChange={() =>
                         setHasAvailableChapter(!hasAvailableChapter)
                       }
@@ -582,7 +639,8 @@ export default function AdvancedSearch({
               selectedInclude.length === 0 &&
               selectedExclude.length === 0 &&
               !hasAvailableChapter &&
-              selectedLanguage.length === 0
+              selectedLanguage.length === 0 &&
+              selectedYear.length === 0
             }
           >
             <Eraser />
@@ -740,11 +798,13 @@ function generateSearchParams({
   translated,
   page,
   limit,
+  year,
 }: AdvancedSearchProps) {
   const params = new URLSearchParams();
 
   // Add non-empty string parameters
   if (q) params.set("q", q);
+  if (year) params.set("year", year);
 
   // Convert array values to comma-separated strings and add if not empty
   if (author) params.set("author", author);

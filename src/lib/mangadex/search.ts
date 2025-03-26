@@ -14,7 +14,8 @@ export async function AdvancedSearchManga(
   graphic: string[],
   origin: string[],
   available_chapter: boolean,
-  translated: string[]
+  translated: string[],
+  year: string,
 ): Promise<{
   mangas: Manga[];
   total: number;
@@ -56,6 +57,10 @@ export async function AdvancedSearchManga(
   }
   if (available_chapter && translated.length > 0) {
     searchParams["availableTranslatedLanguage"] = translated;
+  }
+
+  if(!!year) {
+    searchParams["year"] = year;
   }
 
   const { data } = await axiosInstance.get(`/manga?`, {

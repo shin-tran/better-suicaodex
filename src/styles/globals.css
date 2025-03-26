@@ -115,6 +115,14 @@ body {
   }
 }
 
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
 .transition-\[border-color\] {
   transition-duration: 0.15s;
   transition-property: border-color;
