@@ -63,6 +63,7 @@ export default function LatestCard({ chapter }: LatestCardProps) {
                       : `/chapter/${chapter.id}`
                   }
                   className="hover:underline"
+                  target={chapter.externalUrl ? "_blank" : "_self"}
                 >
                   <p className="font-semibold text-sm md:text-base line-clamp-1 break-all">
                     {chapter.chapter

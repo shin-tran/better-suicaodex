@@ -69,6 +69,7 @@ const SingleCard = ({ chapter, finalChapter, className }: SingleCardProps) => {
       href={
         chapter.externalUrl ? chapter.externalUrl : `/chapter/${chapter.id}`
       }
+      target={chapter.externalUrl ? "_blank" : "_self"}
     >
       <Card
         className={cn(
