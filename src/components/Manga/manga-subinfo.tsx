@@ -45,7 +45,7 @@ export default function MangaSubInfo({ manga }: MangaSubInfoProps) {
               variant="secondary"
               size="sm"
             >
-              <Link href={`/artist/${a.id}`} prefetch={false}>
+              <Link href={`/author/${a.id}`} prefetch={false}>
                 {a.name}
               </Link>
             </Button>
