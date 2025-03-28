@@ -41,7 +41,7 @@ Cần góp ý, thêm chức năng mới, báo lỗi hoặc bất cứ lý do gì
 
 >Bạn có thể tham khảo [suicaodex-api](https://github.com/TNTKien/suicaodex-api) hoặc proxy tích hợp sẵn trong [suicaodex cũ](https://github.com/TNTKien/suicaodex/blob/main/app/api/mangadex/%5B...path%5D/route.ts).
 
-> Khi đã có proxy, hãy chỉnh sửa lại `src/config/site.ts` và `src/lib/axios.ts`. cho phù hợp (có thể sẽ cần sửa thêm 1 số url ảnh khác).
+> Khi đã có proxy, hãy chỉnh sửa lại `src/config/site.ts` và `src/lib/axios.ts` cho phù hợp (có thể sẽ cần sửa thêm 1 số url ảnh).
 
 Cài đặt các package cần thiết:
 ```bash
