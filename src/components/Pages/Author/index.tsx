@@ -25,6 +25,7 @@ import {
 } from "@icons-pack/react-simple-icons";
 import { Icons } from "@/components/icons";
 import { Card } from "@/components/ui/card";
+import AuthorTitles from "./author-titles";
 
 interface AuthorProps {
   id: string;
@@ -62,6 +63,8 @@ export default function Author({ id }: AuthorProps) {
       </div>
     );
   if (error || !data) return <div>Lỗi mất rồi 😭</div>;
+
+  console.log(data);
 
   const socialEntries = formatToArray(data);
   const socialIcons = {
@@ -126,7 +129,7 @@ export default function Author({ id }: AuthorProps) {
               className={cn(isMobile && "shrink-0")}
             >
               <Link
-                href={`${siteConfig.mangadexAPI.webURL}/group/${id}`}
+                href={`${siteConfig.mangadexAPI.webURL}/author/${id}`}
                 target="_blank"
               >
                 <Archive />
@@ -217,6 +220,8 @@ export default function Author({ id }: AuthorProps) {
               </div>
             </div>
           )}
+
+          <AuthorTitles id={id} />
         </div>
       </div>
     </>

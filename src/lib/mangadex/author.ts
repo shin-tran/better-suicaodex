@@ -1,5 +1,7 @@
-import { Author, AuthorDetail } from "@/types/types";
+import { Author, AuthorDetail, Manga } from "@/types/types";
 import axiosInstance from "../axios";
+import { includes } from "lodash";
+import { MangaParser } from "./manga";
 
 export function AuthorParser(data: any[]): Author[] {
   const authors = data.filter((item: any) => item.type === "author");
@@ -7,7 +9,7 @@ export function AuthorParser(data: any[]): Author[] {
   return authors.map((item: any) => {
     return {
       id: item.id,
-      name: item.attributes?.name || 'Unknown Author'
+      name: item.attributes?.name || "Unknown Author",
     };
   });
 }
@@ -19,7 +21,7 @@ export async function SearchAuthor(author: string): Promise<Author[]> {
   return data.data.map((item: any) => {
     return {
       id: item.id,
-      name: item.attributes?.name || 'Unknown Author',
+      name: item.attributes?.name || "Unknown Author",
     };
   });
 }
@@ -37,7 +39,7 @@ export async function SearchAuthorByIds(ids: string[]): Promise<Author[]> {
     return data.data.map((item: any) => {
       return {
         id: item.id,
-        name: item.attributes?.name || 'Unknown Author',
+        name: item.attributes?.name || "Unknown Author",
       };
     });
   } catch (error) {
@@ -50,9 +52,11 @@ export async function GetAuthor(id: string): Promise<AuthorDetail> {
   const attributes = data.data.attributes;
   return {
     id: data.data.id,
-    name: attributes.name || 'Unknown Author',
+    name: attributes.name || "Unknown Author",
     imageUrl: attributes.imageUrl || null,
-    bio: attributes.biography.vi ? attributes.biography.vi : attributes.biography.en || null,
+    bio: attributes.biography.vi
+      ? attributes.biography.vi
+      : attributes.biography.en || null,
     social: {
       twitter: attributes.twitter || null,
       pixiv: attributes.pixiv || null,
@@ -70,7 +74,36 @@ export async function GetAuthor(id: string): Promise<AuthorDetail> {
       website: attributes.website || null,
     },
     mangas: data.data.relationships
-    .filter((rel: any) => rel.type === "manga")
-    .map((rel: any) => rel.id),
+      .filter((rel: any) => rel.type === "manga")
+      .map((rel: any) => rel.id),
+  };
+}
+
+export async function GetAuthorTitles(
+  id: string,
+  limit: number,
+  offset: number
+): Promise<{
+  mangas: Manga[];
+    total: number;
+}> {
+  const max_total = 10000;
+
+  if (limit + offset > max_total) {
+    limit = max_total - offset;
+  }
+  const { data } = await axiosInstance.get("/manga?", {
+    params: {
+      limit: limit,
+      offset: offset,
+      contentRating: ["safe", "suggestive", "erotica", "pornographic"],
+      authorOrArtist: id,
+      includes: ["author", "artist", "cover_art"],
+    },
+  });
+  const total = data.total > max_total ? max_total : data.total;
+  return {
+    mangas: data.data.map((item: any) => MangaParser(item)),
+    total: total,
   };
 }

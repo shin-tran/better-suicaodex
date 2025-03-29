@@ -42,7 +42,7 @@ export default function GroupTitleTabs({
     return (
       <DefaultTabs>
         <Card className="mt-4 rounded-sm justify-center items-center flex h-16 w-full">
-          <p className="italic">Không có kết quả!</p>
+          <p className="italic">Chưa có truyện nào!</p>
         </Card>
       </DefaultTabs>
     );
