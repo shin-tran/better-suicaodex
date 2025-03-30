@@ -12,7 +12,7 @@ Tuy vậy, SuicaoDex sẽ luôn:
 - Thân thiện với độc giả Việt Nam (cụ thể là tôi).
 
 ## Tiến độ
-> UPDATE 30/03/2025: sắp tới sẽ tiến hành triển khai các chức năng liên quan đến người dùng (đăng nhập, đăng ký, lưu truyện...), nếu không cần những tính năng này, hãy chuyển sang nhánh `no-auth`.
+> UPDATE 30/03/2025: sắp tới sẽ tiến hành triển khai các chức năng liên quan đến người dùng (đăng nhập, đăng ký, lưu truyện...), nếu không cần những tính năng này, hãy chuyển sang nhánh [`no-auth`](https://github.com/TNTKien/better-suicaodex/tree/no-auth).
 
 | Route | URL | suicaodex.com | dev.suicaodex.com |
 | --- | --- | :---: | :---: |
