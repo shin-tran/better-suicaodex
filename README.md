@@ -11,17 +11,17 @@ Tuy vậy, SuicaoDex sẽ luôn:
 - Tôn trọng nguồn dịch.
 - Thân thiện với độc giả Việt Nam (cụ thể là tôi).
 
-## Tiến độ hiện tại
-Tạm đã hoàn thành phần lớn các chức năng từ SuicaoDex cũ, chỉ còn lại các chức năng liên quan đến người dùng (đăng nhập, đăng ký, lưu truyện, ...) và vài chức năng phụ chưa quá cần thiết.
+## Tiến độ
+> UPDATE 30/03/2025: sắp tới sẽ tiến hành triển khai các chức năng liên quan đến người dùng (đăng nhập, đăng ký, lưu truyện...), nếu không cần những tính năng này, hãy chuyển sang nhánh `no-auth`.
 
-| Chức năng | URL | suicaodex.com | dev.suicaodex.com |
+| Route | URL | suicaodex.com | dev.suicaodex.com |
 | --- | --- | :---: | :---: |
 | Trang chủ | / | ✅ | ✅ |
 | Tìm kiếm | | ✅ | ✅ |
 | Tìm kiếm nâng cao | /advanced-search | ✅ | ✅ |
 | Manga | /manga/:id | ✅ | ✅ |
 | Chapter | /chapter/:id | ✅ | ✅ |
-| Mới cập nhật | /latest | ✅ | ⬛ |
+| Mới cập nhật | /latest | ✅ | ✅ |
 | Lịch sử đọc | /history | ✅ | ✅ |
 | Nhóm dịch | /groups | ✅ | ✅ |
 | Chi tiết nhóm dịch | /group/:id | ✅ | ✅ |
@@ -29,6 +29,8 @@ Tạm đã hoàn thành phần lớn các chức năng từ SuicaoDex cũ, chỉ
 | Thư viện | /my-library | ✅ | ⬛ |
 | Bình luận |  | ✅ | ⬛ |
 | Built-in API | /api/mangadex/ | ✅ | ❌ |
+
+> Loại bỏ built-in API vì tôi lười 👍
 
 Và thêm một số chức năng mới, sẽ cập nhật sau...
 
