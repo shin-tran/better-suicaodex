@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatTimeToNow } from "@/lib/utils";
 import { Chapter } from "@/types/types";
+import { GB, VN } from "country-flag-icons/react/3x2";
 import { Clock, ExternalLink, Users } from "lucide-react";
 import Link from "next/link";
 
@@ -41,19 +42,11 @@ export default function LatestCard({ chapter }: LatestCardProps) {
 
               <div className="flex items-center space-x-1">
                 {chapter.language === "vi" && (
-                  <img
-                    src="/flags/vn.svg"
-                    alt="Vietnamese"
-                    className="inline-block select-none flex-shrink-0 !h-5 !w-5"
-                  />
+                  <VN className="inline-block select-none flex-shrink-0 !h-5 !w-5" />
                 )}
 
                 {chapter.language === "en" && (
-                  <img
-                    src="/flags/en.svg"
-                    alt="English"
-                    className="inline-block select-none flex-shrink-0 !h-5 !w-5"
-                  />
+                  <GB className="inline-block select-none flex-shrink-0 !h-5 !w-5" />
                 )}
                 {chapter.externalUrl && <ExternalLink size={16} />}
                 <Link
