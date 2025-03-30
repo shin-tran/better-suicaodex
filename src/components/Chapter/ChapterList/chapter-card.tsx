@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { GB, VN } from "country-flag-icons/react/3x2";
 
 interface ChapterCardProps {
   chapters: ChapterGroup;
@@ -80,19 +81,11 @@ const SingleCard = ({ chapter, finalChapter, className }: SingleCardProps) => {
         <div className="flex justify-between">
           <div className="flex items-center space-x-1">
             {chapter.language === "vi" && (
-              <img
-                src="/flags/vn.svg"
-                alt="Vietnamese"
-                className="inline-block select-none flex-shrink-0 !h-5 !w-5"
-              />
+              <VN className="inline-block select-none flex-shrink-0 !h-5 !w-5" />
             )}
 
             {chapter.language === "en" && (
-              <img
-                src="/flags/en.svg"
-                alt="English"
-                className="inline-block select-none flex-shrink-0 !h-5 !w-5"
-              />
+              <GB className="inline-block select-none flex-shrink-0 !h-5 !w-5" />
             )}
             {chapter.externalUrl && <ExternalLink size={16} />}
             <p className="font-semibold text-sm md:text-base line-clamp-1">

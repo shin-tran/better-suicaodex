@@ -18,6 +18,7 @@ import { ThemeWrapper } from "./theme-wrapper";
 import { Label } from "../ui/label";
 import { Skeleton } from "../ui/skeleton";
 import { SidebarMenuButton } from "../ui/sidebar";
+import { GB, VN } from "country-flag-icons/react/3x2";
 
 export function ContentCustomizer() {
   const [mounted, setMounted] = React.useState(false);
@@ -46,7 +47,11 @@ export function ContentCustomizer() {
       <div className="hidden items-center md:flex grow">
         <Popover>
           <PopoverTrigger asChild>
-            <SidebarMenuButton asChild tooltip="Nội dung" className="cursor-pointer">
+            <SidebarMenuButton
+              asChild
+              tooltip="Nội dung"
+              className="cursor-pointer"
+            >
               <div>
                 <SlidersHorizontal />
                 <span>Nội dung</span>
@@ -124,7 +129,7 @@ function Customizer() {
                       JSON.stringify(["vi"]) && "border-2 border-primary"
                   )}
                 >
-                  <img src="/flags/vn.svg" className="h-5 w-5" />
+                  <VN className="h-5 w-5" />
                   T. Việt
                 </Button>
 
@@ -143,7 +148,7 @@ function Customizer() {
                       JSON.stringify(["en"]) && "border-2 border-primary"
                   )}
                 >
-                  <img src="/flags/en.svg" className="h-5 w-5" />
+                  <GB className="h-5 w-5" />
                   T. Anh
                 </Button>
 
