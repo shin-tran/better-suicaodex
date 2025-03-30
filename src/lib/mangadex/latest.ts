@@ -1,4 +1,4 @@
-import { Chapter, LastestManga, Manga } from "@/types/types";
+import { Chapter, Manga } from "@/types/types";
 import axiosInstance from "../axios";
 import { ChaptersParser } from "./chapter";
 import { MangaParser } from "./manga";
@@ -74,64 +74,83 @@ export async function getLatestChapters(
   return Array.from(mangaMap.values()).slice(0, max);
 }
 
-export async function latestMangas(
+export async function getLatestManga(
   limit: number,
-  offset: number
-): Promise<LastestManga[]> {
-  const max_mangas = 18;
+  offset: number,
+  language: ("vi" | "en")[],
+  r18: boolean
+): Promise<{ chapters: Chapter[]; total: number }> {
   const total = 10000;
+  // Ensure limit is within bounds
   if (limit + offset > total) {
     limit = total - offset;
   }
+
+  // Content rating options - defined once to avoid duplication
+  const contentRating = r18
+    ? ["safe", "suggestive", "erotica", "pornographic"]
+    : ["safe", "suggestive", "erotica"];
+
+  // Fetch chapters
   const { data: chaptersData } = await axiosInstance.get("/chapter?", {
     params: {
-      limit: limit,
-      offset: offset,
+      limit,
+      offset,
       includes: ["scanlation_group"],
-      contentRating: ["safe", "suggestive", "erotica"],
-      translatedLanguage: ["vi"],
+      contentRating,
+      translatedLanguage: language,
       order: {
         readableAt: "desc",
       },
     },
   });
-  // const total = chaptersData.total;
 
   const chapters = ChaptersParser(chaptersData.data);
-  const mangaIDs = chapters.map((chapter) => chapter.manga?.id);
 
-  //filter out the chapters that have same manga id
-  let uniqueMangaIDs = Array.from(new Set(mangaIDs));
-  if (uniqueMangaIDs.length > max_mangas) {
-    uniqueMangaIDs = uniqueMangaIDs.slice(0, max_mangas);
+  // Extract and filter manga IDs efficiently
+  const mangaIDs = chapters
+    .map((chapter) => chapter.manga?.id)
+    .filter((id): id is string => !!id);
+
+  const uniqueMangaIDs = Array.from(new Set(mangaIDs));
+
+  if (uniqueMangaIDs.length === 0) {
+    return { chapters: [], total };
   }
 
-  const latestChapters = uniqueMangaIDs
-    .map((mangaID) =>
-      chapters.filter((chapter) => chapter.manga?.id === mangaID).slice(0, 3)
-    )
-    .flat()
-    .filter((chapter): chapter is Chapter => chapter !== undefined);
-
+  // Fetch manga details
   const { data: mangasData } = await axiosInstance.get("/manga?", {
     params: {
-      limit: 20,
+      limit: 32,
       ids: uniqueMangaIDs,
       includes: ["cover_art", "author", "artist"],
+      contentRating,
     },
   });
 
   const mangas = mangasData.data.map((m: any) => MangaParser(m));
-  const result = mangas.map((manga: Manga) => {
-    const lastestChap = latestChapters.filter(
-      (chapter) => chapter.manga?.id === manga.id
-    );
-    return {
-      info: manga,
-      lastestChap,
-      total,
-    };
+
+  // Create manga lookup map for O(1) access
+  const mangaMap = new Map<string, Manga>();
+  mangas.forEach((manga: Manga) => {
+    if (manga.id) {
+      mangaMap.set(manga.id, manga);
+    }
   });
 
-  return result;
+  // Add title and cover to each chapter's manga property using the map
+  chapters.forEach((chapter) => {
+    if (chapter.manga?.id) {
+      const manga = mangaMap.get(chapter.manga.id);
+      if (manga && chapter.manga) {
+        chapter.manga.title = manga.title;
+        chapter.manga.cover = manga.cover;
+      }
+    }
+  });
+
+  return {
+    chapters,
+    total,
+  };
 }
