@@ -40,49 +40,17 @@ export default function LatestMangaCard({
   const isMobile = useIsMobile();
   const maxCount = isMobile ? 2 : 3;
   const [expanded, setExpanded] = useState(false);
+  const src =
+    siteConfig.suicaodex.apiURL +
+    "/covers/" +
+    manga.id +
+    "/" +
+    manga.cover +
+    ".512.jpg";
+  const [loaded, setLoaded] = useState(false);
 
   if (type === "cover") {
-    const src =
-      siteConfig.suicaodex.apiURL +
-      "/covers/" +
-      manga.id +
-      "/" +
-      manga.cover +
-      ".512.jpg";
-    const [loaded, setLoaded] = useState(false);
     return (
-      //   <div className="relative flex flex-col gap-1">
-      //     <Card className="relative rounded-sm shadow-md transition-colors duration-200 w-full h-full border-none">
-      //       <CardContent className="p-0">
-      //         <LazyLoadImage
-      //           wrapperClassName={cn(
-      //             "!block rounded-sm object-cover w-full h-full",
-      //             !loaded && "aspect-[5/7]"
-      //           )}
-      //           placeholderSrc="/images/place-doro.webp"
-      //           className={cn(
-      //             "h-auto w-full rounded-sm block object-cover aspect-[5/7]"
-      //           )}
-      //           src={src}
-      //           alt={`Ảnh bìa ${manga.title}`}
-      //           onLoad={() => setLoaded(true)}
-      //           onError={(e) => {
-      //             e.currentTarget.src = "/images/xidoco.webp";
-      //           }}
-      //         />
-      //       </CardContent>
-
-      //       <CardFooter className="absolute bottom-0 p-2 bg-gradient-to-t from-black w-full rounded-b-sm dark:rounded-b-none h-[40%] max-h-full items-end">
-      //         <p className="text-base font-semibold line-clamp-2 hover:line-clamp-none text-white drop-shadow-sm">
-      //           {manga.title}
-      //         </p>
-      //       </CardFooter>
-      //     </Card>
-
-      //     {chapters.slice(0, maxCount).map((chapter) => (
-      //       <SingleCard key={chapter.id} chapter={chapter} />
-      //     ))}
-      //   </div>
       <Card className="relative rounded-sm shadow-none transition-colors duration-200 w-full h-full border-none bg-background">
         <Link href={`/manga/${manga.id}`}>
           <CardContent className="relative p-0 rounded-sm">
