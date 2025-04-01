@@ -39,7 +39,6 @@ import {
 import { DialogClose } from "@radix-ui/react-dialog";
 import { toast } from "sonner";
 import { useLocalLibrary } from "@/hooks/use-local-library";
-import { Abel } from "next/font/google";
 
 interface AddToLibraryBtnProps {
   isMobile: boolean;
@@ -69,7 +68,7 @@ export default function AddToLibraryBtn({
   useEffect(() => {
     const currentCategory = getLocalCategoryOfId(manga.id);
     setValue(currentCategory || "none");
-  }, [manga.id, localLibrary]); // Add localLibrary as a dependency to detect changes
+  }, [manga.id, localLibrary]); 
 
   const src = `${siteConfig.suicaodex.apiURL}/covers/${manga.id}/${manga.cover}.512.jpg`;
 
@@ -112,15 +111,6 @@ export default function AddToLibraryBtn({
       return toast.success(`Đã xóa truyện khỏi thư viện!`);
     }
 
-    // TODO: alert dialog
-    // const currentCategory = localLibrary[v];
-    // if (currentCategory.length >= 1) {
-    //   return toast.error(
-    //     `Danh mục ${options.find((opt) => opt.value === v)?.label} đã đầy!`
-    //   );
-    // }
-
-    // Thêm truyện vào thư viện (sẽ tự động xóa khỏi các danh mục khác)
     addToLocalCategory(manga.id, v);
     return toast.success(
       `Đã thêm truyện vào: ${options.find((opt) => opt.value === v)?.label}!`
