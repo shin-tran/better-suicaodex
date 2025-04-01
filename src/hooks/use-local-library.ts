@@ -2,11 +2,14 @@ import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 
 type LocalLibrary = {
-  follow: string[];
+  following: string[];
   plan: string[];
   reading: string[];
   completed: string[];
 };
+
+// Library categories
+type LocalLibraryCategory = keyof LocalLibrary;
 
 // Số lượng phần tử tối đa cho mỗi mảng
 const MAX_ITEMS = 500;
@@ -19,10 +22,28 @@ const limitArraySize = <T>(array: T[]): T[] => {
   return array;
 };
 
-const configAtom = atomWithStorage<LocalLibrary>(
+// Hàm kiểm tra và đảm bảo ID chỉ xuất hiện trong một danh mục
+const ensureLocalUniqueCategory = (localLibrary: LocalLibrary, id: string, targetCategory: LocalLibraryCategory): LocalLibrary => {
+  // Tạo bản sao để tránh thay đổi trực tiếp
+  const newLocalLibrary = { ...localLibrary };
+  
+  // Xóa ID khỏi tất cả các danh mục
+  (Object.keys(newLocalLibrary) as LocalLibraryCategory[]).forEach(category => {
+    newLocalLibrary[category] = newLocalLibrary[category].filter(mangaId => mangaId !== id);
+  });
+  
+  // Thêm ID vào danh mục mục tiêu nếu chưa có
+  if (!newLocalLibrary[targetCategory].includes(id)) {
+    newLocalLibrary[targetCategory] = [...newLocalLibrary[targetCategory], id];
+  }
+  
+  return newLocalLibrary;
+};
+
+const localLibraryAtom = atomWithStorage<LocalLibrary>(
   "local-library",
   {
-    follow: [],
+    following: [],
     plan: [],
     reading: [],
     completed: [],
@@ -36,7 +57,7 @@ const configAtom = atomWithStorage<LocalLibrary>(
         const parsedValue = JSON.parse(storedValue) as LocalLibrary;
         // Giới hạn kích thước của mỗi mảng khi lấy từ storage
         return {
-          follow: limitArraySize(parsedValue.follow || []),
+          following: limitArraySize(parsedValue.following || []),
           plan: limitArraySize(parsedValue.plan || []),
           reading: limitArraySize(parsedValue.reading || []),
           completed: limitArraySize(parsedValue.completed || []),
@@ -48,7 +69,7 @@ const configAtom = atomWithStorage<LocalLibrary>(
     setItem: (key, value) => {
       // Giới hạn kích thước của mỗi mảng trước khi lưu vào storage
       const limitedValue = {
-        follow: limitArraySize(value.follow),
+        following: limitArraySize(value.following),
         plan: limitArraySize(value.plan),
         reading: limitArraySize(value.reading),
         completed: limitArraySize(value.completed),
@@ -61,5 +82,41 @@ const configAtom = atomWithStorage<LocalLibrary>(
 );
 
 export function useLocalLibrary() {
-  return useAtom(configAtom);
+  const [localLibrary, setLocalLibrary] = useAtom(localLibraryAtom);
+
+  // Thêm ID vào một danh mục (đảm bảo ID chỉ xuất hiện trong một danh mục)
+  const addToLocalCategory = (id: string, category: LocalLibraryCategory) => {
+    setLocalLibrary(current => ensureLocalUniqueCategory(current, id, category));
+  };
+
+  // Xóa ID khỏi tất cả các danh mục
+  const removeFromLocalLibrary = (id: string) => {
+    setLocalLibrary(current => {
+      const newLocalLibrary = { ...current };
+      Object.keys(newLocalLibrary).forEach(category => {
+        newLocalLibrary[category as LocalLibraryCategory] = newLocalLibrary[category as LocalLibraryCategory].filter(
+          mangaId => mangaId !== id
+        );
+      });
+      return newLocalLibrary;
+    });
+  };
+
+  // Kiểm tra ID có trong danh mục nào không
+  const getLocalCategoryOfId = (id: string): LocalLibraryCategory | null => {
+    for (const category of Object.keys(localLibrary) as LocalLibraryCategory[]) {
+      if (localLibrary[category].includes(id)) {
+        return category;
+      }
+    }
+    return null;
+  };
+
+  return {
+    localLibrary,
+    addToLocalCategory,
+    removeFromLocalLibrary,
+    getLocalCategoryOfId,
+    rawSetLocalLibrary: setLocalLibrary
+  };
 }

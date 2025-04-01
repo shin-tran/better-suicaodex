@@ -17,16 +17,17 @@ import { useConfig } from "@/hooks/use-config";
 import { cn } from "@/lib/utils";
 import { LibraryType, Manga } from "@/types/types";
 import {
-  Bell,
-  BellMinus,
+  Album,
   BellOff,
   BellRing,
-  CircleHelp,
+  BookmarkCheck,
   CircleUser,
   CloudOff,
+  ListCheck,
   ListPlus,
+  NotebookPen,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import {
   Select,
@@ -37,13 +38,13 @@ import {
 } from "@/components/ui/select";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { toast } from "sonner";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useLocalLibrary } from "@/hooks/use-local-library";
+import { Abel } from "next/font/google";
 
 interface AddToLibraryBtnProps {
   isMobile: boolean;
   manga: Manga;
 }
-
 
 export default function AddToLibraryBtn({
   isMobile,
@@ -53,23 +54,83 @@ export default function AddToLibraryBtn({
   const [loaded, setLoaded] = useState(false);
 
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
-  const [value, setValue] = useState("following");
+
+  const {
+    localLibrary,
+    addToLocalCategory,
+    removeFromLocalLibrary,
+    getLocalCategoryOfId,
+  } = useLocalLibrary();
+
+  const [value, setValue] = useState<LibraryType | "none">(
+    getLocalCategoryOfId(manga.id) || "none"
+  );
+  // Cập nhật giá trị mặc định của dropdown dựa trên danh mục hiện tại của truyện
+  useEffect(() => {
+    const currentCategory = getLocalCategoryOfId(manga.id);
+    setValue(currentCategory || "none");
+  }, [manga.id, localLibrary]); // Add localLibrary as a dependency to detect changes
 
   const src = `${siteConfig.suicaodex.apiURL}/covers/${manga.id}/${manga.cover}.512.jpg`;
 
   const options = [
-    { value: "none", label: "Không" },
-    { value: "following", label: "Theo dõi" },
-    { value: "reading", label: "Đang đọc" },
-    { value: "plan", label: "Để dành đọc sau" },
-    { value: "completed", label: "Đã đọc xong" },
+    {
+      value: "none",
+      label: "Không",
+      icon: <ListPlus />,
+      btnLabel: "Thêm vào thư viện",
+    },
+    {
+      value: "following",
+      label: "Theo dõi",
+      icon: <BookmarkCheck />,
+      btnLabel: "Đang theo dõi",
+    },
+    {
+      value: "reading",
+      label: "Đang đọc",
+      icon: <Album />,
+      btnLabel: "Đang đọc",
+    },
+    {
+      value: "plan",
+      label: "Để dành đọc sau",
+      icon: <NotebookPen />,
+      btnLabel: "Để dành đọc sau",
+    },
+    {
+      value: "completed",
+      label: "Đã đọc xong",
+      icon: <ListCheck />,
+      btnLabel: "Đã đọc xong",
+    },
   ];
 
-  const handleLocalLibraryAdd = (v: LibraryType) => {
+  const handleLocalLibraryAdd = (v: LibraryType | "none") => {
+    if (v === "none") {
+      removeFromLocalLibrary(manga.id);
+      return toast.success(`Đã xóa truyện khỏi thư viện!`);
+    }
 
-   return toast.success(`Added manga to library with status: ${v}`);
-  }
+    // TODO: alert dialog
+    // const currentCategory = localLibrary[v];
+    // if (currentCategory.length >= 1) {
+    //   return toast.error(
+    //     `Danh mục ${options.find((opt) => opt.value === v)?.label} đã đầy!`
+    //   );
+    // }
 
+    // Thêm truyện vào thư viện (sẽ tự động xóa khỏi các danh mục khác)
+    addToLocalCategory(manga.id, v);
+    return toast.success(
+      `Đã thêm truyện vào: ${options.find((opt) => opt.value === v)?.label}!`
+    );
+  };
+
+  const handleCancel = () => {
+    // Reset value to default when dialog is closed
+    setValue(getLocalCategoryOfId(manga.id) || "none");
+  };
 
   return (
     <Dialog>
@@ -78,8 +139,10 @@ export default function AddToLibraryBtn({
           size={isMobile ? "icon" : "lg"}
           className={cn("rounded-sm", isMobile && "grow-0")}
         >
-          <ListPlus />
-          {!isMobile && "Thêm vào thư viện"}
+          {options.find((opt) => opt.value === value)?.icon}
+          {!isMobile && (
+            <span>{options.find((opt) => opt.value === value)?.btnLabel}</span>
+          )}
         </Button>
       </DialogTrigger>
       <DialogContent
@@ -113,12 +176,17 @@ export default function AddToLibraryBtn({
             />
 
             <div className="flex flex-col gap-4 w-full">
-              <p className="font-bold text-2xl line-clamp-4 sm:line-clamp-2">{manga.title}</p>
+              <p className="font-bold text-2xl line-clamp-4 sm:line-clamp-2">
+                {manga.title}
+              </p>
 
               <div className="hidden sm:flex flex-row gap-2 w-full">
-                <Select defaultValue={value} onValueChange={(v) => setValue(v)}>
+                <Select
+                  value={value}
+                  onValueChange={(v) => setValue(v as LibraryType | "none")}
+                >
                   <SelectTrigger className="h-10 font-semibold">
-                    <SelectValue placeholder="mẹ mày" />
+                    <SelectValue placeholder="Chọn danh mục" />
                   </SelectTrigger>
                   <SelectContent>
                     {options.map((option) => (
@@ -126,7 +194,6 @@ export default function AddToLibraryBtn({
                         key={option.value}
                         value={option.value}
                         className="hover:bg-secondary"
-                        disabled={option.value === value}
                       >
                         {option.label}
                       </SelectItem>
@@ -147,7 +214,9 @@ export default function AddToLibraryBtn({
                   )}
                 </Button>
               </div>
-              <Label className="hidden sm:block" htmlFor="note">Hướng dẫn:</Label>
+              <Label className="hidden sm:block" htmlFor="note">
+                Hướng dẫn:
+              </Label>
               <div className="hidden sm:block -mt-2 text-base text-muted-foreground">
                 <p>- Chọn 1 trong các danh mục trên để thêm truyện.</p>
                 <p>
@@ -162,9 +231,12 @@ export default function AddToLibraryBtn({
 
           <div className="sm:hidden flex flex-col gap-4 w-full">
             <div className="flex flex-row gap-2 w-full">
-              <Select defaultValue={value} onValueChange={(v) => setValue(v)}>
+              <Select
+                value={value}
+                onValueChange={(v) => setValue(v as LibraryType | "none")}
+              >
                 <SelectTrigger className="h-10 font-semibold">
-                  <SelectValue placeholder="mẹ mày" />
+                  <SelectValue placeholder="Chọn danh mục" />
                 </SelectTrigger>
                 <SelectContent>
                   {options.map((option) => (
@@ -172,7 +244,6 @@ export default function AddToLibraryBtn({
                       key={option.value}
                       value={option.value}
                       className="hover:bg-secondary"
-                      disabled={option.value === value}
                     >
                       {option.label}
                     </SelectItem>
@@ -207,25 +278,31 @@ export default function AddToLibraryBtn({
 
         <DialogFooter className="justify-end flex flex-col-reverse sm:flex-row gap-2 !space-x-0">
           <DialogClose asChild>
-            <Button variant="secondary" className="w-full sm:w-auto">
+            <Button
+              variant="secondary"
+              className="w-full sm:w-auto"
+              onClick={handleCancel}
+            >
               Hủy
             </Button>
           </DialogClose>
 
+          {/* <DialogClose asChild> */}
           <Button
             className="w-full sm:w-auto"
-            onClick={() => handleLocalLibraryAdd(value as LibraryType)}
+            onClick={() => handleLocalLibraryAdd(value)}
           >
             <CloudOff />
-            Thêm
+            Cập nhật
           </Button>
+          {/* </DialogClose> */}
 
           <Button
             className="w-full sm:w-auto"
             onClick={() => toast.info("Chức năng đang phát triển!")}
           >
             <CircleUser />
-            Thêm
+            Cập nhật
           </Button>
         </DialogFooter>
       </DialogContent>
