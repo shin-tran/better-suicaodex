@@ -1,8 +1,22 @@
 import { Metadata } from "next";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { CircleUser, CloudOff, Terminal } from "lucide-react";
+import { Alert } from "@/components/ui/alert";
+import {
+  Album,
+  BookmarkCheck,
+  CircleHelp,
+  CircleUser,
+  CloudOff,
+  ListCheck,
+  NotebookPen,
+} from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card } from "@/components/ui/card";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import MyLibrary from "@/components/Pages/MyLibrary";
 
 export function generateMetadata(): Metadata {
   return {
@@ -12,6 +26,12 @@ export function generateMetadata(): Metadata {
   };
 }
 export default function Page() {
+  const tabValues = [
+    { value: "following", icon: <BookmarkCheck /> },
+    { value: "reading", icon: <Album /> },
+    { value: "plan", icon: <NotebookPen /> },
+    { value: "completed", icon: <ListCheck /> },
+  ];
   return (
     <>
       <div>
@@ -31,18 +51,48 @@ export default function Page() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="local">
-          <Alert className="rounded-sm bg-secondary">
-            <Terminal size={18} />
-            <AlertTitle>Có thể bạn cần biết:</AlertTitle>
-            <AlertDescription>
-              Đây là thư viện được lưu trên chính thiết bị của bạn, nó không
-              đồng bộ với thư viện lưu trên tài khoản. Nếu bạn xóa dữ liệu trình
-              duyệt, thư viện này cũng sẽ bị xóa theo.
-              <br />
-              Ngoài ra, mỗi danh mục chỉ lưu tối đa 500 truyện, khi lưu thêm sẽ
-              tự động xóa truyện cũ nhất.
-            </AlertDescription>
-          </Alert>
+          <Accordion
+            type="single"
+            collapsible
+            className="bg-secondary rounded-md px-2"
+          >
+            <AccordionItem value="item-1" className="border-none">
+              <AccordionTrigger className="py-2">
+                <div className="flex items-center gap-1.5">
+                  <CircleHelp size={18} /> Có thể bạn cần biết:
+                </div>
+              </AccordionTrigger>
+              <AccordionContent className="pb-2">
+                Đây là thư viện được lưu trên chính thiết bị của bạn, nó không
+                đồng bộ với thư viện lưu trên tài khoản. Nếu bạn xóa dữ liệu
+                trình duyệt, thư viện này cũng sẽ bị xóa theo.
+                <br />
+                Ngoài ra, mỗi danh mục chỉ lưu tối đa 500 truyện, khi lưu thêm
+                sẽ tự động xóa truyện cũ nhất.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
+          <Tabs defaultValue="following" className="mt-2">
+            <TabsList className="rounded-sm gap-1 h-10">
+              {tabValues.map((tab) => (
+                <TabsTrigger
+                  key={tab.value}
+                  className="rounded-sm"
+                  value={tab.value}
+                >
+                  {tab.icon}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            {tabValues.map((tab) => (
+              <TabsContent key={tab.value} value={tab.value} className="w-full">
+                <MyLibrary category={tab.value} />
+              </TabsContent>
+            ))}
+
+          </Tabs>
         </TabsContent>
         <TabsContent value="cloud">
           <Alert className="rounded-sm bg-secondary justify-center text-center">

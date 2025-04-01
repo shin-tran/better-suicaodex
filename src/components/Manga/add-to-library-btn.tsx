@@ -60,7 +60,7 @@ export default function AddToLibraryBtn({
     removeFromLocalLibrary,
     getLocalCategoryOfId,
   } = useLocalLibrary();
-
+ 
   const [value, setValue] = useState<LibraryType | "none">(
     getLocalCategoryOfId(manga.id) || "none"
   );
@@ -277,7 +277,7 @@ export default function AddToLibraryBtn({
             </Button>
           </DialogClose>
 
-          {/* <DialogClose asChild> */}
+          <DialogClose asChild>
           <Button
             className="w-full sm:w-auto"
             onClick={() => handleLocalLibraryAdd(value)}
@@ -285,7 +285,7 @@ export default function AddToLibraryBtn({
             <CloudOff />
             Cập nhật
           </Button>
-          {/* </DialogClose> */}
+          </DialogClose>
 
           <Button
             className="w-full sm:w-auto"
