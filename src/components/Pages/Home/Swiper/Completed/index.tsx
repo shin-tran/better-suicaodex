@@ -23,6 +23,7 @@ export default function CompletedSwiper() {
     ([, language, r18]) => getCompletedMangas(language, r18),
     {
       refreshInterval: 1000 * 60 * 10,
+      revalidateOnFocus: false,
     }
   );
 

@@ -52,6 +52,7 @@ export default function StaffPick() {
     ([, r18]) => getStaffPickMangas(r18),
     {
       refreshInterval: 1000 * 60 * 10,
+      revalidateOnFocus: false,
     }
   );
 

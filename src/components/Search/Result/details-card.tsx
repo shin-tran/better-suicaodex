@@ -14,7 +14,7 @@ interface DetailsCardProps {
 
 export default function DetailsCard({ manga }: DetailsCardProps) {
   return (
-    <Card className="rounded-sm shadow-sm transition-colors duration-200">
+    <Card className="rounded-sm shadow-sm transition-colors duration-200 w-full">
       <CardContent className="flex gap-2 p-1">
         <Link href={`/manga/${manga.id}`}>
           <MangaCover

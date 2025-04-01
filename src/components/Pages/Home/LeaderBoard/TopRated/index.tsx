@@ -15,6 +15,7 @@ export default function TopRated() {
     ([, language, r18]) => getTopRatedMangas(language, r18),
     {
       refreshInterval: 1000 * 60 * 10,
+      revalidateOnFocus: false,
     }
   );
 
