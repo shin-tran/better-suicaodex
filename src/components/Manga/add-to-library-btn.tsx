@@ -15,13 +15,15 @@ import { Label } from "@/components/ui/label";
 import { siteConfig } from "@/config/site";
 import { useConfig } from "@/hooks/use-config";
 import { cn } from "@/lib/utils";
-import { Manga } from "@/types/types";
+import { LibraryType, Manga } from "@/types/types";
 import {
   Bell,
   BellMinus,
   BellOff,
   BellRing,
   CircleHelp,
+  CircleUser,
+  CloudOff,
   ListPlus,
 } from "lucide-react";
 import { useState } from "react";
@@ -42,6 +44,7 @@ interface AddToLibraryBtnProps {
   manga: Manga;
 }
 
+
 export default function AddToLibraryBtn({
   isMobile,
   manga,
@@ -61,6 +64,12 @@ export default function AddToLibraryBtn({
     { value: "plan", label: "Để dành đọc sau" },
     { value: "completed", label: "Đã đọc xong" },
   ];
+
+  const handleLocalLibraryAdd = (v: LibraryType) => {
+
+   return toast.success(`Added manga to library with status: ${v}`);
+  }
+
 
   return (
     <Dialog>
@@ -198,16 +207,25 @@ export default function AddToLibraryBtn({
 
         <DialogFooter className="justify-end flex flex-col-reverse sm:flex-row gap-2 !space-x-0">
           <DialogClose asChild>
-            <Button variant="secondary" className="w-full sm:w-52">
+            <Button variant="secondary" className="w-full sm:w-auto">
               Hủy
             </Button>
           </DialogClose>
 
           <Button
-            className="w-full sm:w-52"
+            className="w-full sm:w-auto"
+            onClick={() => handleLocalLibraryAdd(value as LibraryType)}
+          >
+            <CloudOff />
+            Thêm
+          </Button>
+
+          <Button
+            className="w-full sm:w-auto"
             onClick={() => toast.info("Chức năng đang phát triển!")}
           >
-            Cập nhật
+            <CircleUser />
+            Thêm
           </Button>
         </DialogFooter>
       </DialogContent>
