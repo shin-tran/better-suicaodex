@@ -88,7 +88,7 @@ const SingleCard = ({ chapter, finalChapter, className }: SingleCardProps) => {
               <GB className="inline-block select-none flex-shrink-0 !h-5 !w-5" />
             )}
             {chapter.externalUrl && <ExternalLink size={16} />}
-            <p className="font-semibold text-sm md:text-base line-clamp-1">
+            <p className="font-semibold text-sm md:text-base line-clamp-1 break-all">
               {chapter.chapter
                 ? `Ch. ${chapter.chapter}
       ${chapter.title ? ` - ${chapter.title}` : ""}`
