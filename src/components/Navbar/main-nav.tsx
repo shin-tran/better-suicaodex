@@ -18,7 +18,7 @@ export function MainNav() {
   useEffect(() => {
     const logosName = [
       "gehenna",
-      // "redwinter",
+      "redwinter",
       "shanhaijing",
       "srt",
       "trinity",
