@@ -21,6 +21,7 @@ export default function PopularSwiper() {
     ([language, r18]) => getPopularMangas(language, r18),
     {
       refreshInterval: 1000 * 60 * 10,
+      revalidateOnFocus: false,
     }
   );
   const [slideIndex, setSlideIndex] = useState(1);

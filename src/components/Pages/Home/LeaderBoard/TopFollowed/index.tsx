@@ -15,6 +15,7 @@ export default function TopFollowed() {
     ([, language, r18]) => getTopFollowedMangas(language, r18),
     {
       refreshInterval: 1000 * 60 * 10,
+      revalidateOnFocus: false,
     }
   );
 

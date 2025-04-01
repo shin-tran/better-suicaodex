@@ -171,3 +171,5 @@ export type Cover = {
   locale: string;
   fileName: string;
 };
+
+export type LibraryType = "none" | "following" | "reading" | "plan" | "completed";
