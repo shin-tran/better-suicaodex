@@ -41,7 +41,9 @@ const getSearchParams = async ({ searchParams }: pageProps) => {
   const params = await searchParams;
 
   const page = params["page"] ? parseInt(params["page"]) : 1;
-  const limit = params["limit"] ? parseInt(params["limit"]) : 32;
+  let limit = params["limit"] ? parseInt(params["limit"]) : 32;
+  //Non-feed limit query param may not be >100
+  if (limit > 100) limit = 100;
 
   return {
     page,
