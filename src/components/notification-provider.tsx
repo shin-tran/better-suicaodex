@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { fetchLatestChapters } from "@/lib/mangadex/latest";
 import { ChapterTitle } from "./Chapter/ChapterReader/chapter-info";
 import { useConfig } from "@/hooks/use-config";
+import { GB, VN } from "country-flag-icons/react/3x2";
 
 export function NotificationProvider({
   children,
@@ -41,17 +42,20 @@ export function NotificationProvider({
     // For each manga ID in the notification list
     localNotification.ids.forEach((mangaId) => {
       // Find all chapters for this manga
-      const chaptersForManga = data.filter(item => item.manga.id === mangaId);
-      
+      const chaptersForManga = data.filter((item) => item.manga.id === mangaId);
+
       // Check each chapter
-      chaptersForManga.forEach(chapter => {
+      chaptersForManga.forEach((chapter) => {
         // If this chapter hasn't been shown yet
         if (!isShown(chapter.id)) {
           // Create a toast notification
-          toast.message("Có chương mới nè!", {
+          toast.message(<div className="flex items-center gap-1">
+            {chapter.language === "vi" ? <VN className="size-4" /> : <GB className="size-4" />}
+            Có chương mới nè!
+          </div>, {
             closeButton: false,
-            description: 
-              chapter.manga.title + " " + ChapterTitle(chapter),
+            description: chapter.manga.title + " " + ChapterTitle(chapter),
+            // icon: chapter.language === "vi" ? <VN /> : <GB />,
             action: {
               label: "Đọc ngay",
               onClick: () => {
@@ -60,7 +64,7 @@ export function NotificationProvider({
               },
             },
           });
-          
+
           // Mark as shown after showing the toast
           markAsShown(chapter.id);
         }
