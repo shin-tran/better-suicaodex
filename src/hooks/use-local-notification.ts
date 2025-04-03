@@ -8,10 +8,11 @@ type LocalNotification = {
 };
 
 const MAX_ITEMS = 500;
+const MAX_SHOWN_ITEMS = 100;
 
-const limitArraySize = <T>(array: T[]): T[] => {
-  if (array.length > MAX_ITEMS) {
-    return array.slice(-MAX_ITEMS); // bỏ id cũ nhất
+const limitArraySize = <T>(array: T[], maxSize: number = MAX_ITEMS): T[] => {
+  if (array.length > maxSize) {
+    return array.slice(-maxSize); // bỏ id cũ nhất
   }
   return array;
 };
@@ -33,7 +34,7 @@ const localNotificationAtom = atomWithStorage<LocalNotification>(
         // Giới hạn kích thước của mảng khi lấy từ storage
         return {
           ids: limitArraySize(parsedValue.ids || []),
-          shown: limitArraySize(parsedValue.shown || []),
+          shown: limitArraySize(parsedValue.shown || [], MAX_SHOWN_ITEMS),
           unread: limitArraySize(parsedValue.unread || []),
         };
       } catch {
@@ -44,7 +45,7 @@ const localNotificationAtom = atomWithStorage<LocalNotification>(
       // Giới hạn kích thước của mảng trước khi lưu vào storage
       const limitedValue = {
         ids: limitArraySize(value.ids),
-        shown: limitArraySize(value.shown),
+        shown: limitArraySize(value.shown, MAX_SHOWN_ITEMS),
         unread: limitArraySize(value.unread),
       };
 
