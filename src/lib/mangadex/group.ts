@@ -1,11 +1,24 @@
 import { Group, GroupStats, Manga } from "@/types/types";
 import axiosInstance from "../axios";
-import { includes } from "lodash";
 import { MangaParser } from "./manga";
 
 export function GroupParser(data: any): Group {
   const id = data.id;
   const attributes = data.attributes;
+
+  if (!attributes) {
+    return {
+      id: id,
+      name: "Unknown Group",
+      description: "",
+      website: "",
+      discord: "",
+      email: "",
+      twitter: "",
+      language: [],
+      leader: null,
+    };
+  }
   const name = attributes.name;
   const description = attributes.description;
   const website = attributes.website;
@@ -91,9 +104,9 @@ export async function getGroupTitles(
   const total = data.total > max_total ? max_total : data.total;
 
   return {
-      mangas: data.data.map((item: any) => MangaParser(item)),
-      total: total,
-    }
+    mangas: data.data.map((item: any) => MangaParser(item)),
+    total: total,
+  };
 }
 
 export async function searchGroups(
@@ -114,14 +127,14 @@ export async function searchGroups(
     offset: offset,
     includes: ["leader"],
   };
-  
+
   if (query) {
     params.name = query;
   }
 
   const { data } = await axiosInstance.get(`/group?`, { params });
   const total = data.total > max_total ? max_total : data.total;
-  
+
   return {
     groups: data.data.map((item: any) => GroupParser(item)),
     total: total,
