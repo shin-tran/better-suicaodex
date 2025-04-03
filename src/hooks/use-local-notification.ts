@@ -64,7 +64,7 @@ export function useLocalNotification() {
       return {
         ...current,
         ids: [...current.ids, id],
-        unread: [...current.unread, id], // Also add to unread list
+        // Không thêm manga ID vào unread list nữa
       };
     });
   };
@@ -74,7 +74,7 @@ export function useLocalNotification() {
     setLocalNotification(current => ({
       ...current,
       ids: current.ids.filter(notificationId => notificationId !== id),
-      unread: current.unread.filter(notificationId => notificationId !== id),
+      // Giữ nguyên unread list vì ID trong unread list là chapter ID, không phải manga ID
     }));
   };
 
