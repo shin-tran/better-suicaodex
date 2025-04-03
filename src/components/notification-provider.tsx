@@ -44,7 +44,6 @@ export function NotificationProvider({
     localNotification.ids.forEach((mangaId) => {
       // Find all chapters for this manga
       const chaptersForManga = data.filter((item) => item.manga.id === mangaId);
-
       // Check each chapter
       chaptersForManga.forEach((chapter) => {
         // If this chapter hasn't been shown yet
