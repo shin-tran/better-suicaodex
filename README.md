@@ -27,7 +27,7 @@ Tuy vậy, SuicaoDex sẽ luôn:
 | Chi tiết nhóm dịch | /group/:id | ✅ | ✅ |
 | Đăng ký/Đăng nhập | /login | ✅ | ⬛ |
 | Thư viện | /my-library | ✅ | ☑️ (local) |
-| Thông báo | /notifications | ✅ | ☑️ (local) |
+| Thông báo | /notifications | ⬛ | ☑️ (local) |
 | Bình luận |  | ✅ | ⬛ |
 | Built-in API | /api/mangadex/ | ✅ | ❌ |
 
