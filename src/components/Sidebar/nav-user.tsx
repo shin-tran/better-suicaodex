@@ -21,6 +21,7 @@ import {
 import { Badge } from "../ui/badge";
 import { useLocalNotification } from "@/hooks/use-local-notification";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export function NavUser({
   user,
@@ -44,19 +45,19 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground overflow-visible"
             >
               <div className="relative inline-block">
-              {!!localNotification.unread.length && (
-                <span className="absolute block rounded-full ring-2 ring-white top-0 left-0 bg-red-500 size-2.5 z-10 animate-bounce duration-250" />
-              )}
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage
-                  src={user.avatar}
-                  alt={user.name}
-                  className="object-cover"
-                />
-                <AvatarFallback className="rounded-lg">
-                  {user.name.slice(0, 2)}
-                </AvatarFallback>
-              </Avatar>
+                {!!localNotification.unread.length && (
+                  <span className="absolute block rounded-full ring-2 ring-white top-0 left-0 bg-red-500 size-2.5 z-10 animate-bounce duration-250" />
+                )}
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarImage
+                    src={user.avatar}
+                    alt={user.name}
+                    className="object-cover"
+                  />
+                  <AvatarFallback className="rounded-lg">
+                    {user.name.slice(0, 2)}
+                  </AvatarFallback>
+                </Avatar>
               </div>
 
               <div className="grid flex-1 text-left text-sm leading-tight">
@@ -97,23 +98,25 @@ export function NavUser({
                 Tài khoản
               </DropdownMenuItem>
 
-              <DropdownMenuItem>
-                <Bell
-                  className={cn(
-                    !!localNotification.unread.length && "animate-bell-shake"
+              <DropdownMenuItem asChild>
+                <Link href={"/notifications"}>
+                  <Bell
+                    className={cn(
+                      !!localNotification.unread.length && "animate-bell-shake"
+                    )}
+                  />
+                  Thông báo
+                  {!!localNotification.unread.length && (
+                    <Badge
+                      className="rounded-full ml-auto min-w-4 h-4 justify-center p-1 text-xs font-normal"
+                      variant="destructive"
+                    >
+                      {localNotification.unread.length <= 10
+                        ? localNotification.unread.length
+                        : "10+"}
+                    </Badge>
                   )}
-                />
-                Thông báo
-                {!!localNotification.unread.length && (
-                  <Badge
-                    className="rounded-full ml-auto min-w-4 h-4 justify-center p-1 text-xs font-normal"
-                    variant="destructive"
-                  >
-                    {localNotification.unread.length <= 10
-                      ? localNotification.unread.length
-                      : "10+"}
-                  </Badge>
-                )}
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
