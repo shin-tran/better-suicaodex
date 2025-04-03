@@ -17,7 +17,8 @@ export function NotificationProvider({
 }) {
   const router = useRouter();
   const [config] = useConfig();
-  const { localNotification, markAsShown, isShown } = useLocalNotification();
+  const { localNotification, markAsShown, isShown, markAsRead, markAsUnread } =
+    useLocalNotification();
 
   // Fetch latest chapters every 5 minutes
   const { data } = useSWR(
@@ -49,21 +50,29 @@ export function NotificationProvider({
         // If this chapter hasn't been shown yet
         if (!isShown(chapter.id)) {
           // Create a toast notification
-          toast.message(<div className="flex items-center gap-1">
-            {chapter.language === "vi" ? <VN className="size-4" /> : <GB className="size-4" />}
-            Có chương mới nè!
-          </div>, {
-            closeButton: false,
-            description: chapter.manga.title + " " + ChapterTitle(chapter),
-            // icon: chapter.language === "vi" ? <VN /> : <GB />,
-            action: {
-              label: "Đọc ngay",
-              onClick: () => {
-                router.push(`/chapter/${chapter.id}`);
-                toast.dismiss();
+          markAsUnread(chapter.id);
+          toast.message(
+            <div className="flex items-center gap-1">
+              {chapter.language === "vi" ? (
+                <VN className="size-4" />
+              ) : (
+                <GB className="size-4" />
+              )}
+              Có chương mới nè!
+            </div>,
+            {
+              closeButton: false,
+              description: chapter.manga.title + " " + ChapterTitle(chapter),
+              action: {
+                label: "Đọc ngay",
+                onClick: () => {
+                  markAsRead(chapter.id);
+                  router.push(`/chapter/${chapter.id}`);
+                  toast.dismiss();
+                },
               },
-            },
-          });
+            }
+          );
 
           // Mark as shown after showing the toast
           markAsShown(chapter.id);

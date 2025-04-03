@@ -4,6 +4,7 @@ import { atomWithStorage } from "jotai/utils";
 type LocalNotification = {
   ids: string[];
   shown: string[];
+  unread: string[];
 };
 
 const MAX_ITEMS = 500;
@@ -20,6 +21,7 @@ const localNotificationAtom = atomWithStorage<LocalNotification>(
   {
     ids: [],
     shown: [],
+    unread: [],
   },
   {
     getItem: (key, initialValue) => {
@@ -32,6 +34,7 @@ const localNotificationAtom = atomWithStorage<LocalNotification>(
         return {
           ids: limitArraySize(parsedValue.ids || []),
           shown: limitArraySize(parsedValue.shown || []),
+          unread: limitArraySize(parsedValue.unread || []),
         };
       } catch {
         return initialValue;
@@ -42,6 +45,7 @@ const localNotificationAtom = atomWithStorage<LocalNotification>(
       const limitedValue = {
         ids: limitArraySize(value.ids),
         shown: limitArraySize(value.shown),
+        unread: limitArraySize(value.unread),
       };
 
       localStorage.setItem(key, JSON.stringify(limitedValue));
@@ -60,6 +64,7 @@ export function useLocalNotification() {
       return {
         ...current,
         ids: [...current.ids, id],
+        unread: [...current.unread, id], // Also add to unread list
       };
     });
   };
@@ -69,6 +74,7 @@ export function useLocalNotification() {
     setLocalNotification(current => ({
       ...current,
       ids: current.ids.filter(notificationId => notificationId !== id),
+      unread: current.unread.filter(notificationId => notificationId !== id),
     }));
   };
 
@@ -83,6 +89,25 @@ export function useLocalNotification() {
     });
   };
 
+  // Đánh dấu ID là đã đọc (bỏ khỏi unread)
+  const markAsRead = (id: string) => {
+    setLocalNotification(current => ({
+      ...current,
+      unread: current.unread.filter(notificationId => notificationId !== id),
+    }));
+  };
+
+  // Đánh dấu ID là chưa đọc (thêm vào unread)
+  const markAsUnread = (id: string) => {
+    setLocalNotification(current => {
+      if (current.unread.includes(id)) return current;
+      return {
+        ...current,
+        unread: [...current.unread, id],
+      };
+    });
+  };
+
   // Kiểm tra ID đã được xem chưa
   const isShown = (id: string): boolean => {
     return localNotification.shown.includes(id);
@@ -93,9 +118,14 @@ export function useLocalNotification() {
     return localNotification.ids.includes(id);
   };
 
+  // Kiểm tra ID có chưa đọc không
+  const isUnread = (id: string): boolean => {
+    return localNotification.unread.includes(id);
+  };
+
   // Xóa tất cả thông báo
   const clearAllLocalNotifications = () => {
-    setLocalNotification({ ids: [], shown: [] });
+    setLocalNotification({ ids: [], shown: [], unread: [] });
   };
 
   // Xóa tất cả trạng thái đã xem
@@ -106,15 +136,27 @@ export function useLocalNotification() {
     }));
   };
 
+  // Đánh dấu tất cả thông báo là đã đọc
+  const markAllAsRead = () => {
+    setLocalNotification(current => ({
+      ...current,
+      unread: [],
+    }));
+  };
+
   return {
     localNotification,
     addToLocalNotification,
     removeFromLocalNotification,
     markAsShown,
+    markAsRead,
+    markAsUnread,
     isShown,
+    isUnread,
     isInLocalNotification,
     clearAllLocalNotifications,
     clearAllShownStatus,
+    markAllAsRead,
     rawSetLocalNotification: setLocalNotification
   };
 }
