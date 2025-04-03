@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 import useSWR from "swr";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { useLocalNotification } from "@/hooks/use-local-notification";
 import { useRouter } from "next/navigation";
 import { fetchLatestChapters } from "@/lib/mangadex/latest";
@@ -16,22 +16,15 @@ export function NotificationProvider({
 }) {
   const router = useRouter();
   const [config] = useConfig();
-  // Add a ref to track initialization
-  const initialized = useRef(false);
-  // Store a map of manga IDs to their latest chapter IDs
-  const latestChaptersRef = useRef<Map<string, Set<string>>>(new Map());
-  // Track the previous notification ids to detect new additions
-  const prevNotificationIdsRef = useRef<string[]>([]);
-
-  // Use the updated hook with the shown property
   const { localNotification, markAsShown, isShown } = useLocalNotification();
 
+  // Fetch latest chapters every 5 minutes
   const { data } = useSWR(
     ["feed", 100, 0, config.translatedLanguage, config.r18],
     ([, limit, offset, language, r18]) =>
       fetchLatestChapters(limit, offset, language, r18),
     {
-      refreshInterval: 1000 * 60 * 5, // 5 minutes
+      refreshInterval: 1000 * 10 * 1, // 5 minutes
       onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
         if (retryCount >= 3) return; // Stop retrying after 3 attempts
         setTimeout(() => revalidate({ retryCount }), 1000); // Retry after 1 second
@@ -39,100 +32,25 @@ export function NotificationProvider({
     }
   );
 
-  // Set initialized to true after first render
-  useEffect(() => {
-    initialized.current = true;
-  }, []);
-
-  // Initial population of latestChaptersRef when data is first loaded
-  useEffect(() => {
-    if (!data || !Array.isArray(data)) return;
-
-    // For each manga in the data, store its latest chapters
-    data.forEach(item => {
-      if (!latestChaptersRef.current.has(item.manga.id)) {
-        latestChaptersRef.current.set(item.manga.id, new Set([item.id]));
-      } else {
-        // Add this chapter ID to the set
-        latestChaptersRef.current.get(item.manga.id)?.add(item.id);
-      }
-    });
-  }, [data]);
-
-  // Handle newly added manga IDs to notification list - mark existing chapters as known
-  useEffect(() => {
-    if (!data || !Array.isArray(data) || !initialized.current) return;
-    
-    // Find newly added manga IDs
-    const currentIds = localNotification.ids;
-    const newlyAddedIds = currentIds.filter(
-      id => !prevNotificationIdsRef.current.includes(id)
-    );
-    
-    // Mark all existing chapters for newly added manga as "shown"
-    if (newlyAddedIds.length > 0) {
-      // console.log("New manga added to notifications:", newlyAddedIds);
-      
-      // For each newly added manga
-      newlyAddedIds.forEach(mangaId => {
-        // Find all chapters for this manga in current data
-        const chaptersForNewManga = data.filter(item => item.manga.id === mangaId);
-        
-        // Mark all existing chapters as shown to prevent immediate notifications
-        chaptersForNewManga.forEach(chapter => {
-          markAsShown(chapter.id);
-          
-          // Make sure we add it to our reference map
-          if (!latestChaptersRef.current.has(mangaId)) {
-            latestChaptersRef.current.set(mangaId, new Set([chapter.id]));
-          } else {
-            latestChaptersRef.current.get(mangaId)?.add(chapter.id);
-          }
-        });
-      });
-    }
-    
-    // Update the previous ids reference
-    prevNotificationIdsRef.current = [...currentIds];
-  }, [localNotification.ids, data, markAsShown]);
-
   // Check for new chapters and show notifications
   useEffect(() => {
-    // Only proceed if the component is initialized and we have data
-    if (
-      !initialized.current ||
-      !data ||
-      !Array.isArray(data) ||
-      localNotification.ids.length === 0
-    ) {
+    if (!data || !Array.isArray(data) || localNotification.ids.length === 0) {
       return;
     }
 
-    console.log("Checking for notifications...");
-
-    // For each id in the localNotification.ids array
+    // For each manga ID in the notification list
     localNotification.ids.forEach((mangaId) => {
-      // Find all chapters for this manga ID in the current data
+      // Find all chapters for this manga
       const chaptersForManga = data.filter(item => item.manga.id === mangaId);
-      
-      if (chaptersForManga.length === 0) return;
-      
-      // Get previously known chapter IDs for this manga
-      const knownChapterIds = latestChaptersRef.current.get(mangaId) || new Set();
       
       // Check each chapter
       chaptersForManga.forEach(chapter => {
-        // If this is a new chapter (not in knownChapterIds) and hasn't been shown yet
-        if (!knownChapterIds.has(chapter.id) && !isShown(chapter.id)) {
-          console.log("New notification found:", mangaId, chapter.manga.title);
-          
-          // Mark as shown
-          markAsShown(chapter.id);
-          
-          // Create a toast for the new chapter
+        // If this chapter hasn't been shown yet
+        if (!isShown(chapter.id)) {
+          // Create a toast notification
           toast.message("Có chương mới nè!", {
             closeButton: false,
-            description:
+            description: 
               chapter.manga.title + " " + ChapterTitle(chapter),
             action: {
               label: "Đọc ngay",
@@ -142,16 +60,13 @@ export function NotificationProvider({
               },
             },
           });
+          
+          // Mark as shown after showing the toast
+          markAsShown(chapter.id);
         }
-        
-        // Always add this chapter ID to the known set
-        knownChapterIds.add(chapter.id);
       });
-      
-      // Update the reference map with any new chapters
-      latestChaptersRef.current.set(mangaId, knownChapterIds);
     });
-  }, [data, localNotification.ids, router, markAsShown, isShown]);
+  }, [data, localNotification.ids, markAsShown, isShown, router]);
 
   return <>{children}</>;
 }
