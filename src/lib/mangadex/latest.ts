@@ -87,9 +87,9 @@ export async function getLatestManga(
   }
 
   // Content rating options - defined once to avoid duplication
-  const contentRating = r18
-    ? ["safe", "suggestive", "erotica", "pornographic"]
-    : ["safe", "suggestive", "erotica"];
+    const contentRating = r18
+      ? ["safe", "suggestive", "erotica", "pornographic"]
+      : ["safe", "suggestive", "erotica"];
 
   // Fetch chapters
   const { data: chaptersData } = await axiosInstance.get("/chapter?", {
@@ -153,4 +153,82 @@ export async function getLatestManga(
     chapters,
     total,
   };
+}
+
+export async function fetchLatestChapters(
+  limit: number,
+  offset: number,
+  language: ("vi" | "en")[],
+  r18: boolean
+): Promise<Chapter[]> {
+  const total = 10000;
+  // Ensure limit is within bounds
+  if (limit + offset > total) {
+    limit = total - offset;
+  }
+
+  // Content rating options - defined once to avoid duplication
+  const contentRating = r18
+    ? ["safe", "suggestive", "erotica", "pornographic"]
+    : ["safe", "suggestive", "erotica"];
+
+  // Fetch chapters
+  const { data: chaptersData } = await axiosInstance.get("/chapter?", {
+    params: {
+      limit,
+      offset,
+      includes: ["scanlation_group"],
+      contentRating,
+      translatedLanguage: language,
+      order: {
+        readableAt: "desc",
+      },
+    },
+  });
+
+  const chapters = ChaptersParser(chaptersData.data);
+
+  // Extract and filter manga IDs efficiently
+  const mangaIDs = chapters
+    .map((chapter) => chapter.manga?.id)
+    .filter((id): id is string => !!id);
+
+  const uniqueMangaIDs = Array.from(new Set(mangaIDs));
+
+  if (uniqueMangaIDs.length === 0) {
+    return [];
+  }
+
+  // Fetch manga details
+  const { data: mangasData } = await axiosInstance.get("/manga?", {
+    params: {
+      limit: 100,
+      ids: uniqueMangaIDs,
+      includes: ["cover_art", "author", "artist"],
+      contentRating,
+    },
+  });
+
+  const mangas = mangasData.data.map((m: any) => MangaParser(m));
+
+  // Create manga lookup map for O(1) access
+  const mangaMap = new Map<string, Manga>();
+  mangas.forEach((manga: Manga) => {
+    if (manga.id) {
+      mangaMap.set(manga.id, manga);
+    }
+  });
+
+  // Add title and cover to each chapter's manga property using the map
+  chapters.forEach((chapter) => {
+    if (chapter.manga?.id) {
+      const manga = mangaMap.get(chapter.manga.id);
+      if (manga && chapter.manga) {
+        chapter.manga.title = manga.title;
+        chapter.manga.cover = manga.cover;
+      }
+    }
+  });
+
+  return chapters;
 }

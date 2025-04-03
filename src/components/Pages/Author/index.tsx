@@ -64,7 +64,7 @@ export default function Author({ id }: AuthorProps) {
     );
   if (error || !data) return <div>Lỗi mất rồi 😭</div>;
 
-  console.log(data);
+  // console.log(data);
 
   const socialEntries = formatToArray(data);
   const socialIcons = {

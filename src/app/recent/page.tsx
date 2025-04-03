@@ -22,6 +22,7 @@ export async function generateMetadata({
 }
 export default async function Page({ searchParams }: pageProps) {
   const { page } = await getSearchParams({ searchParams });
+
   return (
     <>
       <div>

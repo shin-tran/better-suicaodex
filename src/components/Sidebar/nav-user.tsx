@@ -18,6 +18,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Badge } from "../ui/badge";
+import { useLocalNotification } from "@/hooks/use-local-notification";
+import { cn } from "@/lib/utils";
 
 export function NavUser({
   user,
@@ -29,6 +32,7 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
+  const { localNotification } = useLocalNotification();
 
   return (
     <SidebarMenu>
@@ -37,8 +41,12 @@ export function NavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground overflow-visible"
             >
+              <div className="relative inline-block">
+              {!!localNotification.unread.length && (
+                <span className="absolute block rounded-full ring-2 ring-white top-0 left-0 bg-red-500 size-2.5 z-10 animate-bounce duration-250" />
+              )}
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage
                   src={user.avatar}
@@ -49,6 +57,8 @@ export function NavUser({
                   {user.name.slice(0, 2)}
                 </AvatarFallback>
               </Avatar>
+              </div>
+
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.name}</span>
                 <span className="truncate text-xs">{user.email}</span>
@@ -88,8 +98,22 @@ export function NavUser({
               </DropdownMenuItem>
 
               <DropdownMenuItem>
-                <Bell />
+                <Bell
+                  className={cn(
+                    !!localNotification.unread.length && "animate-bell-shake"
+                  )}
+                />
                 Thông báo
+                {!!localNotification.unread.length && (
+                  <Badge
+                    className="rounded-full ml-auto min-w-4 h-4 justify-center p-1 text-xs font-normal"
+                    variant="destructive"
+                  >
+                    {localNotification.unread.length <= 10
+                      ? localNotification.unread.length
+                      : "10+"}
+                  </Badge>
+                )}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

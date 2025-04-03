@@ -10,7 +10,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { siteConfig } from "@/config/site";
 import { useConfig } from "@/hooks/use-config";
@@ -39,6 +38,7 @@ import {
 import { DialogClose } from "@radix-ui/react-dialog";
 import { toast } from "sonner";
 import { useLocalLibrary } from "@/hooks/use-local-library";
+import { useLocalNotification } from "@/hooks/use-local-notification";
 
 interface AddToLibraryBtnProps {
   isMobile: boolean;
@@ -60,7 +60,14 @@ export default function AddToLibraryBtn({
     removeFromLocalLibrary,
     getLocalCategoryOfId,
   } = useLocalLibrary();
- 
+
+  const {
+    localNotification,
+    addToLocalNotification,
+    removeFromLocalNotification,
+    isInLocalNotification,
+  } = useLocalNotification();
+
   const [value, setValue] = useState<LibraryType | "none">(
     getLocalCategoryOfId(manga.id) || "none"
   );
@@ -68,7 +75,12 @@ export default function AddToLibraryBtn({
   useEffect(() => {
     const currentCategory = getLocalCategoryOfId(manga.id);
     setValue(currentCategory || "none");
-  }, [manga.id, localLibrary]); 
+  }, [manga.id, localLibrary]);
+
+  useEffect(() => {
+    const isInNotification = isInLocalNotification(manga.id);
+    setIsNotificationEnabled(isInNotification);
+  }, [manga.id, localNotification]);
 
   const src = `${siteConfig.suicaodex.apiURL}/covers/${manga.id}/${manga.cover}.512.jpg`;
 
@@ -105,6 +117,16 @@ export default function AddToLibraryBtn({
     },
   ];
 
+  const handleLocalNotificationToggle = (
+    v: LibraryType | "none",
+    n: boolean
+  ) => {
+    if (v === "none" || !n) {
+      return removeFromLocalNotification(manga.id);
+    }
+    addToLocalNotification(manga.id);
+  };
+
   const handleLocalLibraryAdd = (v: LibraryType | "none") => {
     if (v === "none") {
       removeFromLocalLibrary(manga.id);
@@ -120,6 +142,7 @@ export default function AddToLibraryBtn({
   const handleCancel = () => {
     // Reset value to default when dialog is closed
     setValue(getLocalCategoryOfId(manga.id) || "none");
+    setIsNotificationEnabled(isInLocalNotification(manga.id));
   };
 
   return (
@@ -193,11 +216,20 @@ export default function AddToLibraryBtn({
 
                 <Button
                   size="icon"
-                  variant={isNotificationEnabled ? "default" : "outline"}
+                  variant={
+                    value === "none"
+                      ? "outline"
+                      : isNotificationEnabled
+                      ? "default"
+                      : "outline"
+                  }
                   className="shrink-0 size-10 [&_svg]:size-5"
                   onClick={() => setIsNotificationEnabled((prev) => !prev)}
+                  disabled={value === "none"}
                 >
-                  {isNotificationEnabled ? (
+                  {value === "none" ? (
+                    <BellOff />
+                  ) : isNotificationEnabled ? (
                     <BellRing className="animate-bell-shake" />
                   ) : (
                     <BellOff />
@@ -243,11 +275,20 @@ export default function AddToLibraryBtn({
 
               <Button
                 size="icon"
-                variant={isNotificationEnabled ? "default" : "outline"}
+                variant={
+                  value === "none"
+                    ? "outline"
+                    : isNotificationEnabled
+                    ? "default"
+                    : "outline"
+                }
                 className="shrink-0 size-10 [&_svg]:size-5"
                 onClick={() => setIsNotificationEnabled((prev) => !prev)}
+                disabled={value === "none"}
               >
-                {isNotificationEnabled ? (
+                {value === "none" ? (
+                  <BellOff />
+                ) : isNotificationEnabled ? (
                   <BellRing className="animate-bell-shake" />
                 ) : (
                   <BellOff />
@@ -278,13 +319,16 @@ export default function AddToLibraryBtn({
           </DialogClose>
 
           <DialogClose asChild>
-          <Button
-            className="w-full sm:w-auto"
-            onClick={() => handleLocalLibraryAdd(value)}
-          >
-            <CloudOff />
-            Cập nhật
-          </Button>
+            <Button
+              className="w-full sm:w-auto"
+              onClick={() => {
+                handleLocalLibraryAdd(value);
+                handleLocalNotificationToggle(value, isNotificationEnabled);
+              }}
+            >
+              <CloudOff />
+              Cập nhật
+            </Button>
           </DialogClose>
 
           <Button
