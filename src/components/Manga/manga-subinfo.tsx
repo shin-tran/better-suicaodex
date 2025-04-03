@@ -7,6 +7,7 @@ import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { LibraryBig } from "lucide-react";
 import Image from "next/image";
+import { Icons } from "../icons";
 
 interface MangaSubInfoProps {
   manga: Manga;
@@ -75,17 +76,17 @@ export default function MangaSubInfo({ manga }: MangaSubInfoProps) {
       <div className="flex flex-col gap-2">
         <Label className="text-base font-bold">Nguồn</Label>
         <div className="flex flex-wrap gap-2">
-          <Button asChild className="rounded-sm hover:bg-primary/25" variant="secondary" size="sm">
+          <Button
+            asChild
+            className="rounded-sm hover:bg-primary/25"
+            variant="secondary"
+            size="sm"
+          >
             <Link
               href={`${siteConfig.mangadexAPI.webURL}/title/${manga.id}`}
               target="_blank"
             >
-              <Image
-                src="/images/mangadex-logo.svg"
-                alt="MangaDex's Logo"
-                width={16}
-                height={16}
-              />
+              <Icons.mangadex />
               MangaDex
             </Link>
           </Button>

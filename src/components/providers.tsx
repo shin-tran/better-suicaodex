@@ -10,6 +10,7 @@ import {
   Progress,
   AppProgressProvider as ProgressProvider,
 } from "@bprogress/next";
+import { NotificationProvider } from "./notification-provider";
 
 export function ThemeProvider({
   children,
@@ -27,7 +28,9 @@ export function ThemeProvider({
             <Progress>
               <Bar className="!bg-primary" />
             </Progress>
-            <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
+            <TooltipProvider delayDuration={0}>
+              <NotificationProvider>{children}</NotificationProvider>
+            </TooltipProvider>
           </ProgressProvider>
         </ThemeWrapper>
       </NextThemesProvider>

@@ -1,14 +1,25 @@
 "use client";
 
+import { useLocalNotification } from "@/hooks/use-local-notification";
 import { Chapter } from "@/types/types";
 import { Users } from "lucide-react";
 import Link from "next/link";
+import { useEffect } from "react";
 
 interface ChapterInfoProps {
   chapter: Chapter;
 }
 
 export default function ChapterInfo({ chapter }: ChapterInfoProps) {
+  const { markAsRead, isUnread } = useLocalNotification();
+  
+  // Move the state update to an effect hook
+  useEffect(() => {
+    if (isUnread(chapter.id)) {
+      markAsRead(chapter.id);
+    }
+  }, [chapter.id, isUnread, markAsRead]);
+
   return (
     <div className="grid grid-cols-1 gap-0.5 pb-2">
       <h1 className="text-xl">{ChapterTitle(chapter)}</h1>
