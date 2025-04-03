@@ -4,7 +4,7 @@ import { useLocalNotification } from "@/hooks/use-local-notification";
 import { getUnreadChapters } from "@/lib/notifications";
 import useSWR from "swr";
 import { Button } from "../ui/button";
-import { CheckCheck, Loader2 } from "lucide-react";
+import { BellOff, CheckCheck, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "../ui/alert";
 import { Chapter } from "@/types/types";
 import UnreadCard from "./unread-card";
@@ -26,7 +26,8 @@ interface NotificationsProps {
 const LIMIT = 32; // Number of notifications per page
 
 export default function Notifications({ page }: NotificationsProps) {
-  const { markAllAsRead, localNotification } = useLocalNotification();
+  const { markAllAsRead, localNotification, clearAllLocalNotifications } =
+    useLocalNotification();
   const router = useRouter();
 
   const unreadIds = localNotification.unread;
@@ -43,8 +44,22 @@ export default function Notifications({ page }: NotificationsProps) {
 
   return (
     <>
-      <div className="w-full flex justify-end">
-        <Button size="sm" onClick={markAllAsRead} variant="secondary">
+      <div className="w-full flex flex-wrap gap-2 justify-end">
+        <Button
+          className="w-full md:w-auto"
+          size="sm"
+          onClick={clearAllLocalNotifications}
+          variant="secondary"
+        >
+          <BellOff />
+          Hủy nhận thông báo tất cả
+        </Button>
+        <Button
+          className="w-full md:w-auto"
+          size="sm"
+          onClick={markAllAsRead}
+          variant="secondary"
+        >
           <CheckCheck />
           Đánh dấu tất cả là đã đọc
         </Button>
@@ -55,124 +70,124 @@ export default function Notifications({ page }: NotificationsProps) {
       </div>
 
       {totalPages > 1 && (
-              <Pagination className="mt-4">
-                <PaginationContent>
-                  <PaginationPrevious
+        <Pagination className="mt-4">
+          <PaginationContent>
+            <PaginationPrevious
+              className="w-8 h-8"
+              onClick={() => handlePageChange(page - 1)}
+              disabled={page === 1}
+            />
+
+            {totalPages <= 7 ? (
+              // Show all pages if total is 7 or less
+              Array.from({ length: totalPages }, (_, i) => (
+                <PaginationItem key={i + 1}>
+                  <PaginationLink
                     className="w-8 h-8"
-                    onClick={() => handlePageChange(page - 1)}
-                    disabled={page === 1}
-                  />
-      
-                  {totalPages <= 7 ? (
-                    // Show all pages if total is 7 or less
-                    Array.from({ length: totalPages }, (_, i) => (
-                      <PaginationItem key={i + 1}>
-                        <PaginationLink
-                          className="w-8 h-8"
-                          isActive={i + 1 === page}
-                          onClick={() => handlePageChange(i + 1)}
-                        >
-                          {i + 1}
-                        </PaginationLink>
-                      </PaginationItem>
-                    ))
-                  ) : page <= 4 ? (
-                    // Near start: show 1, 2, 3, 4, 5, ..., lastPage
-                    <>
-                      {[1, 2, 3, 4, 5].map((num) => (
-                        <PaginationItem key={num}>
-                          <PaginationLink
-                            className="w-8 h-8"
-                            isActive={num === page}
-                            onClick={() => handlePageChange(num)}
-                          >
-                            {num}
-                          </PaginationLink>
-                        </PaginationItem>
-                      ))}
-                      <PaginationEllipsis />
-                      <PaginationItem>
-                        <PaginationLink
-                          className="w-8 h-8"
-                          onClick={() => handlePageChange(totalPages)}
-                        >
-                          {totalPages}
-                        </PaginationLink>
-                      </PaginationItem>
-                    </>
-                  ) : page >= totalPages - 3 ? (
-                    // Near end: show 1, ..., lastPage-4, lastPage-3, lastPage-2, lastPage-1, lastPage
-                    <>
-                      <PaginationItem>
-                        <PaginationLink
-                          className="w-8 h-8"
-                          onClick={() => handlePageChange(1)}
-                        >
-                          1
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationEllipsis />
-                      {[
-                        totalPages - 4,
-                        totalPages - 3,
-                        totalPages - 2,
-                        totalPages - 1,
-                        totalPages,
-                      ].map((num) => (
-                        <PaginationItem key={num}>
-                          <PaginationLink
-                            className="w-8 h-8"
-                            isActive={num === page}
-                            onClick={() => handlePageChange(num)}
-                          >
-                            {num}
-                          </PaginationLink>
-                        </PaginationItem>
-                      ))}
-                    </>
-                  ) : (
-                    // Middle: show 1, ..., page-1, page, page+1, ..., lastPage
-                    <>
-                      <PaginationItem>
-                        <PaginationLink
-                          className="w-8 h-8"
-                          onClick={() => handlePageChange(1)}
-                        >
-                          1
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationEllipsis />
-                      {[page - 1, page, page + 1].map((num) => (
-                        <PaginationItem key={num}>
-                          <PaginationLink
-                            className="w-8 h-8"
-                            isActive={num === page}
-                            onClick={() => handlePageChange(num)}
-                          >
-                            {num}
-                          </PaginationLink>
-                        </PaginationItem>
-                      ))}
-                      <PaginationEllipsis />
-                      <PaginationItem>
-                        <PaginationLink
-                          className="w-8 h-8"
-                          onClick={() => handlePageChange(totalPages)}
-                        >
-                          {totalPages}
-                        </PaginationLink>
-                      </PaginationItem>
-                    </>
-                  )}
-      
-                  <PaginationNext
+                    isActive={i + 1 === page}
+                    onClick={() => handlePageChange(i + 1)}
+                  >
+                    {i + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))
+            ) : page <= 4 ? (
+              // Near start: show 1, 2, 3, 4, 5, ..., lastPage
+              <>
+                {[1, 2, 3, 4, 5].map((num) => (
+                  <PaginationItem key={num}>
+                    <PaginationLink
+                      className="w-8 h-8"
+                      isActive={num === page}
+                      onClick={() => handlePageChange(num)}
+                    >
+                      {num}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationEllipsis />
+                <PaginationItem>
+                  <PaginationLink
                     className="w-8 h-8"
-                    onClick={() => handlePageChange(page + 1)}
-                    disabled={page === totalPages}
-                  />
-                </PaginationContent>
-              </Pagination>
+                    onClick={() => handlePageChange(totalPages)}
+                  >
+                    {totalPages}
+                  </PaginationLink>
+                </PaginationItem>
+              </>
+            ) : page >= totalPages - 3 ? (
+              // Near end: show 1, ..., lastPage-4, lastPage-3, lastPage-2, lastPage-1, lastPage
+              <>
+                <PaginationItem>
+                  <PaginationLink
+                    className="w-8 h-8"
+                    onClick={() => handlePageChange(1)}
+                  >
+                    1
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationEllipsis />
+                {[
+                  totalPages - 4,
+                  totalPages - 3,
+                  totalPages - 2,
+                  totalPages - 1,
+                  totalPages,
+                ].map((num) => (
+                  <PaginationItem key={num}>
+                    <PaginationLink
+                      className="w-8 h-8"
+                      isActive={num === page}
+                      onClick={() => handlePageChange(num)}
+                    >
+                      {num}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+              </>
+            ) : (
+              // Middle: show 1, ..., page-1, page, page+1, ..., lastPage
+              <>
+                <PaginationItem>
+                  <PaginationLink
+                    className="w-8 h-8"
+                    onClick={() => handlePageChange(1)}
+                  >
+                    1
+                  </PaginationLink>
+                </PaginationItem>
+                <PaginationEllipsis />
+                {[page - 1, page, page + 1].map((num) => (
+                  <PaginationItem key={num}>
+                    <PaginationLink
+                      className="w-8 h-8"
+                      isActive={num === page}
+                      onClick={() => handlePageChange(num)}
+                    >
+                      {num}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationEllipsis />
+                <PaginationItem>
+                  <PaginationLink
+                    className="w-8 h-8"
+                    onClick={() => handlePageChange(totalPages)}
+                  >
+                    {totalPages}
+                  </PaginationLink>
+                </PaginationItem>
+              </>
             )}
+
+            <PaginationNext
+              className="w-8 h-8"
+              onClick={() => handlePageChange(page + 1)}
+              disabled={page === totalPages}
+            />
+          </PaginationContent>
+        </Pagination>
+      )}
     </>
   );
 }

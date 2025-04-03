@@ -44,41 +44,63 @@ export function NotificationProvider({
     localNotification.ids.forEach((mangaId) => {
       // Find all chapters for this manga
       const chaptersForManga = data.filter((item) => item.manga.id === mangaId);
-      // Check each chapter
-      chaptersForManga.forEach((chapter) => {
-        // If this chapter hasn't been shown yet
-        if (!isShown(chapter.id)) {
-          // Create a toast notification
-          markAsUnread(chapter.id);
-          toast.message(
-            <div className="flex items-center gap-1">
-              {chapter.language === "vi" ? (
-                <VN className="size-4" />
-              ) : (
-                <GB className="size-4" />
-              )}
-              Có chương mới nè!
-            </div>,
-            {
-              closeButton: false,
-              description: chapter.manga.title + " " + ChapterTitle(chapter),
-              action: {
-                label: "Đọc ngay",
-                onClick: () => {
-                  markAsRead(chapter.id);
-                  router.push(`/chapter/${chapter.id}`);
-                  toast.dismiss();
-                },
-              },
-            }
-          );
 
-          // Mark as shown after showing the toast
+      // Mark all new chapters as unread
+      chaptersForManga.forEach((chapter) => {
+        if (!isShown(chapter.id)) {
+          markAsUnread(chapter.id);
           markAsShown(chapter.id);
         }
       });
+
+      // Only show toast for a maximum of 3 chapters
+      const chaptersToNotify = chaptersForManga
+        .filter((chapter) => !isShown(chapter.id))
+        .slice(0, 3);
+
+      // Show toast notifications for the limited chapters
+      chaptersToNotify.forEach((chapter) => {
+        // Create a toast notification
+        toast.message(
+          <div className="flex items-center gap-1">
+            {chapter.language === "vi" ? (
+              <VN className="size-4" />
+            ) : (
+              <GB className="size-4" />
+            )}
+            Có chương mới nè!
+          </div>,
+          {
+            closeButton: false,
+            description: chapter.manga.title + " " + ChapterTitle(chapter),
+            action: {
+              label: "Đọc ngay",
+              onClick: () => {
+                markAsRead(chapter.id);
+                router.push(`/chapter/${chapter.id}`);
+                toast.dismiss();
+              },
+            },
+          }
+        );
+      });
+
+      // If there are more chapters than shown in toast, show a summary toast
+      // if (chaptersForManga.length > 3) {
+      //   toast.message("Thông báo", {
+      //     description: `Có thêm ${chaptersForManga.length - 3} chương mới của ${chaptersForManga[0].manga.title} chưa hiển thị.`,
+      //   });
+      // }
     });
-  }, [data, localNotification.ids, markAsShown, isShown, router]);
+  }, [
+    data,
+    localNotification.ids,
+    markAsShown,
+    isShown,
+    router,
+    markAsUnread,
+    markAsRead,
+  ]);
 
   return <>{children}</>;
 }
