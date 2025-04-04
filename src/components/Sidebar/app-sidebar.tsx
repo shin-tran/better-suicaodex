@@ -21,13 +21,14 @@ import { NavMain } from "./nav-main";
 import { siteConfig } from "@/config/site";
 import { NavSupports } from "./nav-supports";
 import { NavSettings } from "./nav-settings";
+import { signOut, useSession } from "next-auth/react";
 
 // This is sample data.
 const data = {
   user: {
     name: "Dorothy",
     email: "doro@suicaodex.com",
-    avatar: "/avatars/doro_think.webp",
+    image: "/avatars/doro_think.webp",
   },
 
   navMain: [
@@ -108,10 +109,12 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  // const { data: session } = useSession();
+  // console.log("session", session);
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="h-12 items-center justify-center">
-        <NavUser user={data.user} />
+        <NavUser  />
       </SidebarHeader>
       <SidebarSeparator />
       <SidebarContent>

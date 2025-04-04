@@ -1,6 +1,16 @@
 "use client";
 
-import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from "lucide-react";
+import {
+  BadgeCheck,
+  Bell,
+  ChevronsUpDown,
+  CircleUser,
+  CircleUserRound,
+  LogIn,
+  LogOut,
+  SquareUser,
+  UserIcon,
+} from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -9,7 +19,11 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -22,110 +36,198 @@ import { Badge } from "../ui/badge";
 import { useLocalNotification } from "@/hooks/use-local-notification";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "../ui/button";
+import {
+  SiDiscord,
+  SiFacebook,
+  SiGithub,
+  SiGoogle,
+} from "@icons-pack/react-simple-icons";
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+export function NavUser() {
   const { isMobile } = useSidebar();
   const { localNotification } = useLocalNotification();
+  const { data: session } = useSession();
+  const user = session?.user;
 
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground overflow-visible"
-            >
-              <div className="relative inline-block">
-                {!!localNotification.unread.length && (
-                  <span className="absolute block rounded-full ring-2 ring-white top-0 left-0 bg-red-500 size-2.5 z-10 animate-bounce duration-250" />
+        <Dialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton
+                size="lg"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground overflow-visible"
+              >
+                {!!user ? (
+                  <>
+                    <div className="relative inline-block">
+                      {!!localNotification.unread.length && (
+                        <span className="absolute block rounded-full ring-2 ring-white top-0 left-0 bg-red-500 size-2.5 z-10 animate-bounce duration-250" />
+                      )}
+                      <Avatar className="h-8 w-8 rounded-lg">
+                        <AvatarImage
+                          src={user.image || ""}
+                          alt={user.name || ""}
+                          className="object-cover"
+                        />
+                        <AvatarFallback className="rounded-lg">
+                          {user && user.name ? user.name.slice(0, 2) : "S"}
+                        </AvatarFallback>
+                      </Avatar>
+                    </div>
+
+                    <div className="grid flex-1 text-left text-sm leading-tight">
+                      <span className="truncate font-semibold">
+                        {user.name || "Unknown"}
+                      </span>
+                      <span className="truncate text-xs">
+                        {user.email || "Unknown"}
+                      </span>
+                    </div>
+                    <ChevronsUpDown className="ml-auto size-4" />
+                  </>
+                ) : (
+                  <>
+                    <div className="relative inline-block">
+                      {!!localNotification.unread.length && (
+                        <span className="absolute block rounded-full ring-2 ring-white top-0 left-0 bg-red-500 size-2.5 animate-bounce duration-250" />
+                      )}
+                      <CircleUserRound className="size-8" strokeWidth={1.5} />
+                    </div>
+
+                    <div className="grid flex-1 text-left text-sm leading-tight">
+                      <span className="truncate font-semibold">
+                        Bạn chưa đăng nhập
+                      </span>
+                      {/* <span className="truncate text-xs">mẹ mày béo</span> */}
+                    </div>
+                    <ChevronsUpDown className="ml-auto size-4" />
+                  </>
                 )}
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage
-                    src={user.avatar}
-                    alt={user.name}
-                    className="object-cover"
-                  />
-                  <AvatarFallback className="rounded-lg">
-                    {user.name.slice(0, 2)}
-                  </AvatarFallback>
-                </Avatar>
-              </div>
+              </SidebarMenuButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+              side={isMobile ? "bottom" : "right"}
+              align="end"
+              sideOffset={4}
+            >
+              {!!user && (
+                <>
+                  <DropdownMenuLabel className="p-0 font-normal">
+                    <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                      <Avatar className="h-8 w-8 rounded-lg">
+                        <AvatarImage
+                          src={user.image || "/avatars/doro_think.webp"}
+                          alt={user.name || "Doro"}
+                          className="object-cover"
+                        />
+                        <AvatarFallback className="rounded-lg">
+                          {user && user.name ? user.name.slice(0, 2) : "DR"}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="grid flex-1 text-left text-sm leading-tight">
+                        <span className="truncate font-semibold">
+                          {user.name}
+                        </span>
+                        <span className="truncate text-xs">{user.email}</span>
+                      </div>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                </>
+              )}
 
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
-              </div>
-              <ChevronsUpDown className="ml-auto size-4" />
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
-            align="end"
-            sideOffset={4}
-          >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage
-                    src={user.avatar}
-                    alt={user.name}
-                    className="object-cover"
-                  />
-                  <AvatarFallback className="rounded-lg">
-                    {user.name.slice(0, 2)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
-                </div>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Tài khoản
-              </DropdownMenuItem>
+              <DropdownMenuGroup>
+                {!!user && (
+                  <DropdownMenuItem>
+                    <BadgeCheck />
+                    Tài khoản
+                  </DropdownMenuItem>
+                )}
 
-              <DropdownMenuItem asChild>
-                <Link href={"/notifications"}>
-                  <Bell
-                    className={cn(
-                      !!localNotification.unread.length && "animate-bell-shake"
+                <DropdownMenuItem asChild>
+                  <Link href={"/notifications"}>
+                    <Bell
+                      className={cn(
+                        !!localNotification.unread.length &&
+                          "animate-bell-shake"
+                      )}
+                    />
+                    Thông báo
+                    {!!localNotification.unread.length && (
+                      <Badge
+                        className="rounded-full ml-auto min-w-4 h-4 justify-center p-1 text-xs font-normal"
+                        variant="destructive"
+                      >
+                        {localNotification.unread.length <= 10
+                          ? localNotification.unread.length
+                          : "10+"}
+                      </Badge>
                     )}
-                  />
-                  Thông báo
-                  {!!localNotification.unread.length && (
-                    <Badge
-                      className="rounded-full ml-auto min-w-4 h-4 justify-center p-1 text-xs font-normal"
-                      variant="destructive"
-                    >
-                      {localNotification.unread.length <= 10
-                        ? localNotification.unread.length
-                        : "10+"}
-                    </Badge>
-                  )}
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-500 focus:bg-red-500/20 focus:text-red-500">
-              <LogOut />
-              Đăng xuất
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+
+              {!user ? (
+                <DialogTrigger asChild>
+                  <DropdownMenuItem className="text-blue-500 focus:bg-blue-500/20 focus:text-blue-500">
+                    <LogIn />
+                    Đăng nhập
+                  </DropdownMenuItem>
+                </DialogTrigger>
+              ) : (
+                <DropdownMenuItem
+                  className="text-red-500 focus:bg-red-500/20 focus:text-red-500"
+                  onClick={() => signOut()}
+                >
+                  <LogOut />
+                  Đăng xuất
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Đăng nhập bằng:</DialogTitle>
+              <DialogDescription className="hidden">mẹ mày</DialogDescription>
+            </DialogHeader>
+            <div className="grid grid-cols-2 gap-2">
+              <Button>
+                <SiFacebook />
+                Facebook
+              </Button>
+              <Button>
+                <SiDiscord /> Discord
+              </Button>
+
+              <Button>
+                <SiGoogle /> Google
+              </Button>
+
+              <Button>
+                <SiGithub /> Github
+              </Button>
+            </div>
+            {/* <DialogFooter>
+              <Button type="submit">Confirm</Button>
+            </DialogFooter> */}
+          </DialogContent>
+        </Dialog>
       </SidebarMenuItem>
     </SidebarMenu>
   );
