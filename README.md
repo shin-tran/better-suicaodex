@@ -14,7 +14,7 @@ Tuy vậy, SuicaoDex sẽ luôn:
 ## Tiến độ
 > UPDATE 30/03/2025: sắp tới sẽ tiến hành triển khai các chức năng liên quan đến người dùng (đăng nhập, đăng ký, lưu truyện...), nếu không cần những tính năng này, hãy chuyển sang nhánh [`no-auth`](https://github.com/TNTKien/better-suicaodex/tree/no-auth).
 
-| Route | URL | suicaodex.com | dev.suicaodex.com |
+| Route | URL | suicaodex | better-suicaodex |
 | --- | --- | :---: | :---: |
 | Trang chủ | / | ✅ | ✅ |
 | Tìm kiếm | | ✅ | ✅ |
@@ -25,7 +25,7 @@ Tuy vậy, SuicaoDex sẽ luôn:
 | Lịch sử đọc | /history | ✅ | ✅ |
 | Nhóm dịch | /groups | ✅ | ✅ |
 | Chi tiết nhóm dịch | /group/:id | ✅ | ✅ |
-| Đăng ký/Đăng nhập | /login | ✅ | ⬛ |
+| Đăng nhập |  | ✅ | ✅ |
 | Thư viện | /my-library | ✅ | ☑️ (local) |
 | Thông báo | /notifications | ⬛ | ☑️ (local) |
 | Bình luận |  | ✅ | ⬛ |
@@ -33,7 +33,7 @@ Tuy vậy, SuicaoDex sẽ luôn:
 
 > Loại bỏ built-in API vì tôi lười 👍
 
-Và thêm một số chức năng mới, sẽ cập nhật sau...
+Ngoài ra còn cải thiện các chức năng cũ và thêm một số chức năng mới, sẽ cập nhật sau...
 
 ## Góp ý/Báo lỗi
 Cần góp ý, thêm chức năng mới, báo lỗi hoặc bất cứ lý do gì bạn nghĩ ra được, hãy tìm tôi qua [Facebook](https://www.facebook.com/suicaodex), Discord: `@iam_neyk_7719`, hoặc tạo issue/pull request/discussion ngay trên repo này. Tôi rất hoan nghênh và thậm chí là khuyến khích cmn luôn, làm một mình oải vcl thề 🐧.
@@ -45,6 +45,9 @@ Cần góp ý, thêm chức năng mới, báo lỗi hoặc bất cứ lý do gì
 >Bạn có thể tham khảo [suicaodex-api](https://github.com/TNTKien/suicaodex-api) hoặc proxy tích hợp sẵn trong [suicaodex cũ](https://github.com/TNTKien/suicaodex/blob/main/app/api/mangadex/%5B...path%5D/route.ts).
 
 > Khi đã có proxy, hãy chỉnh sửa lại `src/config/site.ts` và `src/lib/axios.ts` cho phù hợp (có thể sẽ cần sửa thêm 1 số url ảnh).
+
+> `.env`: SuicaoDex sử dụng [AuthJS](https://authjs.dev/), nhớ đọc kỹ docs để biết đường mà config, có thể tham khảo `example.env`.
+
 
 Cài đặt các package cần thiết:
 ```bash
