@@ -17,6 +17,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import MyLibrary from "@/components/Pages/MyLibrary";
+import { auth } from "@/auth";
+import SyncLib from "@/components/Library/sync-lib";
 
 export function generateMetadata(): Metadata {
   return {
@@ -25,7 +27,9 @@ export function generateMetadata(): Metadata {
     // keywords: ["Lịch sử", "History", "SuicaoDex"],
   };
 }
-export default function Page() {
+export default async function Page() {
+  const session = await auth();
+  // console.log(session);
   const tabValues = [
     { value: "following", icon: <BookmarkCheck /> },
     { value: "reading", icon: <Album /> },
@@ -91,13 +95,16 @@ export default function Page() {
                 <MyLibrary category={tab.value} />
               </TabsContent>
             ))}
-
           </Tabs>
         </TabsContent>
         <TabsContent value="cloud">
-          <Alert className="rounded-sm bg-secondary justify-center text-center">
-            Chức năng đang phát triển!
-          </Alert>
+          {!!session ? (
+            <SyncLib session={session} />
+          ) : (
+            <Alert className="rounded-sm bg-secondary justify-center text-center">
+              Bạn cần đăng nhập để dùng chức năng này!
+            </Alert>
+          )}
         </TabsContent>
       </Tabs>
     </>
