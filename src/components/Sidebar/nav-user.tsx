@@ -36,7 +36,7 @@ import { Badge } from "../ui/badge";
 import { useLocalNotification } from "@/hooks/use-local-notification";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import {
   Dialog,
   DialogContent,
@@ -53,6 +53,7 @@ import {
   SiGithub,
   SiGoogle,
 } from "@icons-pack/react-simple-icons";
+import { toast } from "sonner";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -201,31 +202,48 @@ export function NavUser() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <DialogContent>
+          <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
             <DialogHeader>
               <DialogTitle>Đăng nhập bằng:</DialogTitle>
               <DialogDescription className="hidden">mẹ mày</DialogDescription>
             </DialogHeader>
             <div className="grid grid-cols-2 gap-2">
-              <Button>
+              <Button
+                className="bg-blue-500 text-white hover:bg-blue-500/80"
+                onClick={() =>
+                  toast.error("Tạm chưa thể đăng nhập bằng Facebook")
+                }
+              >
                 <SiFacebook />
                 Facebook
               </Button>
-              <Button>
+              <Button
+                className="bg-[#5865F2] text-white hover:bg-[#5865F2]/80"
+                onClick={() => signIn("discord")}
+              >
                 <SiDiscord /> Discord
               </Button>
 
-              <Button>
+              <Button
+                className="text-white bg-stone-800  hover:bg-stone-800/80"
+                // onClick={() => signIn("google")}
+                onClick={() =>
+                  toast.error("Tạm chưa thể đăng nhập bằng Google")
+                }
+              >
                 <SiGoogle /> Google
               </Button>
 
-              <Button>
+              <Button
+                className="bg-slate-700  text-white hover:bg-slate-700/80"
+                // onClick={() => signIn("github")}
+                onClick={() =>
+                  toast.error("Tạm chưa thể đăng nhập bằng Github")
+                }
+              >
                 <SiGithub /> Github
               </Button>
             </div>
-            {/* <DialogFooter>
-              <Button type="submit">Confirm</Button>
-            </DialogFooter> */}
           </DialogContent>
         </Dialog>
       </SidebarMenuItem>
