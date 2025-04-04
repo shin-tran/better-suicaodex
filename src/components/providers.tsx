@@ -11,6 +11,7 @@ import {
   AppProgressProvider as ProgressProvider,
 } from "@bprogress/next";
 import { NotificationProvider } from "./notification-provider";
+import { SessionProvider } from "next-auth/react";
 
 export function ThemeProvider({
   children,
@@ -29,7 +30,9 @@ export function ThemeProvider({
               <Bar className="!bg-primary" />
             </Progress>
             <TooltipProvider delayDuration={0}>
-              <NotificationProvider>{children}</NotificationProvider>
+              <SessionProvider>
+                <NotificationProvider>{children}</NotificationProvider>
+              </SessionProvider>
             </TooltipProvider>
           </ProgressProvider>
         </ThemeWrapper>
