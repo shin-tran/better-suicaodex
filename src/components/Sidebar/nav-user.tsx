@@ -226,20 +226,20 @@ export function NavUser() {
 
               <Button
                 className="text-white bg-stone-800  hover:bg-stone-800/80"
-                onClick={() => signIn("google")}
-                // onClick={() =>
-                //   toast.error("Tạm chưa thể đăng nhập bằng Google")
-                // }
+                // onClick={() => signIn("google")}
+                onClick={() =>
+                  toast.error("Tạm chưa thể đăng nhập bằng Google")
+                }
               >
                 <SiGoogle /> Google
               </Button>
 
               <Button
                 className="bg-slate-700  text-white hover:bg-slate-700/80"
-                onClick={() => signIn("github")}
-                // onClick={() =>
-                //   toast.error("Tạm chưa thể đăng nhập bằng Github")
-                // }
+                // onClick={() => signIn("github")}
+                onClick={() =>
+                  toast.error("Tạm chưa thể đăng nhập bằng Github")
+                }
               >
                 <SiGithub /> Github
               </Button>
