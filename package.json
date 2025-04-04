@@ -89,6 +89,11 @@
     "@types/react-dom": "19.0.4"
   },
   "trustedDependencies": [
-    "@vercel/speed-insights"
+    "@prisma/client",
+    "@prisma/engines",
+    "@vercel/speed-insights",
+    "esbuild",
+    "prisma",
+    "sharp"
   ]
 }
