@@ -24,6 +24,7 @@ import {
   CloudOff,
   ListCheck,
   ListPlus,
+  Loader2,
   NotebookPen,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -40,6 +41,7 @@ import { toast } from "sonner";
 import { useLocalLibrary } from "@/hooks/use-local-library";
 import { useLocalNotification } from "@/hooks/use-local-notification";
 import { useSession } from "next-auth/react";
+import { updateMangaCategory } from "@/lib/suicaodex/db";
 
 interface AddToLibraryBtnProps {
   isMobile: boolean;
@@ -50,9 +52,10 @@ export default function AddToLibraryBtn({
   isMobile,
   manga,
 }: AddToLibraryBtnProps) {
-  const {data: session} = useSession()
+  const { data: session } = useSession();
   const [config] = useConfig();
   const [loaded, setLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
 
@@ -139,6 +142,34 @@ export default function AddToLibraryBtn({
     return toast.success(
       `Đã thêm truyện vào: ${options.find((opt) => opt.value === v)?.label}!`
     );
+  };
+
+  const handleLibraryAdd = async (v: LibraryType | "none") => {
+    if (!session || !session.user || !session.user.id) {
+      toast.info("Bạn cần đăng nhập để sử dụng chức năng này!");
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const res = await updateMangaCategory(
+        session.user.id,
+        manga.id,
+        v.toUpperCase() as any,
+        manga.latestChapter || "none"
+      );
+      if (res.status === 200 || res.status === 201) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
+    } finally {
+      setIsLoading(false);
+
+      return;
+    }
   };
 
   const handleCancel = () => {
@@ -334,16 +365,18 @@ export default function AddToLibraryBtn({
           </DialogClose>
 
           <Button
+            disabled={isLoading}
             className="w-full sm:w-auto"
             onClick={() => {
               if (!session) {
                 toast.info("Bạn cần đăng nhập để sử dụng chức năng này!");
                 return;
               }
-              toast.info("Chức năng đang phát triển!");
+              // toast.info("Chức năng đang phát triển!");
+              handleLibraryAdd(value);
             }}
           >
-            <CircleUser />
+            {isLoading ? <Loader2 className="animate-spin" /> : <CircleUser />}
             Cập nhật
           </Button>
         </DialogFooter>
