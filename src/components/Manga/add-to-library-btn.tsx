@@ -39,6 +39,7 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import { toast } from "sonner";
 import { useLocalLibrary } from "@/hooks/use-local-library";
 import { useLocalNotification } from "@/hooks/use-local-notification";
+import { useSession } from "next-auth/react";
 
 interface AddToLibraryBtnProps {
   isMobile: boolean;
@@ -49,6 +50,7 @@ export default function AddToLibraryBtn({
   isMobile,
   manga,
 }: AddToLibraryBtnProps) {
+  const {data: session} = useSession()
   const [config] = useConfig();
   const [loaded, setLoaded] = useState(false);
 
@@ -333,7 +335,13 @@ export default function AddToLibraryBtn({
 
           <Button
             className="w-full sm:w-auto"
-            onClick={() => toast.info("Chức năng đang phát triển!")}
+            onClick={() => {
+              if (!session) {
+                toast.info("Bạn cần đăng nhập để sử dụng chức năng này!");
+                return;
+              }
+              toast.info("Chức năng đang phát triển!");
+            }}
           >
             <CircleUser />
             Cập nhật

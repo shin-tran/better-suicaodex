@@ -96,7 +96,7 @@ export default function Page() {
         </TabsContent>
         <TabsContent value="cloud">
           <Alert className="rounded-sm bg-secondary justify-center text-center">
-            Chức năng đang phát triển!
+            Bạn cần đăng nhập để dùng chức năng này!
           </Alert>
         </TabsContent>
       </Tabs>
