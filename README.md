@@ -26,7 +26,7 @@ Tuy vậy, SuicaoDex sẽ luôn:
 | Nhóm dịch | /groups | ✅ | ✅ |
 | Chi tiết nhóm dịch | /group/:id | ✅ | ✅ |
 | Tài khoản |  | ✅ | ✅ |
-| Thư viện | /my-library | ✅ | ☑️ (local) |
+| Thư viện | /my-library | ✅ | ✅ |
 | Thông báo | /notifications | ⬛ | ☑️ (local) |
 | Tác giả | /author | ⬛ | ✅ |
 | Bình luận |  | ✅ | ⬛ |
