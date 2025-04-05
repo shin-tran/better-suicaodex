@@ -41,7 +41,7 @@ Ngoài ra còn cải thiện các chức năng cũ và thêm một số chức n
 ## Góp ý/Báo lỗi
 Cần góp ý, thêm chức năng mới, báo lỗi hoặc bất cứ lý do gì bạn nghĩ ra được, hãy tìm tôi tại:
 
- <a target="_blank" href="https://discord.gg/zkspfFwqDg"><img src="https://img.shields.io/badge/SuicaoDex-1877F2?style=flat&logo=facebook&logoColor=white" alt="" /></a> 
+ <a target="_blank" href="https://www.facebook.com/suicaodex"><img src="https://img.shields.io/badge/SuicaoDex-1877F2?style=flat&logo=facebook&logoColor=white" alt="" /></a> 
  ![](https://dcbadge.limes.pink/api/shield/559979358404608001?style=flat)
   
   hoặc tạo:
