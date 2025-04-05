@@ -25,9 +25,10 @@ Tuy vậy, SuicaoDex sẽ luôn:
 | Lịch sử đọc | /history | ✅ | ✅ |
 | Nhóm dịch | /groups | ✅ | ✅ |
 | Chi tiết nhóm dịch | /group/:id | ✅ | ✅ |
-| Đăng nhập |  | ✅ | ✅ |
+| Tài khoản |  | ✅ | ✅ |
 | Thư viện | /my-library | ✅ | ☑️ (local) |
 | Thông báo | /notifications | ⬛ | ☑️ (local) |
+| Tác giả | /author | ⬛ | ✅ |
 | Bình luận |  | ✅ | ⬛ |
 | Built-in API | /api/mangadex/ | ✅ | ❌ |
 
