@@ -15,7 +15,7 @@ Tuy vậy, SuicaoDex sẽ luôn:
 - Thân thiện với độc giả Việt Nam (cụ thể là tôi).
 
 ## Tiến độ
-> UPDATE 30/03/2025: sắp tới sẽ tiến hành triển khai các chức năng liên quan đến người dùng (đăng nhập, đăng ký, lưu truyện...), nếu không cần những tính năng này, hãy chuyển sang nhánh [`no-auth`](https://github.com/TNTKien/better-suicaodex/tree/no-auth).
+✅ Đã hoàn thành chuyển đổi từ suicaodex cũ sang better-suicaodex.
 
 | Route | URL | suicaodex | better-suicaodex |
 | --- | --- | :---: | :---: |
@@ -37,7 +37,16 @@ Tuy vậy, SuicaoDex sẽ luôn:
 
 > Bỏ built-in API vì tôi lười 👍
 
+> Tạm bỏ chức năng Bình luận, lý do bên dưới.
+
 Ngoài ra còn cải thiện các chức năng cũ và thêm một số chức năng mới, sẽ cập nhật sau...
+
+## Dự kiến
+⬛ Hoàn thiện Thông báo.
+
+⬛ Làm lại Bình luận cho đàng hoàng.
+
+⬛ Giả lập Gacha (tại sao lại không nhỉ? 🐧)
 
 ## Góp ý/Báo lỗi
 Cần góp ý, thêm chức năng mới, báo lỗi hoặc bất cứ lý do gì bạn nghĩ ra được, hãy tìm tôi tại:
