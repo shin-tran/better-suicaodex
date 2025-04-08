@@ -4,9 +4,9 @@ import NormalTag from "@/components/Manga/Tags/normal-tag";
 import StatusChip from "@/components/Manga/Tags/status-tag";
 import { Card, CardContent } from "@/components/ui/card";
 import { Manga } from "@/types/types";
-import Link from "next/link";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
+import NoPrefetchLink from "@/components/Custom/no-prefetch-link";
 
 interface DetailsCardProps {
   manga: Manga;
@@ -16,7 +16,7 @@ export default function DetailsCard({ manga }: DetailsCardProps) {
   return (
     <Card className="rounded-sm shadow-sm transition-colors duration-200 w-full">
       <CardContent className="flex gap-2 p-1">
-        <Link href={`/manga/${manga.id}`}>
+        <NoPrefetchLink href={`/manga/${manga.id}`}>
           <MangaCover
             id={manga.id}
             cover={manga.cover}
@@ -27,15 +27,15 @@ export default function DetailsCard({ manga }: DetailsCardProps) {
             quality="256"
             //isExpandable
           />
-        </Link>
+        </NoPrefetchLink>
         <div className="flex flex-col gap-1 w-full pr-2">
           <div className="flex items-center justify-between">
-            <Link
+            <NoPrefetchLink
               href={`/manga/${manga.id}`}
               className="line-clamp-1 font-bold text-xl break-all"
             >
               {manga.title}
-            </Link>
+            </NoPrefetchLink>
             <StatusChip status={manga.status} />
           </div>
           <div className="flex flex-wrap items-center gap-1 max-h-4 overflow-y-hidden">

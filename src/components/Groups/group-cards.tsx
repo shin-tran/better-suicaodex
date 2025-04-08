@@ -1,8 +1,8 @@
 import { Group } from "@/types/types";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
-import Link from "next/link";
 import { Users } from "lucide-react";
+import NoPrefetchLink from "../Custom/no-prefetch-link";
 
 interface GroupCardsProps {
   groups: Group[];
@@ -27,10 +27,10 @@ export default function GroupCards({ groups }: GroupCardsProps) {
           variant="secondary"
           size="lg"
         >
-          <Link href={`/group/${group.id}`}>
+          <NoPrefetchLink href={`/group/${group.id}`}>
             <Users />
             <span className="line-clamp-1 break-all">{group.name}</span>
-          </Link>
+          </NoPrefetchLink>
         </Button>
       ))}
     </div>

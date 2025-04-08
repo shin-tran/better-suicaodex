@@ -7,10 +7,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { formatTimeToNow } from "@/lib/utils";
 import { GB, VN } from "country-flag-icons/react/3x2";
 import { Check, Clock, Users } from "lucide-react";
-import Link from "next/link";
 import { Button } from "../ui/button";
 import { useLocalNotification } from "@/hooks/use-local-notification";
 import MangaCover from "../Manga/manga-cover";
+import NoPrefetchLink from "../Custom/no-prefetch-link";
 
 interface UnreadCardProps {
   chapter: Chapter;
@@ -23,7 +23,7 @@ export default function UnreadCard({ chapter }: UnreadCardProps) {
   return (
     <Card className="rounded-sm shadow-sm transition-colors duration-200 w-full">
       <CardContent className="flex gap-1.5 p-1 md:p-1.5">
-        <Link href={`/manga/${chapter.manga.id}`}>
+        <NoPrefetchLink href={`/manga/${chapter.manga.id}`}>
           <MangaCover
             id={chapter.manga.id || ""}
             cover={chapter.manga.cover || ""}
@@ -34,15 +34,15 @@ export default function UnreadCard({ chapter }: UnreadCardProps) {
             quality="256"
             // quality={isMobile ? "256" : "512"}
           />
-        </Link>
+        </NoPrefetchLink>
         <div className="flex flex-col gap-0 w-full">
           <div className="w-full flex flex-row items-center justify-between border-b pb-1 md:pb-1.5">
-            <Link
+            <NoPrefetchLink
               href={`/manga/${chapter.manga.id}`}
               className="font-bold line-clamp-1 break-all"
             >
               {chapter.manga.title}
-            </Link>
+            </NoPrefetchLink>
             <Button
               size="sm"
               variant="ghost"
@@ -55,7 +55,7 @@ export default function UnreadCard({ chapter }: UnreadCardProps) {
           </div>
 
           <div className="py-1 px-1 w-full hover:bg-secondary">
-            <Link
+            <NoPrefetchLink
               className="flex flex-col gap-1 w-full"
               href={`/chapter/${chapter.id}`}
             >
@@ -104,7 +104,7 @@ export default function UnreadCard({ chapter }: UnreadCardProps) {
                   <Clock size={15} className="shrink-0" />
                 </div>
               </div>
-            </Link>
+            </NoPrefetchLink>
           </div>
         </div>
       </CardContent>

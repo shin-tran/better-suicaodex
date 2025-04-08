@@ -8,6 +8,7 @@ import Link from "next/link";
 import useSWR from "swr";
 import RecentlyCard from "./recently-card";
 import { Skeleton } from "@/components/ui/skeleton";
+import NoPrefetchLink from "@/components/Custom/no-prefetch-link";
 
 export default function RecentlyAdded() {
   const [config] = useConfig();
@@ -55,9 +56,9 @@ export default function RecentlyAdded() {
 
       <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
         {data.mangas.map((manga) => (
-          <Link key={manga.id} href={`/manga/${manga.id}`}>
+          <NoPrefetchLink key={manga.id} href={`/manga/${manga.id}`}>
             <RecentlyCard manga={manga} />
-          </Link>
+          </NoPrefetchLink>
         ))}
       </div>
     </div>

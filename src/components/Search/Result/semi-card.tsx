@@ -4,10 +4,10 @@ import NormalTag from "@/components/Manga/Tags/normal-tag";
 import StatusChip from "@/components/Manga/Tags/status-tag";
 import { Card, CardContent } from "@/components/ui/card";
 import { Artist, Author, Manga } from "@/types/types";
-import Link from "next/link";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import NoPrefetchLink from "@/components/Custom/no-prefetch-link";
 
 interface SemiCardProps {
   manga: Manga;
@@ -17,7 +17,7 @@ export default function SemiCard({ manga }: SemiCardProps) {
   return (
     <Card className="rounded-sm shadow-sm transition-colors duration-200">
       <CardContent className="flex gap-2 p-1">
-        <Link href={`/manga/${manga.id}`}>
+        <NoPrefetchLink href={`/manga/${manga.id}`}>
           <MangaCover
             id={manga.id}
             cover={manga.cover}
@@ -29,14 +29,14 @@ export default function SemiCard({ manga }: SemiCardProps) {
             quality="256"
             //isExpandable
           />
-        </Link>
+        </NoPrefetchLink>
         <div className="flex flex-col gap-1 w-full pr-2">
-          <Link
+          <NoPrefetchLink
             href={`/manga/${manga.id}`}
             className="line-clamp-1 font-bold text-xl break-all"
           >
             {manga.title}
-          </Link>
+          </NoPrefetchLink>
           <p className="text-sm line-clamp-1 break-all -mt-2">
             {[
               ...new Set([

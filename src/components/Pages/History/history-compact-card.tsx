@@ -1,11 +1,11 @@
 import { ChapterTitle } from "@/components/Chapter/ChapterReader/chapter-info";
+import NoPrefetchLink from "@/components/Custom/no-prefetch-link";
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { formatTimeToNow } from "@/lib/utils";
 import { Chapter } from "@/types/types";
 import { GB, VN } from "country-flag-icons/react/3x2";
 import { Clock, Users } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface HistoryCompactCardProps {
@@ -20,10 +20,10 @@ export default function HistoryCompactCard({
   return (
     <Card className="rounded-sm shadow-sm transition-colors duration-200 w-full">
       <CardHeader className="px-2 py-1 border-b font-bold line-clamp-2 md:line-clamp-1 break-all">
-        <Link href={`/manga/${chapter.manga.id}`}>{chapter.manga.title}</Link>
+        <NoPrefetchLink href={`/manga/${chapter.manga.id}`}>{chapter.manga.title}</NoPrefetchLink>
       </CardHeader>
       <CardFooter className="py-1 px-2 w-full hover:bg-secondary">
-        <Link
+        <NoPrefetchLink
           className="flex flex-col gap-1 w-full"
           href={`/chapter/${chapter.id}`}
         >
@@ -72,7 +72,7 @@ export default function HistoryCompactCard({
               <Clock size={15} className="shrink-0" />
             </div>
           </div>
-        </Link>
+        </NoPrefetchLink>
       </CardFooter>
     </Card>
   );

@@ -3,12 +3,12 @@
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Artist, Author, Manga } from "@/types/types";
-import Link from "next/link";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import Tags from "@/components/Manga/Tags";
 import MangaCover from "@/components/Manga/manga-cover";
 import { useIsMobile } from "@/hooks/use-mobile";
+import NoPrefetchLink from "@/components/Custom/no-prefetch-link";
 
 interface MangaSlideProps {
   manga: Manga;
@@ -51,7 +51,7 @@ export default function MangaSlide({ manga }: MangaSlideProps) {
           "md:pr-[calc(32px+var(--sidebar-width-icon))] lg:pr-[calc(48px+var(--sidebar-width-icon))]"
         )}
       >
-        <Link href={`/manga/${manga.id}`}>
+        <NoPrefetchLink href={`/manga/${manga.id}`}>
           <MangaCover
             id={manga.id}
             cover={manga.cover}
@@ -61,7 +61,7 @@ export default function MangaSlide({ manga }: MangaSlideProps) {
             wrapper="w-[130px] md:w-[200px] lg:w-[215px] h-auto"
             preload={true}
           />
-        </Link>
+        </NoPrefetchLink>
 
         <div
           className="grid gap-6 sm:gap-2 h-full min-h-0 pb-8 md:pb-1.5 lg:pb-1"
@@ -71,11 +71,11 @@ export default function MangaSlide({ manga }: MangaSlideProps) {
               : "max-content min-content auto max-content",
           }}
         >
-          <Link href={`/manga/${manga.id}`}>
+          <NoPrefetchLink href={`/manga/${manga.id}`}>
             <p className="drop-shadow-md font-black text-xl line-clamp-5 sm:line-clamp-2 lg:text-4xl overflow-hidden lg:!leading-[2.75rem]">
               {manga.title}
             </p>
-          </Link>
+          </NoPrefetchLink>
 
           <div className="hidden md:flex flex-wrap gap-1">
             <Tags

@@ -2,7 +2,6 @@
 
 import { useConfig } from "@/hooks/use-config";
 import { getStaffPickMangas } from "@/lib/mangadex/manga";
-import Link from "next/link";
 import useSWR from "swr";
 import { Skeleton } from "@/components/ui/skeleton";
 import RecentlyCard from "../Recently/recently-card";
@@ -10,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronsDown, ChevronsUp } from "lucide-react";
+import NoPrefetchLink from "@/components/Custom/no-prefetch-link";
 
 export default function StaffPick() {
   const [config] = useConfig();
@@ -97,9 +97,9 @@ export default function StaffPick() {
         }}
       >
         {data.map((manga) => (
-          <Link key={manga.id} href={`/manga/${manga.id}`}>
+          <NoPrefetchLink key={manga.id} href={`/manga/${manga.id}`}>
             <RecentlyCard manga={manga} />
-          </Link>
+          </NoPrefetchLink>
         ))}
       </div>
 

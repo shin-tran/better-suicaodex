@@ -1,10 +1,10 @@
 import { ChapterTitle } from "@/components/Chapter/ChapterReader/chapter-info";
+import NoPrefetchLink from "@/components/Custom/no-prefetch-link";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Chapter } from "@/types/types";
 import { GB, VN } from "country-flag-icons/react/3x2";
-import Link from "next/link";
 import { useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
@@ -24,7 +24,7 @@ export default function HistoryCoverCard({ chapter }: HistoryCoverCardProps) {
   const title = ChapterTitle(chapter);
   return (
     <Card className="relative rounded-sm shadow-none transition-colors duration-200 w-full h-full border-none bg-background">
-      <Link href={`/manga/${chapter.manga.id}`}>
+      <NoPrefetchLink href={`/manga/${chapter.manga.id}`}>
         <CardContent className="relative p-0 rounded-sm">
           <LazyLoadImage
             wrapperClassName={cn(
@@ -43,16 +43,16 @@ export default function HistoryCoverCard({ chapter }: HistoryCoverCardProps) {
             }}
           />
         </CardContent>
-      </Link>
+      </NoPrefetchLink>
 
       <CardFooter className="py-2 px-0 w-full flex flex-col gap-1 items-start">
-        <Link
+        <NoPrefetchLink
           href={`/manga/${chapter.manga.id}`}
           className="font-bold line-clamp-2 break-all"
         >
           {chapter.manga.title}
-        </Link>
-        <Link
+        </NoPrefetchLink>
+        <NoPrefetchLink
           href={`/chapter/${chapter.id}`}
           className="items-center flex gap-1"
         >
@@ -64,7 +64,7 @@ export default function HistoryCoverCard({ chapter }: HistoryCoverCardProps) {
           <span className="font-bold text-sm line-clamp-1 break-all hover:underline">
             {title}
           </span>
-        </Link>
+        </NoPrefetchLink>
       </CardFooter>
     </Card>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import NoPrefetchLink from "@/components/Custom/no-prefetch-link";
 import MangaCover from "@/components/Manga/manga-cover";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +22,6 @@ import {
   MessageSquare,
   Users,
 } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -52,7 +52,7 @@ export default function LatestMangaCard({
   if (type === "cover") {
     return (
       <Card className="relative rounded-sm shadow-none transition-colors duration-200 w-full h-full border-none bg-background">
-        <Link href={`/manga/${manga.id}`}>
+        <NoPrefetchLink href={`/manga/${manga.id}`}>
           <CardContent className="relative p-0 rounded-sm">
             <LazyLoadImage
               wrapperClassName={cn(
@@ -71,7 +71,7 @@ export default function LatestMangaCard({
               }}
             />
           </CardContent>
-        </Link>
+        </NoPrefetchLink>
 
         <CardFooter className="p-0 pt-1 w-full flex flex-col gap-0 items-start">
           <SingleCard key={chapters[0].id} chapter={chapters[0]} hideIcons />
@@ -83,15 +83,15 @@ export default function LatestMangaCard({
   return (
     <Card className="rounded-sm shadow-sm transition-colors duration-200">
       <CardHeader className="p-1 md:hidden">
-        <Link
+        <NoPrefetchLink
           href={`/manga/${manga.id}`}
           className="line-clamp-1 font-bold text-lg break-all border-b"
         >
           {manga.title}
-        </Link>
+        </NoPrefetchLink>
       </CardHeader>
       <CardContent className="flex gap-1.5 p-1 md:p-1.5">
-        <Link href={`/manga/${manga.id}`}>
+        <NoPrefetchLink href={`/manga/${manga.id}`}>
           <MangaCover
             id={manga.id || ""}
             cover={manga.cover || ""}
@@ -102,14 +102,14 @@ export default function LatestMangaCard({
             quality="256"
             // quality={isMobile ? "256" : "512"}
           />
-        </Link>
+        </NoPrefetchLink>
         <div className="flex flex-col w-full">
-          <Link
+          <NoPrefetchLink
             href={`/manga/${manga.id}`}
             className="hidden md:flex line-clamp-1 font-bold text-lg break-all border-b md:pb-1 px-1.5"
           >
             {manga.title}
-          </Link>
+          </NoPrefetchLink>
 
           <div className="flex flex-col overflow-hidden">
             {chapters.slice(0, maxCount).map((chapter) => (
@@ -162,7 +162,7 @@ interface SingleCardProps {
 const SingleCard = ({ chapter, hideIcons = false }: SingleCardProps) => {
   const router = useRouter();
   return (
-    <Link
+    <NoPrefetchLink
       key={chapter.id}
       suppressHydrationWarning
       href={
@@ -234,6 +234,6 @@ const SingleCard = ({ chapter, hideIcons = false }: SingleCardProps) => {
           </div>
         </div>
       </Card>
-    </Link>
+    </NoPrefetchLink>
   );
 };

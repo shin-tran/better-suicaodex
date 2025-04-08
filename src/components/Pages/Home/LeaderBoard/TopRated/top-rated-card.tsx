@@ -1,10 +1,10 @@
 "use client";
 
+import NoPrefetchLink from "@/components/Custom/no-prefetch-link";
 import MangaCover from "@/components/Manga/manga-cover";
 import { Card, CardContent } from "@/components/ui/card";
 import { Artist, Author, Manga } from "@/types/types";
 import { Star } from "lucide-react";
-import Link from "next/link";
 
 interface TopRatedCardProps {
   manga: Manga;
@@ -14,7 +14,7 @@ export default function TopRatedCard({ manga }: TopRatedCardProps) {
   return (
     <Card className="rounded-sm shadow-none transition-colors duration-200 border-none dark:bg-background">
       <CardContent className="flex gap-3 p-1">
-        <Link href={`/manga/${manga.id}`}>
+        <NoPrefetchLink href={`/manga/${manga.id}`}>
           <MangaCover
             id={manga.id}
             cover={manga.cover}
@@ -24,16 +24,16 @@ export default function TopRatedCard({ manga }: TopRatedCardProps) {
             className="!w-20 !h-28 !object-cover"
             quality="256"
           />
-        </Link>
+        </NoPrefetchLink>
 
         <div className="flex flex-col justify-between ">
           <div className="flex flex-col gap-1">
-            <Link
+            <NoPrefetchLink
               href={`/manga/${manga.id}`}
               className="line-clamp-2 font-bold text-xl"
             >
               {manga.title}
-            </Link>
+            </NoPrefetchLink>
 
             <p className="text-sm line-clamp-1">
               {[

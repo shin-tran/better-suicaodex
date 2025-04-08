@@ -2,7 +2,6 @@
 import { Chapter, ChapterGroup } from "@/types/types";
 import { Clock, ExternalLink, MessageSquare, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { cn, formatTimeToNow } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import {
@@ -14,6 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { GB, VN } from "country-flag-icons/react/3x2";
+import NoPrefetchLink from "@/components/Custom/no-prefetch-link";
 
 interface ChapterCardProps {
   chapters: ChapterGroup;
@@ -65,7 +65,7 @@ const SingleCard = ({ chapter, finalChapter, className }: SingleCardProps) => {
   const router = useRouter();
 
   return (
-    <Link
+    <NoPrefetchLink
       suppressHydrationWarning
       href={
         chapter.externalUrl ? chapter.externalUrl : `/chapter/${chapter.id}`
@@ -147,6 +147,6 @@ const SingleCard = ({ chapter, finalChapter, className }: SingleCardProps) => {
           </div>
         </div>
       </Card>
-    </Link>
+    </NoPrefetchLink>
   );
 };

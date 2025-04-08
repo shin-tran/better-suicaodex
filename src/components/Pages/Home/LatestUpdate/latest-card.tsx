@@ -1,5 +1,6 @@
 "use client";
 
+import NoPrefetchLink from "@/components/Custom/no-prefetch-link";
 import MangaCover from "@/components/Manga/manga-cover";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -7,7 +8,6 @@ import { formatTimeToNow } from "@/lib/utils";
 import { Chapter } from "@/types/types";
 import { GB, VN } from "country-flag-icons/react/3x2";
 import { Clock, ExternalLink, Users } from "lucide-react";
-import Link from "next/link";
 
 interface LatestCardProps {
   chapter: Chapter;
@@ -19,7 +19,7 @@ export default function LatestCard({ chapter }: LatestCardProps) {
       <CardContent className="flex gap-2 p-1">
         {!!chapter.manga.title && !!chapter.manga.cover && (
           <>
-            <Link href={`/manga/${chapter.manga.id}`}>
+            <NoPrefetchLink href={`/manga/${chapter.manga.id}`}>
               <MangaCover
                 id={chapter.manga.id}
                 cover={chapter.manga.cover}
@@ -30,15 +30,15 @@ export default function LatestCard({ chapter }: LatestCardProps) {
                 quality="256"
                 //isExpandable
               />
-            </Link>
+            </NoPrefetchLink>
 
             <div className="flex flex-col justify-evenly w-full">
-              <Link
+              <NoPrefetchLink
                 href={`/manga/${chapter.manga.id}`}
                 className="line-clamp-1 font-bold text-lg break-all"
               >
                 {chapter.manga.title}
-              </Link>
+              </NoPrefetchLink>
 
               <div className="flex items-center space-x-1">
                 {chapter.language === "vi" && (
@@ -49,7 +49,7 @@ export default function LatestCard({ chapter }: LatestCardProps) {
                   <GB className="inline-block select-none flex-shrink-0 !h-5 !w-5" />
                 )}
                 {chapter.externalUrl && <ExternalLink size={16} />}
-                <Link
+                <NoPrefetchLink
                   href={
                     chapter.externalUrl
                       ? chapter.externalUrl
@@ -64,7 +64,7 @@ export default function LatestCard({ chapter }: LatestCardProps) {
       ${chapter.title ? ` - ${chapter.title}` : ""}`
                       : "Oneshot"}
                   </p>
-                </Link>
+                </NoPrefetchLink>
               </div>
 
               <div className="flex justify-between">
@@ -84,7 +84,7 @@ export default function LatestCard({ chapter }: LatestCardProps) {
                           className="whitespace-normal font-normal text-start line-clamp-1 rounded-sm h-4 py-0 px-[0.25rem] hover:text-primary break-all"
                           size="sm"
                         >
-                          <Link href={`/group/${group.id}`}>{group.name}</Link>
+                          <NoPrefetchLink href={`/group/${group.id}`}>{group.name}</NoPrefetchLink>
                         </Button>
                       ))}
                     </div>

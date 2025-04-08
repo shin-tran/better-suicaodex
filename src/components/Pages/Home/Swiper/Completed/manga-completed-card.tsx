@@ -6,11 +6,11 @@ import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Manga } from "@/types/types";
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
+import NoPrefetchLink from "@/components/Custom/no-prefetch-link";
 
 interface MangaCompletedCardProps {
   manga: Manga;
@@ -72,9 +72,9 @@ export default function MangaCompletedCard({ manga }: MangaCompletedCardProps) {
               size="icon"
               variant="secondary"
             >
-              <Link href={`/manga/${manga.id}`}>
+              <NoPrefetchLink href={`/manga/${manga.id}`}>
                 <ArrowRight />
-              </Link>
+              </NoPrefetchLink>
             </Button>
           </div>
         </div>
@@ -97,11 +97,11 @@ export default function MangaCompletedCard({ manga }: MangaCompletedCardProps) {
       </CardContent>
 
       <CardFooter className="py-2 px-0 w-full">
-        <Link href={`/manga/${manga.id}`}>
+        <NoPrefetchLink href={`/manga/${manga.id}`}>
           <p className="text-base font-semibold line-clamp-2 drop-shadow-sm">
             {manga.title}
           </p>
-        </Link>
+        </NoPrefetchLink>
       </CardFooter>
     </Card>
   );
