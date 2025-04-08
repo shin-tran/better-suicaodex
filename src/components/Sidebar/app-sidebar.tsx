@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Bookmark, BookOpen, Users } from "lucide-react";
+import { Bookmark, BookOpen, Gamepad2, Users } from "lucide-react";
 import {
   SiDiscord,
   SiFacebook,
@@ -85,6 +85,21 @@ const data = {
           title: "Nhóm dịch",
           url: "/groups",
         },
+      ],
+    },
+    {
+      title: "Giải trí",
+      url: "#",
+      icon: Gamepad2,
+      items: [
+        {
+          title: "Gacha",
+          url: "/gacha",
+        },
+        // {
+        //   title: "Nhóm dịch",
+        //   url: "/groups",
+        // },
       ],
     },
   ],
