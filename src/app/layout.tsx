@@ -9,7 +9,6 @@ import { ThemeProvider } from "@/components/providers";
 import { ThemeSwitcher } from "@/components/Theme/theme-switcher";
 import { META_THEME_COLORS, siteConfig } from "@/config/site";
 import { Toaster } from "@/components/ui/sonner";
-import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const inter = Inter({
   preload: true,
@@ -19,7 +18,6 @@ const inter = Inter({
 // const leagueSpartan = League_Spartan({
 //   subsets: ["vietnamese"],
 // });
-
 
 export const metadata: Metadata = {
   title: siteConfig.name,
@@ -74,7 +72,6 @@ export default function RootLayout({
           </SidebarProvider>
           <ThemeSwitcher />
         </ThemeProvider>
-        <SpeedInsights />
       </body>
     </html>
   );
