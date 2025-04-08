@@ -1,16 +1,14 @@
 import Gacha from "@/components/Pages/Gacha";
+import { Metadata } from "next";
+
+export function generateMetadata(): Metadata {
+  return {
+    title: "Gacha Simulator - SuicaoDex",
+    description: "SuicaoDex88 - Nhà cái đầu hàng Vi En",
+    keywords: ["Gacha", "SuicaoDex", "Blue Archive", "Pokemon TCG", "Honkai Star Rail"],
+  };
+}
 
 export default function Page() {
-  return (
-    <>
-      {/* <div>
-        <hr className="w-9 h-1 bg-primary border-none" />
-        <h1 className="text-2xl font-black uppercase">Gacha</h1>
-      </div>
-
-      <div className="mt-4"> */}
-        <Gacha/>
-      {/* </div> */}
-    </>
-  );
+  return <Gacha />;
 }
