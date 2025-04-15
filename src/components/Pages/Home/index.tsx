@@ -1,11 +1,13 @@
 "use client";
 
+import { Skeleton } from "@/components/ui/skeleton";
 import LatestUpdate from "./LatestUpdate";
 import LeaderBoard from "./LeaderBoard";
 import RecentlyAdded from "./Recently";
 import StaffPick from "./StaffPick";
 import CompletedSwiper from "./Swiper/Completed";
 import PopularSwiper from "./Swiper/Popular";
+import { LazyLoadComponent } from "react-lazy-load-image-component";
 
 export default function HomePage() {
   return (
@@ -19,20 +21,28 @@ export default function HomePage() {
       </section>
 
       <section className="mt-9">
-        <RecentlyAdded />
+        <LazyLoadComponent>
+          <RecentlyAdded />
+        </LazyLoadComponent>
       </section>
 
       <section className="mt-9 grid grid-cols-1 gap-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
         <div className="lg:col-span-2 xl:col-span-3 2xl:col-span-4">
-          <StaffPick />
+          <LazyLoadComponent>
+            <StaffPick />
+          </LazyLoadComponent>
         </div>
         <div className="lg:col-span-2">
-          <LeaderBoard />
+          <LazyLoadComponent>
+            <LeaderBoard />
+          </LazyLoadComponent>
         </div>
       </section>
 
       <section className="mt-9">
-        <CompletedSwiper />
+        <LazyLoadComponent>
+          <CompletedSwiper />
+        </LazyLoadComponent>
       </section>
     </div>
   );
