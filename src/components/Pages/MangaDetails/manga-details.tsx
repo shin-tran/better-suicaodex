@@ -48,9 +48,9 @@ import { useEffect, useState } from "react";
 import MangaDetailsSkeleton from "./manga-details-skeleton";
 import { toast } from "sonner";
 import AddToLibraryBtn from "@/components/Manga/add-to-library-btn";
-import { Card } from "@/components/ui/card";
 import MangaCoversTab from "@/components/Manga/manga-covers-tab";
 import MangaSubInfo from "@/components/Manga/manga-subinfo";
+import CommentSection from "@/components/Comment/comment-section";
 
 interface MangaDetailsProps {
   id: string;
@@ -371,7 +371,9 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
         )} */}
         <MangaDescription
           content={manga.description.content}
-          language={manga.description.content ? manga.description.language : "vi"}
+          language={
+            manga.description.content ? manga.description.language : "vi"
+          }
           maxHeight={isMobile ? 78 : 234}
           manga={manga}
         />
@@ -418,9 +420,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
             </div>
           </TabsContent>
           <TabsContent value="comment">
-            <Card className="mt-4 rounded-sm justify-center items-center flex h-16 w-full">
-              <p className="italic">Chức năng đang phát triển!</p>
-            </Card>
+            <CommentSection id={manga.id} />
           </TabsContent>
 
           <TabsContent value="art">
