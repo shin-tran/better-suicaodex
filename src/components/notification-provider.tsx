@@ -27,6 +27,7 @@ export function NotificationProvider({
       fetchLatestChapters(limit, offset, language, r18),
     {
       refreshInterval: 1000 * 60 * 5, // 5 minutes
+      revalidateOnFocus: false,
       onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
         if (retryCount >= 3) return; // Stop retrying after 3 attempts
         setTimeout(() => revalidate({ retryCount }), 1000); // Retry after 1 second
