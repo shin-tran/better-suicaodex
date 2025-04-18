@@ -2,7 +2,7 @@ import { User, MangaComment } from "@prisma/client";
 
 export function serializeUser(user: User) {
   return {
-    // id: user.id,
+    id: user.id,
     name: user.name,
     image: user.image,
     createdAt: user.createdAt,

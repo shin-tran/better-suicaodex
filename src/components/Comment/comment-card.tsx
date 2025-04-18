@@ -4,17 +4,20 @@ import { CommentWithUser } from "@/lib/suicaodex/serializers";
 import { Card } from "../ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
-import { Reply, ThumbsUp, TriangleAlert } from "lucide-react";
+import { PencilLine, Reply, ThumbsUp, TriangleAlert } from "lucide-react";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
+import { useSession } from "next-auth/react";
+import { cn } from "@/lib/utils";
 
 interface CommentCardProps {
   comment: CommentWithUser;
 }
 
 export default function CommentCard({ comment }: CommentCardProps) {
+  const { data: session } = useSession();
   return (
     <Card className="flex flex-col md:flex-row gap-3 p-3 rounded-md">
       <div className="flex flex-row md:flex-col items-center md:justify-center p-2 bg-secondary border rounded-sm md:max-w-[114px] max-h-fit">
@@ -26,7 +29,7 @@ export default function CommentCard({ comment }: CommentCardProps) {
         </Avatar>
 
         <div className="pl-2 md:pl-0">
-          <p className="font-semibold line-clamp-1 break-all">
+          <p className="font-semibold line-clamp-1 break-all md:text-center">
             {comment.user.name}
           </p>
           <div className="flex md:flex-col gap-1 md:gap-0 items-center md:justify-center text-xs text-muted-foreground">
@@ -99,22 +102,34 @@ export default function CommentCard({ comment }: CommentCardProps) {
           {comment.content}
         </ReactMarkdown>
 
-        <div className="flex flex-row items-center justify-between mt-2">
-          <Button variant="link" className="h-6 px-0 gap-1 text-destructive">
-            <TriangleAlert />
-            Báo cáo
-          </Button>
-          <div className="flex flex-row items-center gap-2">
-            <Button variant="link" className="h-6 px-0 gap-1">
-              <ThumbsUp />
-              Thích
-            </Button>
-            <Button variant="link" className="h-6 px-0 gap-1">
-              <Reply />
-              Trả lời
-            </Button>
+        {!!session?.user?.id && (
+          <div
+            className={cn(
+              "flex flex-row items-center mt-2",
+              session?.user?.id === comment.user.id ? "justify-between" : "justify-end"
+            )}
+          >
+            {session?.user?.id === comment.user.id && (
+              <Button variant="link" className="h-6 px-0 gap-1">
+                <PencilLine />
+                Sửa
+              </Button>
+            )}
+
+            <div className="flex flex-row items-center gap-2">
+              {session?.user?.id !== comment.user.id && (
+                <Button variant="link" className="h-6 px-0 gap-1">
+                  <ThumbsUp />
+                  Thích
+                </Button>
+              )}
+              <Button variant="link" className="h-6 px-0 gap-1">
+                <Reply />
+                Trả lời
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </Card>
   );
