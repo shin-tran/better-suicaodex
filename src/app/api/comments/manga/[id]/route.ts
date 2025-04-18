@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { serializeComment } from "@/lib/suicaodex/serializers";
 import { auth } from "@/auth";
 import removeMarkdown from "remove-markdown";
+import { limiter, RateLimitError } from "@/lib/rate-limit";
 
 
 interface RouteParams {
@@ -41,6 +42,20 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
   }
 
   const { id } = await params;
+
+  const headers = new Headers();
+
+  try {
+    await limiter.check(headers, 10, session.user.id); // 10 req/min
+  } catch (err) {
+    if (err instanceof RateLimitError) {
+      return new NextResponse(JSON.stringify({ error: err.message }), {
+        status: err.statusCode,
+        headers,
+      });
+    }
+    throw err;
+  }
 
   const { content } = await req.json();
   const plainContent = removeMarkdown(content || "");

@@ -62,13 +62,27 @@ export default function CommentForm({
     if (!data.comment.trim()) return;
     try {
       setLoading(true);
-      await fetch(`/api/comments/manga/${mangaId}`, {
+      const response = await fetch(`/api/comments/manga/${mangaId}`, {
         method: "POST",
         body: JSON.stringify({ content: data.comment }),
         headers: {
           "Content-Type": "application/json",
         },
       });
+      
+      // const responseData = await response.json();
+      
+      if (!response.ok) {
+        // Handle rate limit or other errors
+        if (response.status === 429) {
+          toast.error("Rap chậm thôi bruh...😓", {
+            closeButton: false,
+          });
+        } else {
+          toast.error("Có lỗi xảy ra, vui lòng thử lại sau!");
+        }
+        return;
+      }
       
       // Reset the form after successful submission
       form.reset({ comment: "" });
