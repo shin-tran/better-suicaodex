@@ -75,7 +75,7 @@ export default function CommentCard({ comment }: CommentCardProps) {
 
         {/* <p className="flex-1 pt-1">{comment.content}</p> */}
         <ReactMarkdown
-          className="flex-1 flex-col gap-2 pt-1"
+          className="prose prose-img:my-1 flex-1 flex-col gap-2 pt-1"
           remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
           rehypePlugins={[rehypeRaw, rehypeSanitize]}
           components={{

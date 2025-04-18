@@ -69,9 +69,9 @@ export default function CommentForm({
           "Content-Type": "application/json",
         },
       });
-      
+
       // const responseData = await response.json();
-      
+
       if (!response.ok) {
         // Handle rate limit or other errors
         if (response.status === 429) {
@@ -83,10 +83,10 @@ export default function CommentForm({
         }
         return;
       }
-      
+
       // Reset the form after successful submission
       form.reset({ comment: "" });
-      
+
       // Call the onCommentPosted callback if provided
       if (onCommentPosted) {
         onCommentPosted();
@@ -112,6 +112,7 @@ export default function CommentForm({
                   placeholder="Viết bình luận..."
                   className="resize-none w-full min-h-28"
                   disabled={loading}
+                  maxLength={2000}
                   {...field}
                 />
               </FormControl>
