@@ -11,6 +11,7 @@ import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
 import { useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface CommentCardProps {
   comment: CommentWithUser;
@@ -18,6 +19,12 @@ interface CommentCardProps {
 
 export default function CommentCard({ comment }: CommentCardProps) {
   const { data: session } = useSession();
+  const handleBtnClick = () => {
+    return toast.info("Chức năng đang phát triển!",{
+      closeButton: false,
+    })
+  };  
+
   return (
     <Card className="flex flex-col md:flex-row gap-3 p-3 rounded-md">
       <div className="flex flex-row md:flex-col items-center md:justify-center p-2 bg-secondary border rounded-sm md:max-w-[114px] max-h-fit">
@@ -110,7 +117,7 @@ export default function CommentCard({ comment }: CommentCardProps) {
             )}
           >
             {session?.user?.id === comment.user.id && (
-              <Button variant="link" className="h-6 px-0 gap-1">
+              <Button variant="link" className="h-6 px-0 gap-1" onClick={handleBtnClick}>
                 <PencilLine />
                 Sửa
               </Button>
@@ -118,12 +125,12 @@ export default function CommentCard({ comment }: CommentCardProps) {
 
             <div className="flex flex-row items-center gap-2">
               {session?.user?.id !== comment.user.id && (
-                <Button variant="link" className="h-6 px-0 gap-1">
+                <Button variant="link" className="h-6 px-0 gap-1" onClick={handleBtnClick}>
                   <ThumbsUp />
                   Thích
                 </Button>
               )}
-              <Button variant="link" className="h-6 px-0 gap-1">
+              <Button variant="link" className="h-6 px-0 gap-1" onClick={handleBtnClick}>
                 <Reply />
                 Trả lời
               </Button>
