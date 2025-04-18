@@ -379,7 +379,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
         />
 
         <Tabs defaultValue="chapter">
-          <TabsList className="rounded-sm w-full md:w-auto">
+          <TabsList className="rounded-sm w-full md:w-auto md:min-w-96">
             <TabsTrigger
               value="chapter"
               className="rounded-sm w-full flex gap-1 px-2"
