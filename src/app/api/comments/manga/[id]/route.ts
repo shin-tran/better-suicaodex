@@ -5,7 +5,6 @@ import { auth } from "@/auth";
 import removeMarkdown from "remove-markdown";
 import { limiter, RateLimitError } from "@/lib/rate-limit";
 
-
 interface RouteParams {
   params: Promise<{
     id: string;
@@ -13,25 +12,40 @@ interface RouteParams {
 }
 
 // GET /api/comments/manga/[id]
-export async function GET(_: NextRequest, { params }: RouteParams) {
+export async function GET(req: NextRequest, { params }: RouteParams) {
   const { id } = await params;
 
   if (!id) {
     return NextResponse.json({ error: "Missing id" }, { status: 400 });
   }
 
-  const comments = await prisma.mangaComment.findMany({
-    where: {
-      mangaId: id,
-    },
-    include: {
-      user: true,
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  const url = new URL(req.url);
+  const limit = parseInt(url.searchParams.get("limit") || "10", 10);
+  const offset = parseInt(url.searchParams.get("offset") || "0", 10);
 
-  const safeComments = comments.map(serializeComment);
-  return NextResponse.json(safeComments);
+  const [totalCount, comments] = await Promise.all([
+    prisma.mangaComment.count({
+      where: { mangaId: id },
+    }),
+    prisma.mangaComment.findMany({
+      where: { mangaId: id },
+      include: { user: true },
+      orderBy: { createdAt: "desc" },
+      skip: offset,
+      take: limit,
+    }),
+  ]);
+
+  return NextResponse.json({
+    comments: comments.map(serializeComment),
+    meta: {
+      limit,
+      offset,
+      count: comments.length,
+      totalCount,
+      hasNextPage: offset + comments.length < totalCount,
+    },
+  });
 }
 
 // POST /api/comments/manga/[id]
@@ -61,15 +75,24 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
   const plainContent = removeMarkdown(content || "");
 
   if (!id || !plainContent) {
-    return NextResponse.json({ error: "Missing id or content" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Missing id or content" },
+      { status: 400 }
+    );
   }
 
   if (plainContent.trim().length < 3) {
-    return NextResponse.json({ error: "Comment must be at least 3 characters" }, { status: 400 });  
+    return NextResponse.json(
+      { error: "Comment must be at least 3 characters" },
+      { status: 400 }
+    );
   }
 
   if (plainContent.length > 2000) {
-    return NextResponse.json({ error: "Comment must not exceed 2000 characters" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Comment must not exceed 2000 characters" },
+      { status: 400 }
+    );
   }
 
   const comment = await prisma.mangaComment.create({
