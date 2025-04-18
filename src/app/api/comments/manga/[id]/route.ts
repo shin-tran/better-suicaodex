@@ -2,13 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { serializeComment } from "@/lib/suicaodex/serializers";
 import { auth } from "@/auth";
+import removeMarkdown from "remove-markdown";
+
 
 interface RouteParams {
   params: Promise<{
     id: string;
   }>;
 }
-//TODO: rate limit & validation; xss
 
 // GET /api/comments/manga/[id]
 export async function GET(_: NextRequest, { params }: RouteParams) {
@@ -42,9 +43,18 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
   const { id } = await params;
 
   const { content } = await req.json();
+  const plainContent = removeMarkdown(content || "");
 
-  if (!id || !content) {
+  if (!id || !plainContent) {
     return NextResponse.json({ error: "Missing id or content" }, { status: 400 });
+  }
+
+  if (plainContent.trim().length < 3) {
+    return NextResponse.json({ error: "Comment must be at least 3 characters" }, { status: 400 });  
+  }
+
+  if (plainContent.length > 2000) {
+    return NextResponse.json({ error: "Comment must not exceed 2000 characters" }, { status: 400 });
   }
 
   const comment = await prisma.mangaComment.create({
