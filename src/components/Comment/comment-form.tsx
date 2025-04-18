@@ -21,6 +21,7 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { SiMarkdown } from "@icons-pack/react-simple-icons";
 
 const FormSchema = z.object({
   comment: z
@@ -101,14 +102,15 @@ export default function CommentForm({
                 />
               </FormControl>
               <FormDescription className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">
+                <span className="text-sm text-muted-foreground flex items-center">
+                  <SiMarkdown className="mr-1" />
                   <Link
                     href="https://www.markdownguide.org/basic-syntax/"
-                    className="text-primary underline"
+                    className="text-primary underline mr-1"
                     target="_blank"
                   >
                     Markdown
-                  </Link>{" "}
+                  </Link>
                   được hỗ trợ!
                 </span>
                 {!!field.value && !!field.value.length && (

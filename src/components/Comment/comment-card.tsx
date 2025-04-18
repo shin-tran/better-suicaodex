@@ -7,6 +7,8 @@ import { Button } from "../ui/button";
 import { Reply, ThumbsUp, TriangleAlert } from "lucide-react";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
 
 interface CommentCardProps {
   comment: CommentWithUser;
@@ -65,6 +67,7 @@ export default function CommentCard({ comment }: CommentCardProps) {
         <ReactMarkdown
           className="flex-1 flex-col gap-2 pt-1"
           remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
+          rehypePlugins={[rehypeRaw, rehypeSanitize]}
           components={{
             a: ({ href, children }) => (
               <a
