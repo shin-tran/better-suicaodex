@@ -44,6 +44,11 @@ export default function CommentForm({
   onCommentPosted,
 }: CommentFormProps) {
   const { data: session } = useSession();
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+  });
+  const [loading, setLoading] = useState(false);
+
   if (!session?.user?.id)
     return (
       <Alert className="rounded-sm bg-secondary">
@@ -52,11 +57,6 @@ export default function CommentForm({
         </AlertDescription>
       </Alert>
     );
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-  });
-
-  const [loading, setLoading] = useState(false);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     if (!data.comment.trim()) return;
