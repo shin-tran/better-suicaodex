@@ -1,4 +1,4 @@
-import { User, MangaComment } from "@prisma/client";
+import { User, MangaComment, ChapterComment } from "@prisma/client";
 
 export function serializeUser(user: User) {
   return {
@@ -9,17 +9,36 @@ export function serializeUser(user: User) {
   };
 }
 
-export type CommentWithUser = MangaComment & { user: User };
+export type MangaCommentWithUser = MangaComment & { user: User };
+export type ChapterCommentWithUser = ChapterComment & { user: User };
+export type CommentWithUser = MangaCommentWithUser | ChapterCommentWithUser;
 
 export function serializeComment(comment: CommentWithUser) {
-  return {
+  const baseComment = {
     id: comment.id,
     content: comment.content,
     createdAt: comment.createdAt,
     updatedAt: comment.updatedAt,
     isEdited: comment.updatedAt.getTime() !== comment.createdAt.getTime(),
-    reactions: comment.reactions || 0, 
-    mangaId: comment.mangaId,
+    reactions: comment.reactions || 0,
     user: serializeUser(comment.user),
   };
+
+  // Determine if it's a manga comment or chapter comment
+  if ('mangaId' in comment) {
+    return {
+      ...baseComment,
+      mangaId: comment.mangaId,
+      type: 'manga' as const,
+    };
+  } else if ('chapterId' in comment) {
+    return {
+      ...baseComment,
+      chapterId: comment.chapterId,
+      type: 'chapter' as const,
+    };
+  }
+
+  // Should never reach here, but TypeScript needs this
+  return baseComment;
 }

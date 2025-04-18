@@ -11,7 +11,7 @@ interface RouteParams {
   }>;
 }
 
-// GET /api/comments/manga/[id]
+// GET /api/comments/chapter/[id]
 export async function GET(req: NextRequest, { params }: RouteParams) {
   const { id } = await params;
 
@@ -24,11 +24,11 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
   const offset = parseInt(url.searchParams.get("offset") || "0", 10);
 
   const [totalCount, comments] = await Promise.all([
-    prisma.mangaComment.count({
-      where: { mangaId: id },
+    prisma.chapterComment.count({
+      where: { chapterId: id },
     }),
-    prisma.mangaComment.findMany({
-      where: { mangaId: id },
+    prisma.chapterComment.findMany({
+      where: { chapterId: id },
       include: { user: true },
       orderBy: { createdAt: "desc" },
       skip: offset,
@@ -48,7 +48,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
   });
 }
 
-// POST /api/comments/manga/[id]
+// POST /api/comments/chapter/[id]
 export async function POST(req: NextRequest, { params }: RouteParams) {
   const session = await auth();
   if (!session?.user?.id) {
@@ -95,10 +95,10 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     );
   }
 
-  const comment = await prisma.mangaComment.create({
+  const comment = await prisma.chapterComment.create({
     data: {
       content,
-      mangaId: id,
+      chapterId: id,
       userId: session.user.id,
     },
     include: {
