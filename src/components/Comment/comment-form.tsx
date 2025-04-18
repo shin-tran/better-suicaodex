@@ -35,12 +35,14 @@ const FormSchema = z.object({
 });
 
 interface CommentFormProps {
-  mangaId: string;
+  id: string;
+  type: "manga" | "chapter";
   onCommentPosted?: () => void;
 }
 
 export default function CommentForm({
-  mangaId,
+  id,
+  type,
   onCommentPosted,
 }: CommentFormProps) {
   const { data: session } = useSession();
@@ -62,15 +64,15 @@ export default function CommentForm({
     if (!data.comment.trim()) return;
     try {
       setLoading(true);
-      const response = await fetch(`/api/comments/manga/${mangaId}`, {
+      const endpoint = `/api/comments/${type}/${id}`;
+      
+      const response = await fetch(endpoint, {
         method: "POST",
         body: JSON.stringify({ content: data.comment }),
         headers: {
           "Content-Type": "application/json",
         },
       });
-
-      // const responseData = await response.json();
 
       if (!response.ok) {
         // Handle rate limit or other errors

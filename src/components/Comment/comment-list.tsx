@@ -19,15 +19,16 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const LIMIT = 10; // Limit for pagination
 
 interface CommentListProps {
-  mangaId: string;
+  id: string;
+  type: "manga" | "chapter";
 }
 
 // Use forwardRef to allow parent components to access the mutate function
-const CommentList = forwardRef(({ mangaId }: CommentListProps, ref) => {
+const CommentList = forwardRef(({ id, type }: CommentListProps, ref) => {
   const [page, setPage] = useState(1);
   const offset = (page - 1) * LIMIT; // Calculate offset based on page number
   const { data, mutate, isLoading, error } = useSWR(
-    `/api/comments/manga/${mangaId}?offset=${offset}&limit=${LIMIT}`,
+    `/api/comments/${type}/${id}?offset=${offset}&limit=${LIMIT}`,
     fetcher
   );
 

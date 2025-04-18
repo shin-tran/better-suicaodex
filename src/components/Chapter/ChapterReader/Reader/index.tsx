@@ -37,6 +37,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import useSWRMutation from "swr/mutation";
+import CommentSection from "@/components/Comment/comment-section";
 
 interface ReaderProps {
   images: string[];
@@ -163,6 +164,7 @@ export default function Reader({ images, chapterData }: ReaderProps) {
     <>
       <LongStrip images={images} />
       <ChapterNav chapterData={chapterData} chapterAggregate={data} />
+      <CommentSection id={chapterData.id} type="chapter" />
     </>
   );
 }

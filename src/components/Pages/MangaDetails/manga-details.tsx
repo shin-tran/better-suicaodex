@@ -420,7 +420,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
             </div>
           </TabsContent>
           <TabsContent value="comment">
-            <CommentSection id={manga.id} />
+            <CommentSection id={manga.id} type="manga" />
           </TabsContent>
 
           <TabsContent value="art">
