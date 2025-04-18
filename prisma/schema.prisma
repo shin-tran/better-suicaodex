@@ -22,6 +22,8 @@ model User {
 
   notifications Notify[]     @relation("toUser")
 
+  mangaComments  MangaComment[]
+
   // Optional for WebAuthn support
   //Authenticator Authenticator[]
  
@@ -29,6 +31,23 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
+model MangaComment {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isEdited  Boolean  @default(false)
+  reactions  Int      @default(0)
+
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+
+  manga     Manga    @relation(fields: [mangaId], references: [mangadexId])
+  mangaId   String
+
+  @@index([userId])
+  @@index([mangaId])
+} 
 
 
 
@@ -52,6 +71,8 @@ model Manga {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  comments       MangaComment[]
 
   @@index([mangadexId])
 }
@@ -148,6 +169,9 @@ model VerificationToken {
 //   transports           String?
  
 //   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+//   @@id([userId, credentialID])
+// }nDelete: Cascade)
  
 //   @@id([userId, credentialID])
 // }

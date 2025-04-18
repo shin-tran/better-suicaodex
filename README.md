@@ -32,7 +32,7 @@ Tuy vậy, SuicaoDex sẽ luôn:
 | Thư viện | /my-library | ✅ | ✅ |
 | Thông báo | /notifications | ⬛ | ☑️ (local) |
 | Tác giả | /author | ⬛ | ✅ |
-| Bình luận |  | ✅ | ⬛ |
+| Bình luận |  | ✅ | ☑️ (chưa hoàn thiện 100%) |
 | Built-in API | /api/mangadex/ | ✅ | ❌ |
 
 > Bỏ built-in API vì tôi lười 👍
@@ -44,7 +44,12 @@ Ngoài ra còn cải thiện các chức năng cũ và thêm một số chức n
 ## Dự kiến
 ⬛ Hoàn thiện Thông báo.
 
-⬛ Làm lại Bình luận cho đàng hoàng.
+☑️ Hoàn thiện bình luận: 
+1. ⬛ Thêm bình luận từng chương.
+2. ⬛ Chỉnh sửa/Trả lời/Xóa bình luận
+3. ⬛ Thả like
+4. ⬛ Thêm emoji, sticker...
+5. ⬛ Richtext editor (hoặc không 🐧)
 
 ⬛ Giả lập Gacha (tại sao lại không nhỉ? 🐧)
 
