@@ -14,6 +14,22 @@ const useKeyDown = (
 ) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      // Ignore keydown events during IME composition (important for Vietnamese input)
+      // if (event.isComposing) {
+      //   return;
+      // }
+
+      // Ignore keydown events when user is typing in input elements
+      const target = event.target as HTMLElement;
+      if (
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.contentEditable === "true" ||
+        target.isContentEditable
+      ) {
+        return;
+      }
+
       if (typeof keyCombination === "string") {
         // Handle simple key press
         if (event.key === keyCombination) {
