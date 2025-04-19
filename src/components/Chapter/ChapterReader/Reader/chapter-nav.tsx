@@ -70,13 +70,13 @@ export default function ChapterNav({
       )
     );
   }
-  
+
   // At this point, we should have a valid volume index since
   // the parent component ensures the chapter exists in the aggregate data
   // console.log(chapterAggregate);
   // console.log("vol: ", currentVolIndex);
   // console.log(chapterAggregate[currentVolIndex]);
- 
+
   const currentChapterIndex = chapterAggregate[
     currentVolIndex
   ].chapters.findIndex((chapter) => chapter.id === chapterData.id);
@@ -95,16 +95,22 @@ export default function ChapterNav({
 
   const router = useRouter();
   const goNextChapter = () => {
-    if (nextChapter) return router.push(`/chapter/${nextChapter}`);
+    if (nextChapter) {
+      const toastId = toast.loading("Đang chuyển chương...");
+      setTimeout(() => toast.dismiss(toastId), 1000);
+      return router.push(`/chapter/${nextChapter}`);
+    }
     return toast.warning("Đây là chương mới nhất rồi nha!");
   };
 
   const goPrevChapter = () => {
-    if (prevChapter) return router.push(`/chapter/${prevChapter}`);
+    if (prevChapter) {
+      const toastId = toast.loading("Đang chuyển chương...");
+      setTimeout(() => toast.dismiss(toastId), 1000);
+      return router.push(`/chapter/${prevChapter}`);
+    }
     return toast.warning("Đây là chương đầu tiên mà!");
   };
-
-  
 
   useKeyDown("ArrowLeft", goPrevChapter);
   useKeyDown("ArrowRight", goNextChapter);
