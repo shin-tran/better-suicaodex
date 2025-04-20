@@ -3,7 +3,7 @@
 import useSWR from "swr";
 import CommentCard from "./comment-card";
 import { forwardRef, useImperativeHandle, useState } from "react";
-import { Alert, AlertDescription } from "../ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Loader2 } from "lucide-react";
 import {
   Pagination,
@@ -48,8 +48,11 @@ const CommentList = forwardRef(({ id, type }: CommentListProps, ref) => {
   if (data.comments.length === 0)
     return (
       <Alert className="rounded-sm bg-secondary">
-        <AlertDescription className="flex justify-center">
-          Chưa có bình luận nào! Hãy bóc tem em nó ngay thôi! 😍
+        <AlertTitle className="flex justify-center text-center">
+          Chưa có bình luận nào!
+        </AlertTitle>
+        <AlertDescription className="flex justify-center text-center">
+          Hãy bóc tem em nó ngay thôi! 😍
         </AlertDescription>
       </Alert>
     );
