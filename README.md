@@ -45,8 +45,8 @@ Ngoài ra còn cải thiện các chức năng cũ và thêm một số chức n
 ⬛ Hoàn thiện Thông báo.
 
 ☑️ Hoàn thiện bình luận: 
-1. ⬛ Thêm bình luận từng chương.
-2. ⬛ Chỉnh sửa/Trả lời/Xóa bình luận
+1. ✅ Thêm bình luận từng chương.
+2. ⬛ Chỉnh sửa/Trả lời
 3. ⬛ Thả like
 4. ⬛ Thêm emoji, sticker...
 5. ⬛ Richtext editor (hoặc không 🐧)
