@@ -14,7 +14,11 @@ export default function CommentSection({ id, type }: CommentSectionProps) {
   // Create a reference to the CommentList component's mutate function
   const commentListRef = useRef<{ mutate: () => void } | null>(null);
 
-  const { refresh: refreshCommentCount } = type === "manga" ? useCommentCount(id) : { refresh: () => {} };
+  // Always call the hook unconditionally
+  const { refresh } = useCommentCount(id);
+  
+  // Then conditionally use the result
+  const refreshCommentCount = type === "manga" ? refresh : () => {};
 
   const handleCommentPosted = () => {
     // Call the mutate function from the CommentList component to refresh data
