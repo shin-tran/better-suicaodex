@@ -51,6 +51,7 @@ import AddToLibraryBtn from "@/components/Manga/add-to-library-btn";
 import MangaCoversTab from "@/components/Manga/manga-covers-tab";
 import MangaSubInfo from "@/components/Manga/manga-subinfo";
 import CommentSection from "@/components/Comment/comment-section";
+import { useCommentCount } from "@/hooks/use-comment-count";
 
 interface MangaDetailsProps {
   id: string;
@@ -63,6 +64,8 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
   const [manga, setManga] = useState<Manga>();
   const [loading, setLoading] = useState(true);
   const [statusCode, setStatusCode] = useState<number>(200);
+
+  const { count: cmtCount } = useCommentCount(id);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -384,22 +387,27 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
               value="chapter"
               className="rounded-sm w-full flex gap-1 px-2"
             >
-              <List size={20} />
+              <List size={18} />
               DS Chương
             </TabsTrigger>
             <TabsTrigger
               value="comment"
               className="rounded-sm w-full flex gap-1 px-2"
             >
-              <MessageSquare size={20} />
+              <MessageSquare size={18} />
               Bình luận
+              {!!cmtCount && cmtCount > 0 && (
+                <span>
+                  ({cmtCount.toLocaleString("en-US")})
+                </span>
+              )}
             </TabsTrigger>
 
             <TabsTrigger
               value="art"
               className="rounded-sm w-full flex gap-1 px-2"
             >
-              <ImagesIcon size={20} />
+              <ImagesIcon size={18} />
               Ảnh bìa
             </TabsTrigger>
           </TabsList>
