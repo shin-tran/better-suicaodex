@@ -71,12 +71,12 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     throw err;
   }
 
-  const { content } = await req.json();
+  const { content, title, chapterNumber } = await req.json();
   const plainContent = removeMarkdown(content || "");
 
-  if (!id || !plainContent) {
+  if (!id || !plainContent || !title || !chapterNumber) {
     return NextResponse.json(
-      { error: "Missing id or content" },
+      { error: "Missing data" },
       { status: 400 }
     );
   }
@@ -98,7 +98,9 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
   const comment = await prisma.chapterComment.create({
     data: {
       content,
+      title,
       chapterId: id,
+      chapterNumber,
       userId: session.user.id,
     },
     include: {

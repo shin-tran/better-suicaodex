@@ -34,6 +34,7 @@ model User {
 
 model MangaComment {
   id        String   @id @default(cuid())
+  title     String   @db.Text @default("")
   content   String   @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -52,6 +53,7 @@ model MangaComment {
 
 model ChapterComment {
   id        String   @id @default(cuid())
+  title     String   @db.Text @default("")
   content   String   @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -63,6 +65,7 @@ model ChapterComment {
 
   chapter  Chapter  @relation(fields: [chapterId], references: [mangadexId])
   chapterId String
+  chapterNumber String @default("Oneshot")
 
   @@index([userId])
   @@index([chapterId])

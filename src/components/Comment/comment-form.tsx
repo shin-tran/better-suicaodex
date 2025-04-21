@@ -37,12 +37,16 @@ const FormSchema = z.object({
 interface CommentFormProps {
   id: string;
   type: "manga" | "chapter";
+  title: string;
+  chapterNumber?: string;
   onCommentPosted?: () => void;
 }
 
 export default function CommentForm({
   id,
   type,
+  title,
+  chapterNumber,
   onCommentPosted,
 }: CommentFormProps) {
   const { data: session } = useSession();
@@ -65,10 +69,22 @@ export default function CommentForm({
     try {
       setLoading(true);
       const endpoint = `/api/comments/${type}/${id}`;
+
+      const body: {
+        content: string;
+        title: string;
+        chapterNumber?: string;
+      } = {
+        content: data.comment,
+        title: title,
+      }
+      if (chapterNumber) {
+        body.chapterNumber = chapterNumber;
+      }
       
       const response = await fetch(endpoint, {
         method: "POST",
-        body: JSON.stringify({ content: data.comment }),
+        body: JSON.stringify(body),
         headers: {
           "Content-Type": "application/json",
         },
