@@ -21,15 +21,15 @@ export default function CommentSection({
   // Create a reference to the CommentList component's mutate function
   const commentListRef = useRef<{ mutate: () => void } | null>(null);
 
-  // Only use the hook when type is manga
-  const commentCount = type === "manga" ? useCommentCount(id) : null;
+  // Always call the hook unconditionally
+  const commentCount = useCommentCount(type === "manga" ? id : "");
 
   const handleCommentPosted = () => {
     // Call the mutate function from the CommentList component to refresh data
     if (commentListRef.current) {
       commentListRef.current.mutate();
     }
-    if (type === "manga" && commentCount) {
+    if (type === "manga") {
       commentCount.refresh();
     }
   };
