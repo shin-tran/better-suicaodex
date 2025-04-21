@@ -22,10 +22,7 @@ export default function CommentSection({
   const commentListRef = useRef<{ mutate: () => void } | null>(null);
 
   // Always call the hook unconditionally
-  const { refresh } = useCommentCount(id);
-
-  // Then conditionally use the result
-  const refreshCommentCount = type === "manga" ? refresh : () => {};
+  const commentCount = useCommentCount(type === "manga" ? id : "");
 
   const handleCommentPosted = () => {
     // Call the mutate function from the CommentList component to refresh data
@@ -33,7 +30,7 @@ export default function CommentSection({
       commentListRef.current.mutate();
     }
     if (type === "manga") {
-      refreshCommentCount();
+      commentCount.refresh();
     }
   };
 
