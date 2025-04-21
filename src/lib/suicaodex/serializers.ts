@@ -16,6 +16,7 @@ export type CommentWithUser = MangaCommentWithUser | ChapterCommentWithUser;
 export function serializeComment(comment: CommentWithUser) {
   const baseComment = {
     id: comment.id,
+    title: comment.title || "", 
     content: comment.content,
     createdAt: comment.createdAt,
     updatedAt: comment.updatedAt,
@@ -35,6 +36,7 @@ export function serializeComment(comment: CommentWithUser) {
     return {
       ...baseComment,
       chapterId: comment.chapterId,
+      chapterNumner: comment.chapterNumber,
       type: 'chapter' as const,
     };
   }
