@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useConfig } from "@/hooks/use-config";
 import { getCompletedMangas } from "@/lib/mangadex/manga";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import useSWR from "swr";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -14,6 +14,7 @@ import "swiper/css/pagination";
 import MangaCompletedCard from "./manga-completed-card";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function CompletedSwiper() {
   const isMobile = useIsMobile();
@@ -33,7 +34,11 @@ export default function CompletedSwiper() {
         <hr className="w-9 h-1 bg-primary border-none" />
         <h1 className="text-2xl font-black uppercase">đã hoàn thành</h1>
 
-        <Skeleton className="mt-4 w-full h-[280px] md:h-[400px] rounded-sm bg-gray-500" />
+        <Alert className="rounded-sm border-none">
+          <AlertDescription className="flex justify-center">
+            <Loader2 className="animate-spin" />
+          </AlertDescription>
+        </Alert>
       </div>
     );
 

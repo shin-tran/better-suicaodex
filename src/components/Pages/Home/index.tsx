@@ -8,6 +8,7 @@ import StaffPick from "./StaffPick";
 import CompletedSwiper from "./Swiper/Completed";
 import PopularSwiper from "./Swiper/Popular";
 import { LazyLoadComponent } from "react-lazy-load-image-component";
+import CommentFeed from "@/components/Comment/CommentFeed";
 
 export default function HomePage() {
   return (
@@ -40,6 +41,12 @@ export default function HomePage() {
       </section>
 
       <section className="mt-9">
+        <LazyLoadComponent>
+          <CommentFeed />
+        </LazyLoadComponent>
+      </section>
+
+      <section className="mt-6">
         <LazyLoadComponent>
           <CompletedSwiper />
         </LazyLoadComponent>

@@ -36,7 +36,7 @@ export function serializeComment(comment: CommentWithUser) {
     return {
       ...baseComment,
       chapterId: comment.chapterId,
-      chapterNumner: comment.chapterNumber,
+      chapterNumber: comment.chapterNumber,
       type: 'chapter' as const,
     };
   }
