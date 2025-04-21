@@ -23,11 +23,17 @@ export default function CommentFeed() {
 
   if (isLoading)
     return (
-      <Alert className="rounded-sm border-none">
-        <AlertDescription className="flex justify-center">
-          <Loader2 className="animate-spin" />
-        </AlertDescription>
-      </Alert>
+      <>
+        <div>
+          <hr className="w-9 h-1 bg-primary border-none" />
+          <h1 className="text-2xl font-black uppercase">Bình luận gần đây</h1>
+        </div>
+        <Alert className="rounded-sm border-none mt-4">
+          <AlertDescription className="flex justify-center">
+            <Loader2 className="animate-spin" />
+          </AlertDescription>
+        </Alert>
+      </>
     );
   if (error || !comments) return null;
 
