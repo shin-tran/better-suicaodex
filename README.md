@@ -39,6 +39,8 @@ Tuy vậy, SuicaoDex sẽ luôn:
 
 > Tạm bỏ chức năng Bình luận, lý do bên dưới.
 
+> UPDATE: Đã thêm lại Bình luận, nhưng code như cc.
+
 Ngoài ra còn cải thiện các chức năng cũ và thêm một số chức năng mới, sẽ cập nhật sau...
 
 ## Dự kiến
