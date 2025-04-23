@@ -57,14 +57,14 @@ export default function CommentForm({
   const [loading, setLoading] = useState(false);
   const [shouldResetEditor, setShouldResetEditor] = useState(false);
 
-  // if (!session?.user?.id)
-  //   return (
-  //     <Alert className="rounded-sm bg-secondary">
-  //       <AlertDescription className="flex justify-center">
-  //         Bạn cần đăng nhập để bình luận!
-  //       </AlertDescription>
-  //     </Alert>
-  //   );
+  if (!session?.user?.id)
+    return (
+      <Alert className="rounded-sm bg-secondary">
+        <AlertDescription className="flex justify-center">
+          Bạn cần đăng nhập để bình luận!
+        </AlertDescription>
+      </Alert>
+    );
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     if (!data.comment.trim()) return;
