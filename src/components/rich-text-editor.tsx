@@ -66,7 +66,7 @@ interface RichTextEditorProps {
   reset?: boolean;
   disabled?: boolean;
 }
-
+//TODO: image, sticker
 export function RichTextEditor({
   value = "",
   onChange,
