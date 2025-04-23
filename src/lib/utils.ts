@@ -2,9 +2,32 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { formatDistanceToNowStrict } from "date-fns";
 import { vi as locale } from "date-fns/locale";
+import * as cheerio from "cheerio";
+import { defaultSchema } from 'hast-util-sanitize';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export function getPlainTextLength(html: string): number {
+  const temp = document.createElement("div");
+  temp.innerHTML = html;
+
+  // Lấy text thuần và loại bỏ xuống dòng, tab
+  const rawText = temp.textContent || temp.innerText || "";
+  const cleaned = rawText.replace(/[\n\t\r]/g, "");
+
+  return cleaned.length;
+}
+
+
+
+export function getPlainTextFromHTML(html: string): string {
+  if (!html) return "";
+
+  const $ = cheerio.load(html);
+  const text = $.text(); // lấy toàn bộ text trong HTML
+  return text.replace(/\s+/g, " ").trim();
 }
 
 const formatDistanceLocale = {
@@ -59,3 +82,43 @@ export function formatTimeToNow(date: Date | number): string {
 export function isFacebookUrl(url: string): boolean {
   return /facebook\.com/.test(url);
 }
+
+export const customSchema = {
+  ...defaultSchema,
+  attributes: {
+    ...(defaultSchema.attributes || {}),
+    '*': [
+      ...((defaultSchema.attributes && defaultSchema.attributes['*']) || []),
+      'style',
+      'className',
+    ],
+    div: [
+      ...((defaultSchema.attributes && defaultSchema.attributes['div']) || []),
+      'style',
+      'className',
+    ],
+    span: [
+      ...((defaultSchema.attributes && defaultSchema.attributes['span']) || []),
+      'style',
+      'className',
+    ],
+    p: [
+      ...((defaultSchema.attributes && defaultSchema.attributes['p']) || []),
+      'style',
+      'className',
+    ],
+    u: [
+      ...((defaultSchema.attributes && defaultSchema.attributes['u']) || []),
+      'style',
+      'className',
+    ],
+  },
+  tagNames: [
+    ...(defaultSchema.tagNames || []),
+    'div',
+    'span',
+    'p',
+    'u',  // Cho phép thẻ <u>
+  ],
+};
+
