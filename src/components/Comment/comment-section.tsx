@@ -35,7 +35,7 @@ export default function CommentSection({
   };
 
   return (
-    <div className="mt-4 flex flex-col gap-4">
+    <div className="mt-4 grid grid-cols-1 gap-4 w-full">
       <CommentForm
         id={id}
         title={title}

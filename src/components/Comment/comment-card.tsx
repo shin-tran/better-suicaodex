@@ -10,20 +10,21 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
 import { useSession } from "next-auth/react";
-import { cn } from "@/lib/utils";
+import { cn, customSchema } from "@/lib/utils";
 import { toast } from "sonner";
 
 interface CommentCardProps {
   comment: CommentWithUser;
 }
 
+
 export default function CommentCard({ comment }: CommentCardProps) {
   const { data: session } = useSession();
   const handleBtnClick = () => {
-    return toast.info("Chức năng đang phát triển!",{
+    return toast.info("Chức năng đang phát triển!", {
       closeButton: false,
-    })
-  };  
+    });
+  };
 
   return (
     <Card className="flex flex-col md:flex-row gap-3 p-3 rounded-md">
@@ -75,9 +76,9 @@ export default function CommentCard({ comment }: CommentCardProps) {
 
         {/* <p className="flex-1 pt-1">{comment.content}</p> */}
         <ReactMarkdown
-          className="prose prose-img:my-1 flex-1 flex-col gap-2 pt-1 dark:prose-invert"
+          className="prose prose-img:my-1 flex-1 flex-col gap-2 pt-1 dark:prose-invert max-w-full"
           remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
-          rehypePlugins={[rehypeRaw, rehypeSanitize]}
+          rehypePlugins={[rehypeRaw, [rehypeSanitize, customSchema]]}
           components={{
             a: ({ href, children }) => (
               <a
@@ -113,11 +114,17 @@ export default function CommentCard({ comment }: CommentCardProps) {
           <div
             className={cn(
               "flex flex-row items-center mt-2",
-              session?.user?.id === comment.user.id ? "justify-between" : "justify-end"
+              session?.user?.id === comment.user.id
+                ? "justify-between"
+                : "justify-end"
             )}
           >
             {session?.user?.id === comment.user.id && (
-              <Button variant="link" className="h-6 px-0 gap-1" onClick={handleBtnClick}>
+              <Button
+                variant="link"
+                className="h-6 px-0 gap-1"
+                onClick={handleBtnClick}
+              >
                 <PencilLine />
                 Sửa
               </Button>
@@ -125,12 +132,20 @@ export default function CommentCard({ comment }: CommentCardProps) {
 
             <div className="flex flex-row items-center gap-2">
               {session?.user?.id !== comment.user.id && (
-                <Button variant="link" className="h-6 px-0 gap-1" onClick={handleBtnClick}>
+                <Button
+                  variant="link"
+                  className="h-6 px-0 gap-1"
+                  onClick={handleBtnClick}
+                >
                   <ThumbsUp />
                   Thích
                 </Button>
               )}
-              <Button variant="link" className="h-6 px-0 gap-1" onClick={handleBtnClick}>
+              <Button
+                variant="link"
+                className="h-6 px-0 gap-1"
+                onClick={handleBtnClick}
+              >
                 <Reply />
                 Trả lời
               </Button>

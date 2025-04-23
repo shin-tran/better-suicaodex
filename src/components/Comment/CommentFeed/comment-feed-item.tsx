@@ -13,7 +13,7 @@ import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
 import NoPrefetchLink from "@/components/Custom/no-prefetch-link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { formatTimeToNow } from "@/lib/utils";
+import { customSchema, formatTimeToNow } from "@/lib/utils";
 import { Clock } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -49,7 +49,7 @@ export default function CommentFeedItem({
         <ReactMarkdown
           className="prose prose-img:my-1 flex-1 flex-col gap-2 dark:prose-invert text-sm"
           remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
-          rehypePlugins={[rehypeRaw, rehypeSanitize]}
+          rehypePlugins={[rehypeRaw, [rehypeSanitize, customSchema]]}
           components={{
             a: ({ href, children }) => (
               <a

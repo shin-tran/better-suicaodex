@@ -17,19 +17,20 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { cn, getPlainTextLength } from "@/lib/utils";
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Send } from "lucide-react";
 import { toast } from "sonner";
 import { SiMarkdown } from "@icons-pack/react-simple-icons";
+import { RichTextEditor } from "../rich-text-editor";
 
 const FormSchema = z.object({
   comment: z
     .string()
-    .min(3, {
+    .refine((val) => getPlainTextLength(val) >= 3, {
       message: "Bình luận phải dài ít nhất 3 ký tự!",
     })
-    .max(2000, {
+    .refine((val) => getPlainTextLength(val) <= 2000, {
       message: "Bình luận không được dài hơn 2000 ký tự!",
     }),
 });
@@ -54,15 +55,16 @@ export default function CommentForm({
     resolver: zodResolver(FormSchema),
   });
   const [loading, setLoading] = useState(false);
+  const [shouldResetEditor, setShouldResetEditor] = useState(false);
 
-  if (!session?.user?.id)
-    return (
-      <Alert className="rounded-sm bg-secondary">
-        <AlertDescription className="flex justify-center">
-          Bạn cần đăng nhập để bình luận!
-        </AlertDescription>
-      </Alert>
-    );
+  // if (!session?.user?.id)
+  //   return (
+  //     <Alert className="rounded-sm bg-secondary">
+  //       <AlertDescription className="flex justify-center">
+  //         Bạn cần đăng nhập để bình luận!
+  //       </AlertDescription>
+  //     </Alert>
+  //   );
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     if (!data.comment.trim()) return;
@@ -77,11 +79,11 @@ export default function CommentForm({
       } = {
         content: data.comment,
         title: title,
-      }
+      };
       if (chapterNumber) {
         body.chapterNumber = chapterNumber;
       }
-      
+
       const response = await fetch(endpoint, {
         method: "POST",
         body: JSON.stringify(body),
@@ -105,6 +107,9 @@ export default function CommentForm({
       // Reset the form after successful submission
       form.reset({ comment: "" });
 
+      // Reset the editor content
+      setShouldResetEditor(true);
+
       // Call the onCommentPosted callback if provided
       if (onCommentPosted) {
         onCommentPosted();
@@ -126,43 +131,24 @@ export default function CommentForm({
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Textarea
+                <RichTextEditor
                   placeholder="Viết bình luận..."
-                  className="resize-none w-full min-h-28"
-                  disabled={loading}
+                  className="bg-sidebar p-2 rounded-md border w-full"
                   maxLength={2000}
-                  {...field}
+                  value={field.value}
+                  onChange={(val) => {
+                    field.onChange(val);
+                  }}
+                  reset={shouldResetEditor}
+                  disabled={loading}
                 />
               </FormControl>
-              <FormDescription className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground flex items-center">
-                  <SiMarkdown className="mr-1" />
-                  <Link
-                    href="https://www.markdownguide.org/basic-syntax/"
-                    className="text-primary underline mr-1"
-                    target="_blank"
-                  >
-                    Markdown
-                  </Link>
-                  được hỗ trợ!
-                </span>
-                {!!field.value && !!field.value.length && (
-                  <span
-                    className={cn(
-                      "text-xs italic text-muted-foreground pr-1",
-                      field.value.length > 2000 && "text-destructive"
-                    )}
-                  >
-                    {field.value.length}/2000
-                  </span>
-                )}
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         <Button type="submit" disabled={loading}>
-          {!!loading && <Loader2 className="animate-spin" />}
+          {!!loading ? <Loader2 className="animate-spin" /> : <Send />}
           Gửi bình luận
         </Button>
       </form>
