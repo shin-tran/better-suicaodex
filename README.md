@@ -17,6 +17,10 @@ Tuy vậy, SuicaoDex sẽ luôn:
 ## Tiến độ
 ✅ Đã hoàn thành chuyển đổi từ suicaodex cũ sang better-suicaodex.
 
+☑️ Chưa hoàn thiện 100%
+
+❌ Loại bỏ
+
 | Route | URL | suicaodex | better-suicaodex |
 | --- | --- | :---: | :---: |
 | Trang chủ | / | ✅ | ✅ |
@@ -30,9 +34,9 @@ Tuy vậy, SuicaoDex sẽ luôn:
 | Chi tiết nhóm dịch | /group/:id | ✅ | ✅ |
 | Tài khoản |  | ✅ | ✅ |
 | Thư viện | /my-library | ✅ | ✅ |
-| Thông báo | /notifications | ⬛ | ☑️ (local) |
+| Thông báo | /notifications | ⬛ | ☑️ |
 | Tác giả | /author | ⬛ | ✅ |
-| Bình luận |  | ✅ | ☑️ (chưa hoàn thiện 100%) |
+| Bình luận |  | ✅ | ☑️ |
 | Built-in API | /api/mangadex/ | ✅ | ❌ |
 
 > Bỏ built-in API vì tôi lười 👍
@@ -45,6 +49,8 @@ Ngoài ra còn cải thiện các chức năng cũ và thêm một số chức n
 
 ## Dự kiến
 ⬛ Hoàn thiện Thông báo.
+
+⬛ Trang thể loại truyện (thể loại hiện tại đang dùng ké tìm kiếm nâng cao)
 
 ☑️ Hoàn thiện bình luận: 
 1. ✅ Thêm bình luận từng chương.
