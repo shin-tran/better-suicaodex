@@ -1,6 +1,5 @@
 import { Artist } from "@/types/types";
-import axiosInstance from "../axios";
-/* eslint-disable  @typescript-eslint/no-explicit-any */
+import { axiosWithProxyFallback } from "../axios";
 
 export function ArtistParser(data: any): Artist[] {
   const artists = data.filter((item: any) => item.type === "artist");
@@ -15,8 +14,10 @@ export function ArtistParser(data: any): Artist[] {
 
 export async function SearchArtist(artist: string): Promise<Artist[]> {
   if (artist.length === 0) return [];
-  const { data } = await axiosInstance.get(`/author?name=${artist}`);
-
+  const data = await axiosWithProxyFallback({
+    url: `/author?name=${artist}`,
+    method: "get",
+  });
   return data.data.map((item: any) => {
     return {
       id: item.id,

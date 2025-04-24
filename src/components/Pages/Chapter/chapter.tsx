@@ -51,6 +51,7 @@ export default function Chapter({ id }: ChapterProps) {
   if (error) {
     if (error.status === 404) return <ChapterNotFound />;
     if (error.status === 503) return <MangaMaintain />;
+    // console.log(error)
     return <div>Lỗi mất rồi 😭</div>;
   }
   if (!data) return <div>Not found</div>;

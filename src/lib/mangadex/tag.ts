@@ -1,5 +1,5 @@
 import { Tag } from "@/types/types";
-import axiosInstance from "../axios";
+import { axiosWithProxyFallback } from "../axios";
 
 export function TagsParser(data: any[]): Tag[] {
   return data.map((item) => {
@@ -11,6 +11,9 @@ export function TagsParser(data: any[]): Tag[] {
 }
 
 export async function getTags(): Promise<Tag[]> {
-  const { data } = await axiosInstance.get("/manga/tag");
+  const data = await axiosWithProxyFallback({
+    url: "/manga/tag",
+    method: "get",
+  });
   return TagsParser(data.data);
 }

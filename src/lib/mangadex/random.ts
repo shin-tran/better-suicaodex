@@ -1,9 +1,11 @@
 import { Manga } from "@/types/types";
-import axiosInstance from "../axios";
+import { axiosWithProxyFallback } from "../axios";
 import { MangaParser } from "./manga";
 
 export async function getRandomManga(r18: boolean): Promise<Manga> {
-  const { data } = await axiosInstance.get(`/manga/random?`, {
+  const data = await axiosWithProxyFallback({
+    url: `/manga/random`,
+    method: "get",
     params: {
       includes: ["cover_art", "author", "artist"],
       contentRating: r18

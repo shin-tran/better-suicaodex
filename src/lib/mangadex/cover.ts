@@ -1,5 +1,5 @@
 import { Cover } from "@/types/types";
-import axiosInstance from "../axios";
+import { axiosWithProxyFallback } from "../axios";
 
 export function CoverParser(data: any): Cover {
   return {
@@ -20,7 +20,20 @@ export async function getCovers(m_ids: string[]): Promise<Cover[]> {
   let hasMore = true;
 
   while (hasMore) {
-    const data = await axiosInstance.get(`/cover?`, {
+    // const data = await axiosWithProxyFallback.get(`/cover?`, {
+    //   params: {
+    //     limit: LIMIT,
+    //     offset: offset,
+    //     manga: m_ids,
+    //     order: {
+    //       volume: "asc",
+    //     },
+    //   },
+    // });
+
+    const data = await axiosWithProxyFallback({
+      url: `/cover?`,
+      method: "get",
       params: {
         limit: LIMIT,
         offset: offset,
@@ -31,8 +44,8 @@ export async function getCovers(m_ids: string[]): Promise<Cover[]> {
       },
     });
     
-    const total = data.data.total;
-    const currentResults = data.data.data.map((item: any) => CoverParser(item));
+    const total = data.total;
+    const currentResults = data.data.map((item: any) => CoverParser(item));
     totalResults = [...totalResults, ...currentResults];
     
     offset += LIMIT;
