@@ -1,7 +1,7 @@
 import { Chapter, ChapterAggregate, Volume } from "@/types/types";
 import { GroupParser } from "./group";
-import axiosInstance from "../axios";
 import { siteConfig } from "@/config/site";
+import { axiosWithProxyFallback } from "../axios";
 
 export function ChaptersParser(data: any[]): Chapter[] {
   return data.map((item) => {
@@ -113,7 +113,20 @@ export async function getChapterVolume(
     contentRating.push("pornographic");
   }
 
-  const { data } = await axiosInstance.get(`/manga/${mangaID}/feed?`, {
+  // const data = await axiosWithProxyFallback.get(`/manga/${mangaID}/feed?`, {
+  //   params: {
+  //     limit: limit,
+  //     offset: offset,
+  //     translatedLanguage: language,
+  //     includes: ["scanlation_group", "manga"],
+  //     contentRating: contentRating,
+  //     ...finalOrderQuery,
+  //   },
+  // });
+
+  const data = await axiosWithProxyFallback({
+    url: `/manga/${mangaID}/feed?`,
+    method: "get",
     params: {
       limit: limit,
       offset: offset,
@@ -122,7 +135,8 @@ export async function getChapterVolume(
       contentRating: contentRating,
       ...finalOrderQuery,
     },
-  });
+  })
+
   const total = data.total;
   const chapters = ChaptersParser(data.data);
 
@@ -130,11 +144,20 @@ export async function getChapterVolume(
 }
 
 export async function getChapterDetail(id: string): Promise<Chapter> {
-  const { data } = await axiosInstance.get(`/chapter/${id}?`, {
+  // const data = await axiosWithProxyFallback.get(`/chapter/${id}?`, {
+  //   params: {
+  //     includes: ["scanlation_group", "manga"],
+  //   },
+  // });
+
+  const data = await axiosWithProxyFallback({
+    url: `/chapter/${id}?`,
+    method: "get",
     params: {
       includes: ["scanlation_group", "manga"],
     },
   });
+
   const chapter = ChaptersParser([data.data])[0];
 
   const manga = () => {
@@ -158,7 +181,14 @@ export async function getChapterDetail(id: string): Promise<Chapter> {
     };
   };
 
-  const { data: atHomeData } = await axiosInstance.get(`/ch/${id}`);
+  // const { data: atHomeData } = await axiosWithProxyFallback.get(`/ch/${id}`);
+
+  const atHomeData = await axiosWithProxyFallback({
+    url: `/ch/${id}`,
+    method: "get",
+  });
+  // console.log(atHomeData);
+
   const pages = atHomeData.images.map(
     (item: string) => `${siteConfig.suicaodex.apiURL}/${item}`
   );
@@ -171,7 +201,15 @@ export async function getChapterAggregate(
   language: string,
   groups: string[]
 ): Promise<ChapterAggregate[]> {
-  const { data } = await axiosInstance.get(`/manga/${mangaID}/aggregate?`, {
+  // const data = await axiosWithProxyFallback.get(`/manga/${mangaID}/aggregate?`, {
+  //   params: {
+  //     translatedLanguage: [language],
+  //     groups: groups,
+  //   },
+  // });
+  const data = await axiosWithProxyFallback({
+    url: `/manga/${mangaID}/aggregate?`,
+    method: "get",
     params: {
       translatedLanguage: [language],
       groups: groups,

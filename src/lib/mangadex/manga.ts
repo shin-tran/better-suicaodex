@@ -1,4 +1,4 @@
-import axiosInstance from "../axios";
+import { axiosWithProxyFallback } from "../axios";
 import { TagsParser } from "./tag";
 import { AuthorParser } from "./author";
 import { ArtistParser } from "./artist";
@@ -115,7 +115,9 @@ export function MangaStatsParser(data: any, id: string): MangaStats {
 
 export async function fetchMangaDetail(id: string): Promise<Manga> {
   const [mangaResponse, stats] = await Promise.all([
-    axiosInstance.get(`/manga/${id}?`, {
+    axiosWithProxyFallback({
+      url: `/manga/${id}?`,
+      method: "get",
       params: {
         includes: ["author", "artist", "cover_art"],
       },
@@ -123,7 +125,7 @@ export async function fetchMangaDetail(id: string): Promise<Manga> {
     getMangaStats(id),
   ]);
 
-  const manga = MangaParser(mangaResponse.data.data);
+  const manga = MangaParser(mangaResponse.data);
   manga.stats = stats;
 
   return manga;
@@ -131,7 +133,10 @@ export async function fetchMangaDetail(id: string): Promise<Manga> {
 
 export async function getMangaStats(id: string): Promise<MangaStats> {
   try {
-    const { data } = await axiosInstance.get(`/statistics/manga/${id}`);
+    const data = await axiosWithProxyFallback({
+      url: `/statistics/manga/${id}`,
+      method: "get",
+    });
     return MangaStatsParser(data, id);
   } catch (error) {
     console.log(error);
@@ -160,7 +165,9 @@ export async function getMangaStats(id: string): Promise<MangaStats> {
 
 export async function getMangasStats(ids: string[]): Promise<MangasStats[]> {
   try {
-    const { data } = await axiosInstance.get(`/statistics/manga?`, {
+    const data = await axiosWithProxyFallback({
+      url: `/statistics/manga?`,
+      method: "get",
       params: {
         manga: ids,
       },
@@ -220,13 +227,17 @@ export async function getFirstChapter(
       chapter: "asc",
     },
   };
-  const { data: en } = await axiosInstance.get(`/manga/${id}/feed`, {
+  const { data: en } = await axiosWithProxyFallback({
+    url: `/manga/${id}/feed`,
+    method: "get",
     params: {
       ...params,
       translatedLanguage: ["en"],
     },
   });
-  const { data: vi } = await axiosInstance.get(`/manga/${id}/feed`, {
+  const { data: vi } = await axiosWithProxyFallback({
+    url: `/manga/${id}/feed`,
+    method: "get",
     params: {
       ...params,
       translatedLanguage: ["vi"],
@@ -243,7 +254,9 @@ export async function FirstViChapter(
   id: string,
   r18: boolean
 ): Promise<Chapter> {
-  const { data } = await axiosInstance.get(`/manga/${id}/feed`, {
+  const data = await axiosWithProxyFallback({
+    url: `/manga/${id}/feed`,
+    method: "get",
     params: {
       limit: 1,
       contentRating: r18
@@ -264,7 +277,9 @@ export async function FirstEnChapter(
   id: string,
   r18: boolean
 ): Promise<Chapter> {
-  const { data } = await axiosInstance.get(`/manga/${id}/feed`, {
+  const data = await axiosWithProxyFallback({
+    url: `/manga/${id}/feed`,
+    method: "get",
     params: {
       limit: 1,
       contentRating: r18
@@ -285,7 +300,9 @@ export async function SearchManga(
   query: string,
   r18: boolean
 ): Promise<Manga[]> {
-  const { data } = await axiosInstance.get("/manga?", {
+  const data = await axiosWithProxyFallback({
+    url: "/manga?",
+    method: "get",
     params: {
       limit: 20,
       title: query,
@@ -313,7 +330,9 @@ export async function getPopularMangas(
   language: ("vi" | "en")[],
   r18: boolean
 ): Promise<Manga[]> {
-  const { data } = await axiosInstance.get(`/manga?`, {
+  const data = await axiosWithProxyFallback({
+    url: `/manga?`,
+    method: "get",
     params: {
       limit: 10,
       includes: ["cover_art", "author", "artist"],
@@ -340,15 +359,17 @@ export async function getRecentlyMangas(
   r18: boolean,
   offset?: number
 ): Promise<{
-  mangas:Manga[],
-  total:number
+  mangas: Manga[];
+  total: number;
 }> {
   const max_total = 10000;
   const safeOffset = offset || 0;
   if (limit + safeOffset > max_total) {
     limit = max_total - safeOffset;
   }
-  const { data } = await axiosInstance.get(`/manga?`, {
+  const data = await axiosWithProxyFallback({
+    url: `/manga?`,
+    method: "get",
     params: {
       limit: limit,
       offset: safeOffset,
@@ -367,7 +388,7 @@ export async function getRecentlyMangas(
   return {
     mangas: data.data.map((item: any) => MangaParser(item)),
     total: total,
-  }
+  };
 }
 
 export async function getTopFollowedMangas(
@@ -387,7 +408,11 @@ export async function getTopFollowedMangas(
     },
   };
 
-  const { data } = await axiosInstance.get(`/manga?`, { params });
+  const data = await axiosWithProxyFallback({
+    url: `/manga?`,
+    method: "get",
+    params,
+  });
 
   const mangas = data.data.map((item: any) => MangaParser(item));
   const stats = await getMangasStats(mangas.map((manga: Manga) => manga.id));
@@ -402,7 +427,9 @@ export async function getTopRatedMangas(
   language: ("vi" | "en")[],
   r18: boolean
 ): Promise<Manga[]> {
-  const { data } = await axiosInstance.get(`/manga?`, {
+  const data = await axiosWithProxyFallback({
+    url: `/manga?`,
+    method: "get",
     params: {
       limit: 10,
       includes: ["cover_art", "author", "artist"],
@@ -433,15 +460,18 @@ export async function getStaffPickMangas(r18: boolean): Promise<Manga[]> {
   // Randomly choose between staffPickList and seasonalList
   const selectedList = Math.random() < 0.5 ? staffPickList : seasonalList;
 
-  const StaffPickID = await axiosInstance
-    .get(`/list/${selectedList}`)
-    .then((res) =>
-      res.data.data.relationships
-        .filter((item: any) => item.type === "manga")
-        .map((item: any) => item.id)
-    );
+  const StaffPickID = await axiosWithProxyFallback({
+    url: `/list/${selectedList}`,
+    method: "get",
+  }).then((res) =>
+    res.data.relationships
+      .filter((item: any) => item.type === "manga")
+      .map((item: any) => item.id)
+  );
 
-  const { data } = await axiosInstance.get(`/manga?`, {
+  const data = await axiosWithProxyFallback({
+    url: `/manga?`,
+    method: "get",
     params: {
       limit: 32,
       offset:
@@ -477,7 +507,9 @@ export async function getCompletedMangas(
   language: ("vi" | "en")[],
   r18: boolean
 ): Promise<Manga[]> {
-  const { data } = await axiosInstance.get(`/manga?`, {
+  const data = await axiosWithProxyFallback({
+    url: `/manga?`,
+    method: "get",
     params: {
       limit: 32,
       includes: ["cover_art", "author", "artist"],

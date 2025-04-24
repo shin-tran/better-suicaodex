@@ -1,5 +1,5 @@
 import { Group, GroupStats, Manga } from "@/types/types";
-import axiosInstance from "../axios";
+import { axiosWithProxyFallback } from "../axios";
 import { MangaParser } from "./manga";
 
 export function GroupParser(data: any): Group {
@@ -47,7 +47,9 @@ export function GroupParser(data: any): Group {
 }
 
 export async function getGroup(id: string): Promise<Group> {
-  const { data } = await axiosInstance.get(`/group/${id}?`, {
+  const data = await axiosWithProxyFallback({
+    url: `/group/${id}`,
+    method: "get",
     params: {
       includes: ["leader"],
     },
@@ -58,19 +60,24 @@ export async function getGroup(id: string): Promise<Group> {
 export async function getGroupStats(id: string): Promise<GroupStats> {
   try {
     const [statsResponse, uploadedResponse] = await Promise.all([
-      axiosInstance.get(`/statistics/group/${id}`),
-      axiosInstance.get(`/chapter?`, {
+      axiosWithProxyFallback({
+        url: `/statistics/group/${id}`,
+        method: "get"
+      }),
+      axiosWithProxyFallback({
+        url: `/chapter`,
+        method: "get",
         params: {
           limit: 0,
           groups: [id],
           contentRating: ["safe", "suggestive", "erotica", "pornographic"],
-        },
-      }),
+        }
+      })
     ]);
 
     const totalReplied =
-      statsResponse.data?.statistics?.[id]?.comments?.repliesCount || 0;
-    const totalUploaded = uploadedResponse.data?.total || 0;
+      statsResponse.statistics?.[id]?.comments?.repliesCount || 0;
+    const totalUploaded = uploadedResponse.total || 0;
 
     return { repliesCount: totalReplied, totalUploaded };
   } catch (error) {
@@ -92,14 +99,16 @@ export async function getGroupTitles(
   if (limit + offset > max_total) {
     limit = max_total - offset;
   }
-  const { data } = await axiosInstance.get(`/manga?`, {
+  const data = await axiosWithProxyFallback({
+    url: `/manga`,
+    method: "get",
     params: {
       limit,
       offset,
       group: id,
       contentRating: ["safe", "suggestive", "erotica", "pornographic"],
       includes: ["cover_art", "author", "artist"],
-    },
+    }
   });
   const total = data.total > max_total ? max_total : data.total;
 
@@ -132,7 +141,11 @@ export async function searchGroups(
     params.name = query;
   }
 
-  const { data } = await axiosInstance.get(`/group?`, { params });
+  const data = await axiosWithProxyFallback({
+    url: `/group`,
+    method: "get",
+    params: params
+  });
   const total = data.total > max_total ? max_total : data.total;
 
   return {

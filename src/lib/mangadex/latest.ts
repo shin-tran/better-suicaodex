@@ -1,5 +1,5 @@
 import { Chapter, Manga } from "@/types/types";
-import axiosInstance from "../axios";
+import { axiosWithProxyFallback } from "../axios";
 import { ChaptersParser } from "./chapter";
 import { MangaParser } from "./manga";
 
@@ -14,7 +14,9 @@ export async function getLatestChapters(
 
   while (mangaMap.size < max) {
     const remaining = max - mangaMap.size;
-    const { data: chaptersData } = await axiosInstance.get("/chapter?", {
+    const chaptersData = await axiosWithProxyFallback({
+      url: "/chapter",
+      method: "get",
       params: {
         limit: limitPerRequest,
         offset: offset,
@@ -28,6 +30,7 @@ export async function getLatestChapters(
         },
       },
     });
+    
     const chapters = ChaptersParser(chaptersData.data);
     const mangaIDs = chapters.map((chapter) => chapter.manga?.id);
 
@@ -43,7 +46,9 @@ export async function getLatestChapters(
       )
       .filter((chapter): chapter is Chapter => chapter !== undefined);
 
-    const { data: mangasData } = await axiosInstance.get("/manga?", {
+    const mangasData = await axiosWithProxyFallback({
+      url: "/manga",
+      method: "get",
       params: {
         limit: 20,
         ids: uniqueMangaIDs,
@@ -92,7 +97,9 @@ export async function getLatestManga(
       : ["safe", "suggestive", "erotica"];
 
   // Fetch chapters
-  const { data: chaptersData } = await axiosInstance.get("/chapter?", {
+  const chaptersData = await axiosWithProxyFallback({
+    url: "/chapter",
+    method: "get",
     params: {
       limit,
       offset,
@@ -119,7 +126,9 @@ export async function getLatestManga(
   }
 
   // Fetch manga details
-  const { data: mangasData } = await axiosInstance.get("/manga?", {
+  const mangasData = await axiosWithProxyFallback({
+    url: "/manga",
+    method: "get",
     params: {
       limit: 32,
       ids: uniqueMangaIDs,
@@ -173,7 +182,9 @@ export async function fetchLatestChapters(
     : ["safe", "suggestive", "erotica"];
 
   // Fetch chapters
-  const { data: chaptersData } = await axiosInstance.get("/chapter?", {
+  const chaptersData = await axiosWithProxyFallback({
+    url: "/chapter",
+    method: "get",
     params: {
       limit,
       offset,
@@ -200,7 +211,9 @@ export async function fetchLatestChapters(
   }
 
   // Fetch manga details
-  const { data: mangasData } = await axiosInstance.get("/manga?", {
+  const mangasData = await axiosWithProxyFallback({
+    url: "/manga",
+    method: "get",
     params: {
       limit: 100,
       ids: uniqueMangaIDs,

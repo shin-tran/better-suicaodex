@@ -1,5 +1,5 @@
 import { Chapter, Manga } from "@/types/types";
-import axiosInstance from "../axios";
+import { axiosWithProxyFallback } from "../axios";
 import { MangaParser } from "./manga";
 import { ChapterParser } from "./chapter";
 
@@ -40,7 +40,9 @@ export async function getMangasByIDs(ids: string[]): Promise<Manga[]> {
   }
 
   const requests = chunks.map((chunk) =>
-    axiosInstance.get(`/manga?`, {
+    axiosWithProxyFallback({
+      url: `/manga`,
+      method: "get",
       params: {
         limit: chunk.length,
         ids: chunk,
@@ -51,7 +53,7 @@ export async function getMangasByIDs(ids: string[]): Promise<Manga[]> {
   );
 
   const responses = await Promise.all(requests);
-  const mangas = responses.flatMap((response) => response.data.data);
+  const mangas = responses.flatMap((response) => response.data);
 
   return mangas.map((item: any) => MangaParser(item));
 }
@@ -67,7 +69,9 @@ export async function getChaptersByIds(ids: string[]): Promise<Chapter[]> {
   }
 
   const requests = chunks.map((chunk) =>
-    axiosInstance.get(`/chapter`, {
+    axiosWithProxyFallback({
+      url: `/chapter`,
+      method: "get",
       params: {
         limit: chunk.length,
         ids: chunk,
@@ -81,7 +85,7 @@ export async function getChaptersByIds(ids: string[]): Promise<Chapter[]> {
     })
   );
   const responses = await Promise.all(requests);
-  const chapters = responses.flatMap((response) => response.data.data);
+  const chapters = responses.flatMap((response) => response.data);
 
   return chapters.map((item: any) => ChapterParser(item));
 }

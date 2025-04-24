@@ -1,7 +1,6 @@
 import { Author, AuthorDetail, Manga } from "@/types/types";
-import axiosInstance from "../axios";
-import { includes } from "lodash";
 import { MangaParser } from "./manga";
+import { axiosWithProxyFallback } from "../axios";
 
 export function AuthorParser(data: any[]): Author[] {
   const authors = data.filter((item: any) => item.type === "author");
@@ -16,7 +15,10 @@ export function AuthorParser(data: any[]): Author[] {
 
 export async function SearchAuthor(author: string): Promise<Author[]> {
   if (author.length === 0) return [];
-  const { data } = await axiosInstance.get(`/author?name=${author}`);
+  const data = await axiosWithProxyFallback({
+    url: `/author?name=${author}`,
+    method: "get",
+  });
 
   return data.data.map((item: any) => {
     return {
@@ -29,7 +31,15 @@ export async function SearchAuthor(author: string): Promise<Author[]> {
 export async function SearchAuthorByIds(ids: string[]): Promise<Author[]> {
   if (ids.length === 0) return [];
   try {
-    const { data } = await axiosInstance.get(`/author?`, {
+    // const data = await axiosWithProxyFallback.get(`/author?`, {
+    //   params: {
+    //     limit: ids.length,
+    //     ids: ids,
+    //   },
+    // });
+    const data = await axiosWithProxyFallback({
+      url: `/author?`,
+      method: "get",
       params: {
         limit: ids.length,
         ids: ids,
@@ -48,7 +58,11 @@ export async function SearchAuthorByIds(ids: string[]): Promise<Author[]> {
 }
 
 export async function GetAuthor(id: string): Promise<AuthorDetail> {
-  const { data } = await axiosInstance.get(`/author/${id}`);
+  const data = await axiosWithProxyFallback({
+    url: `/author/${id}`,
+    method: "get",
+  });
+
   const attributes = data.data.attributes;
   return {
     id: data.data.id,
@@ -85,14 +99,25 @@ export async function GetAuthorTitles(
   offset: number
 ): Promise<{
   mangas: Manga[];
-    total: number;
+  total: number;
 }> {
   const max_total = 10000;
 
   if (limit + offset > max_total) {
     limit = max_total - offset;
   }
-  const { data } = await axiosInstance.get("/manga?", {
+  // const data = await axiosWithProxyFallback.get("/manga?", {
+  //   params: {
+  //     limit: limit,
+  //     offset: offset,
+  //     contentRating: ["safe", "suggestive", "erotica", "pornographic"],
+  //     authorOrArtist: id,
+  //     includes: ["author", "artist", "cover_art"],
+  //   },
+  // });
+  const data = await axiosWithProxyFallback({
+    url: "/manga?",
+    method: "get",
     params: {
       limit: limit,
       offset: offset,
@@ -101,6 +126,7 @@ export async function GetAuthorTitles(
       includes: ["author", "artist", "cover_art"],
     },
   });
+  
   const total = data.total > max_total ? max_total : data.total;
   return {
     mangas: data.data.map((item: any) => MangaParser(item)),
