@@ -50,8 +50,8 @@ Ngoài ra còn cải thiện các chức năng cũ và thêm một số chức n
 1. ✅ Thêm bình luận từng chương.
 2. ⬛ Chỉnh sửa/Trả lời
 3. ⬛ Thả like
-4. ⬛ Thêm emoji, sticker...
-5. ⬛ Richtext editor (hoặc không 🐧)
+4. ✅ Sticker...
+5. ✅ Richtext editor
 
 ⬛ Giả lập Gacha (tại sao lại không nhỉ? 🐧)
 
