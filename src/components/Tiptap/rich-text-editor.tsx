@@ -73,6 +73,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { stickerCategories } from "../stickers";
 import NextImage from "next/image";
 import { TiptapStickker } from "./tiptap-sticker";
+import NoPrefetchLink from "../Custom/no-prefetch-link";
 
 interface RichTextEditorProps {
   value?: string;
@@ -648,7 +649,12 @@ function StickerPicker({ editor }: { editor: any }) {
             onClick={() => handleSelectSticker(sticker.html)}
             className="rounded-none hover:rounded-lg hover:bg-primary/20 overflow-hidden h-full w-full"
           >
-            <NextImage src={sticker.src} alt={sticker.alt} unoptimized />
+            <NextImage
+              src={sticker.src}
+              alt={sticker.alt}
+              unoptimized
+              className="w-full h-auto"
+            />
           </button>
         ))}
     </div>
@@ -668,9 +674,18 @@ function StickerPicker({ editor }: { editor: any }) {
           </Button>
         </DrawerTrigger>
         <DrawerContent className="max-h-[70vh]">
-          <DrawerHeader className="hidden">
-            <DrawerTitle>Chọn sticker</DrawerTitle>
-            <DrawerDescription>Mẹ mày</DrawerDescription>
+          <DrawerHeader>
+            <DrawerTitle>Không thấy sticker bạn thích?</DrawerTitle>
+            <DrawerDescription>
+              Đề xuất sticker mới{" "}
+              <NoPrefetchLink
+                className="text-primary underline"
+                href="https://github.com/TNTKien/better-suicaodex/discussions/36"
+                target="_blank"
+              >
+                tại đây
+              </NoPrefetchLink>
+            </DrawerDescription>
           </DrawerHeader>
           <ScrollArea className="h-[70vh] w-full p-2">
             {renderStickers()}
@@ -692,8 +707,21 @@ function StickerPicker({ editor }: { editor: any }) {
           <StickerIcon className="size-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="size-[350px] ml-4 md:ml-8 lg:ml-12 overflow-auto py-0 px-1">
-        {renderStickers()}
+      <PopoverContent className="ml-4 md:ml-8 lg:ml-12 p-2 w-[350px]">
+        <div className="flex flex-col gap-0 px-1 pb-1 pt-0 border-b">
+          <p className="font-medium">Không thấy sticker bạn thích?</p>
+          <span className="text-sm text-muted-foreground">
+            Đề xuất thêm sticker mới{" "}
+            <NoPrefetchLink
+              className="text-primary underline"
+              href="https://github.com/TNTKien/better-suicaodex/discussions/36"
+              target="_blank"
+            >
+              tại đây
+            </NoPrefetchLink>
+          </span>
+        </div>
+        <ScrollArea className="h-[350px]">{renderStickers()}</ScrollArea>
       </PopoverContent>
     </Popover>
   );
