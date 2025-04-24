@@ -79,7 +79,7 @@ const data = {
       items: [
         {
           title: "Diễn đàn",
-          url: "/forum",
+          url: "https://github.com/TNTKien/better-suicaodex/discussions/36",
         },
         {
           title: "Nhóm dịch",
