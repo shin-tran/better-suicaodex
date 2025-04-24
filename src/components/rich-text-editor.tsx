@@ -35,6 +35,7 @@ import {
   Undo,
   Redo,
   EraserIcon,
+  StickerIcon,
 } from "lucide-react";
 import Link from "@tiptap/extension-link";
 import { cn } from "@/lib/utils";
@@ -53,9 +54,24 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { Label } from "./ui/label";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface RichTextEditorProps {
   value?: string;
@@ -566,12 +582,15 @@ export function RichTextEditor({
 
       <EditorContent editor={editor} />
 
-      {/* character counter */}
-      {maxLength ? (
-        <div className="text-xs text-muted-foreground text-right mt-1.5">
-          {characterCount}/{maxLength}
-        </div>
-      ) : null}
+      <div className="flex items-center justify-between mt-1.5">
+        <StickerPicker editor={editor} />
+        {/* character counter */}
+        {!!maxLength && (
+          <div className="text-xs text-muted-foreground text-right mt-1.5">
+            {characterCount}/{maxLength}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -584,9 +603,10 @@ function LinkDialogButton({ editor }: { editor: any }) {
   const handleSetLink = () => {
     if (url) {
       editor.chain().focus();
-  
+
       if (linkText) {
-        editor.chain()
+        editor
+          .chain()
           .insertContent(linkText)
           .extendMarkRange("link")
           .setLink({
@@ -596,7 +616,8 @@ function LinkDialogButton({ editor }: { editor: any }) {
           })
           .run();
       } else {
-        editor.chain()
+        editor
+          .chain()
           .extendMarkRange("link")
           .setLink({
             href: url,
@@ -606,16 +627,21 @@ function LinkDialogButton({ editor }: { editor: any }) {
           .run();
       }
     }
-  
+
     setOpen(false);
     setUrl("");
     setLinkText("");
   };
-  
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button aria-label="Gắn link" size="icon" className="size-8" variant="outline">
+        <Button
+          aria-label="Gắn link"
+          size="icon"
+          className="size-8 bg-transparent"
+          variant="outline"
+        >
           <LinkIcon className="size-4" />
         </Button>
       </DialogTrigger>
@@ -623,8 +649,8 @@ function LinkDialogButton({ editor }: { editor: any }) {
         <DialogHeader>
           <DialogTitle>Chèn hyperlink</DialogTitle>
           <DialogDescription>
-            Nếu bạn không biết hyperlink là cái mẹ gì, thì tắt cái này đi và
-            để nguyên link vào cmt thôi là được!
+            Nếu bạn không biết hyperlink là cái mẹ gì, thì tắt cái này đi và để
+            nguyên link vào cmt thôi là được!
           </DialogDescription>
         </DialogHeader>
         <Input
@@ -645,5 +671,57 @@ function LinkDialogButton({ editor }: { editor: any }) {
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function StickerPicker({ editor }: { editor: any }) {
+  const isMobile = useIsMobile();
+  const [open, setOpen] = React.useState(false);
+
+  if (isMobile) {
+    return (
+      <Drawer open={open} onOpenChange={setOpen}>
+        <DrawerTrigger asChild>
+          <Button
+            aria-label="Add sticker"
+            size="icon"
+            className="size-8 bg-transparent"
+            variant="outline"
+          >
+            <StickerIcon className="size-4" />
+          </Button>
+        </DrawerTrigger>
+        <DrawerContent>
+          <DrawerHeader className="text-left">
+            <DrawerTitle>Edit profile</DrawerTitle>
+            <DrawerDescription>
+              Make changes to your profile here. Click save when you're done.
+            </DrawerDescription>
+          </DrawerHeader>
+          <div>mẹ mày</div>
+          <DrawerFooter className="pt-2">
+            <DrawerClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          aria-label="Add sticker"
+          size="icon"
+          className="size-8 bg-transparent"
+          variant="outline"
+        >
+          <StickerIcon className="size-4" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="size-[350px] ml-4 md:ml-8 lg:ml-12">Place content for the popover here.</PopoverContent>
+    </Popover>
   );
 }
