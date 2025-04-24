@@ -72,7 +72,7 @@ import { Button } from "../ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { stickerCategories } from "../stickers";
 import NextImage from "next/image";
-import { TiptapStickker } from "./tiptap-sticker";
+import { TiptapSticker } from "./tiptap-sticker";
 import NoPrefetchLink from "../Custom/no-prefetch-link";
 
 interface RichTextEditorProps {
@@ -100,8 +100,8 @@ export function RichTextEditor({
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      Image,
-      TiptapStickker,
+      // Image,
+      TiptapSticker,
       StarterKit.configure({
         heading: {
           levels: [1, 2, 3, 4],
@@ -726,3 +726,11 @@ function StickerPicker({ editor }: { editor: any }) {
     </Popover>
   );
 }
+
+// const getContentLengthWithImages = (editor: any) => {
+//   const textLength = editor.getText().trim().length;
+//   const htmlContent = editor.getHTML();
+//   const imgCount = (htmlContent.match(/<img /g) || []).length;
+
+//   return textLength + imgCount * 3;
+// };

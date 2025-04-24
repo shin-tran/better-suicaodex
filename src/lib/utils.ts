@@ -20,14 +20,25 @@ export function getPlainTextLength(html: string): number {
   return cleaned.length;
 }
 
-
-
 export function getPlainTextFromHTML(html: string): string {
   if (!html) return "";
 
   const $ = cheerio.load(html);
   const text = $.text(); // lấy toàn bộ text trong HTML
   return text.replace(/\s+/g, " ").trim();
+}
+
+export function getContentLength(html: string): number {
+  const $ = cheerio.load(html);
+
+  const text = $.text().trim();
+  const textLength = text.length;
+
+  const imgCount = $('img').length;
+
+  const totalLength = textLength + imgCount;
+
+  return totalLength;
 }
 
 const formatDistanceLocale = {

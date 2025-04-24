@@ -1,6 +1,6 @@
 import { Image } from "@tiptap/extension-image";
 
-export const TiptapStickker = Image.extend({
+export const TiptapSticker = Image.extend({
   addAttributes() {
     return {
       ...this.parent?.(),
