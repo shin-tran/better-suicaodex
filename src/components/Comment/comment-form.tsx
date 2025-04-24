@@ -22,7 +22,7 @@ import { useState } from "react";
 import { Loader2, Send } from "lucide-react";
 import { toast } from "sonner";
 import { SiMarkdown } from "@icons-pack/react-simple-icons";
-import { RichTextEditor } from "../rich-text-editor";
+import { RichTextEditor } from "../Tiptap/rich-text-editor";
 
 const FormSchema = z.object({
   comment: z

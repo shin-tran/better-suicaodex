@@ -43,8 +43,8 @@ import Placeholder from "@tiptap/extension-placeholder";
 import CharacterCount from "@tiptap/extension-character-count";
 import Image from "@tiptap/extension-image";
 import "./rich-text-editor.css";
-import { Separator } from "./ui/separator";
-import { ScrollArea, ScrollBar } from "./ui/scroll-area";
+import { Separator } from "../ui/separator";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import {
   Dialog,
   DialogContent,
@@ -53,13 +53,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
+} from "../ui/dialog";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -69,9 +67,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { stickerCategories } from "../stickers";
+import NextImage from "next/image";
+import { TiptapStickker } from "./tiptap-sticker";
 
 interface RichTextEditorProps {
   value?: string;
@@ -99,6 +100,7 @@ export function RichTextEditor({
     immediatelyRender: false,
     extensions: [
       Image,
+      TiptapStickker,
       StarterKit.configure({
         heading: {
           levels: [1, 2, 3, 4],
@@ -276,66 +278,6 @@ export function RichTextEditor({
           <Separator orientation="vertical" className="h-6" />
 
           <ToggleGroup type="single" size="sm" variant="outline">
-            {/* <Dialog>
-              <DialogTrigger asChild>
-                <ToggleGroupItem
-                  value="link"
-                  aria-label="Add link"
-                  // onClick={() => {
-                  //   const url = window.prompt("Enter URL");
-                  //   if (url) {
-                  //     editor
-                  //       .chain()
-                  //       .focus()
-                  //       .setLink({
-                  //         href: url,
-                  //         target: "_blank",
-                  //         rel: "noopener noreferrer",
-                  //       })
-                  //       .run();
-                  //   }
-                  // }}
-                  disabled={
-                    !editor
-                      .can()
-                      .chain()
-                      .focus()
-                      .setLink({ href: "https://example.com" })
-                      .run()
-                  }
-                  data-state={editor.isActive("link") ? "on" : "off"}
-                >
-                  <LinkIcon className="size-4" />
-                </ToggleGroupItem>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Chèn hyperlink</DialogTitle>
-                  <DialogDescription>
-                    Nếu bạn không biết hyperlink là cái mẹ gì, thì tắt cái này
-                    đi và nhập nguyên link vào cmt thôi là được!
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="flex items-center gap-4">
-                    <Label htmlFor="text" className="text-right">
-                      Text
-                    </Label>
-                    <Input id="text" className="col-span-3" />
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <Label htmlFor="url" className="text-right">
-                      URL
-                    </Label>
-                    <Input id="url" className="col-span-3" />
-                  </div>
-                </div>
-                <DialogFooter>
-                  <Button>Xong</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog> */}
-
             <LinkDialogButton editor={editor} />
 
             {/* <ToggleGroupItem
@@ -586,7 +528,7 @@ export function RichTextEditor({
         <StickerPicker editor={editor} />
         {/* character counter */}
         {!!maxLength && (
-          <div className="text-xs text-muted-foreground text-right mt-1.5">
+          <div className="text-xs text-muted-foreground text-right">
             {characterCount}/{maxLength}
           </div>
         )}
@@ -678,6 +620,40 @@ function StickerPicker({ editor }: { editor: any }) {
   const isMobile = useIsMobile();
   const [open, setOpen] = React.useState(false);
 
+  const handleSelectSticker = (html: string) => {
+    // editor.chain().focus().setImage({ src: html, alt: 'sticker' }).run();
+    editor
+      .chain()
+      .focus()
+      .insertContent({
+        type: "image",
+        attrs: {
+          src: html,
+          alt: "sticker",
+          isSticker: true,
+        },
+      })
+      .run();
+
+    setOpen(false);
+  };
+
+  const renderStickers = () => (
+    <div className="grid grid-cols-3 gap-2 p-1.5 w-full">
+      {Object.values(stickerCategories)
+        .flat()
+        .map((sticker) => (
+          <button
+            key={sticker.id}
+            onClick={() => handleSelectSticker(sticker.html)}
+            className="rounded-none hover:rounded-lg hover:bg-primary/20 overflow-hidden h-full w-full"
+          >
+            <NextImage src={sticker.src} alt={sticker.alt} unoptimized />
+          </button>
+        ))}
+    </div>
+  );
+
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={setOpen}>
@@ -691,26 +667,21 @@ function StickerPicker({ editor }: { editor: any }) {
             <StickerIcon className="size-4" />
           </Button>
         </DrawerTrigger>
-        <DrawerContent>
-          <DrawerHeader className="text-left">
-            <DrawerTitle>Edit profile</DrawerTitle>
-            <DrawerDescription>
-              Make changes to your profile here. Click save when you're done.
-            </DrawerDescription>
+        <DrawerContent className="max-h-[70vh]">
+          <DrawerHeader className="hidden">
+            <DrawerTitle>Chọn sticker</DrawerTitle>
+            <DrawerDescription>Mẹ mày</DrawerDescription>
           </DrawerHeader>
-          <div>mẹ mày</div>
-          <DrawerFooter className="pt-2">
-            <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DrawerClose>
-          </DrawerFooter>
+          <ScrollArea className="h-[70vh] w-full p-2">
+            {renderStickers()}
+          </ScrollArea>
         </DrawerContent>
       </Drawer>
     );
   }
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           aria-label="Add sticker"
@@ -721,7 +692,9 @@ function StickerPicker({ editor }: { editor: any }) {
           <StickerIcon className="size-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="size-[350px] ml-4 md:ml-8 lg:ml-12">Place content for the popover here.</PopoverContent>
+      <PopoverContent className="size-[350px] ml-4 md:ml-8 lg:ml-12 overflow-auto py-0 px-1">
+        {renderStickers()}
+      </PopoverContent>
     </Popover>
   );
 }
