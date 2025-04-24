@@ -2,9 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { serializeComment } from "@/lib/suicaodex/serializers";
 import { auth } from "@/auth";
-import removeMarkdown from "remove-markdown";
 import { limiter, RateLimitError } from "@/lib/rate-limit";
-import { getPlainTextFromHTML } from "@/lib/utils";
+import { getContentLength } from "@/lib/utils";
 
 interface RouteParams {
   params: Promise<{
@@ -73,24 +72,23 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
   }
 
   const { content, title, chapterNumber } = await req.json();
-  // const plainContent = removeMarkdown(content || "");
-  const plainContent = getPlainTextFromHTML(content || "");
+  const contentLength = getContentLength(content || "");
 
-  if (!id || !plainContent || !title || !chapterNumber) {
+  if (!id || !content || !title || !chapterNumber) {
     return NextResponse.json(
       { error: "Missing data" },
       { status: 400 }
     );
   }
 
-  if (plainContent.trim().length < 3) {
+  if (contentLength < 1) {
     return NextResponse.json(
-      { error: "Comment must be at least 3 characters" },
+      { error: "Comment must be at least 1 character" },
       { status: 400 }
     );
   }
 
-  if (plainContent.length > 2000) {
+  if (contentLength > 2000) {
     return NextResponse.json(
       { error: "Comment must not exceed 2000 characters" },
       { status: 400 }

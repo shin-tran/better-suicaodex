@@ -10,27 +10,23 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
-import Link from "next/link";
-import { cn, getPlainTextLength } from "@/lib/utils";
-import { useState } from "react";
+import { cn, getContentLength } from "@/lib/utils";
+import { useState, useEffect } from "react";
 import { Loader2, Send } from "lucide-react";
 import { toast } from "sonner";
-import { SiMarkdown } from "@icons-pack/react-simple-icons";
-import { RichTextEditor } from "../rich-text-editor";
+import { RichTextEditor } from "../Tiptap/rich-text-editor";
 
 const FormSchema = z.object({
   comment: z
     .string()
-    .refine((val) => getPlainTextLength(val) >= 3, {
-      message: "Bình luận phải dài ít nhất 3 ký tự!",
+    .refine((val) => getContentLength(val) >= 1, {
+      message: "Bình luận phải dài ít nhất 1 ký tự!",
     })
-    .refine((val) => getPlainTextLength(val) <= 2000, {
+    .refine((val) => getContentLength(val) <= 2000, {
       message: "Bình luận không được dài hơn 2000 ký tự!",
     }),
 });
@@ -57,6 +53,13 @@ export default function CommentForm({
   const [loading, setLoading] = useState(false);
   const [shouldResetEditor, setShouldResetEditor] = useState(false);
 
+  useEffect(() => {
+    if (shouldResetEditor) {
+      const timer = setTimeout(() => setShouldResetEditor(false), 0);
+      return () => clearTimeout(timer);
+    }
+  }, [shouldResetEditor]);
+
   if (!session?.user?.id)
     return (
       <Alert className="rounded-sm bg-secondary">
@@ -67,7 +70,6 @@ export default function CommentForm({
     );
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    if (!data.comment.trim()) return;
     try {
       setLoading(true);
       const endpoint = `/api/comments/${type}/${id}`;
@@ -93,7 +95,6 @@ export default function CommentForm({
       });
 
       if (!response.ok) {
-        // Handle rate limit or other errors
         if (response.status === 429) {
           toast.error("Rap chậm thôi bruh...😓", {
             closeButton: false,
@@ -104,13 +105,9 @@ export default function CommentForm({
         return;
       }
 
-      // Reset the form after successful submission
-      form.reset({ comment: "" });
-
-      // Reset the editor content
+      // Trigger the editor reset
       setShouldResetEditor(true);
 
-      // Call the onCommentPosted callback if provided
       if (onCommentPosted) {
         onCommentPosted();
       }
