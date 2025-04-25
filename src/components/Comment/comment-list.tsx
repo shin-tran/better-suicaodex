@@ -4,7 +4,6 @@ import useSWR from "swr";
 import CommentCard from "./comment-card";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { Loader2 } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -14,6 +13,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import Image from "next/image";
+import DoroLoading from "#/images/doro-loading.gif";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const LIMIT = 10; // Limit for pagination
@@ -41,7 +42,13 @@ const CommentList = forwardRef(({ id, type }: CommentListProps, ref) => {
     return (
       <Alert className="rounded-sm border-none">
         <AlertDescription className="flex justify-center">
-          <Loader2 className="animate-spin" />
+          <Image
+            src={DoroLoading}
+            alt="Loading..."
+            unoptimized
+            priority
+            className="w-20 h-auto"
+          />
         </AlertDescription>
       </Alert>
     );

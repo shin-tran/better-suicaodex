@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
+import DoroLoading from "#/images/doro-loading.gif";
 
 interface MyLibraryProps {
   category: Omit<LibraryType, "none">;
@@ -67,7 +69,13 @@ export default function MyLibrary({ category }: MyLibraryProps) {
     return (
       <Alert className="rounded-sm border-none">
         <AlertDescription className="flex justify-center">
-          <Loader2 className="animate-spin" />
+          <Image
+            src={DoroLoading}
+            alt="Loading..."
+            unoptimized
+            priority
+            className="w-20 h-auto"
+          />
         </AlertDescription>
       </Alert>
     );

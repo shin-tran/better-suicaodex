@@ -14,6 +14,8 @@ import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Alert, AlertDescription } from "../ui/alert";
 import DetailsCard from "../Search/Result/details-card";
+import Image from "next/image";
+import DoroLoading from "#/images/doro-loading.gif";
 
 interface SyncLibProps {
   session: any;
@@ -80,7 +82,13 @@ export default function SyncLib({ session }: SyncLibProps) {
           <TabsContent key={tab.value} value={tab.value} className="w-full">
             <Alert className="rounded-sm border-none">
               <AlertDescription className="flex justify-center">
-                <Loader2 className="animate-spin" />
+                <Image
+                  src={DoroLoading}
+                  alt="Loading..."
+                  unoptimized
+                  priority
+                  className="w-20 h-auto"
+                />
               </AlertDescription>
             </Alert>
           </TabsContent>

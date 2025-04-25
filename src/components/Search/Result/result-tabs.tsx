@@ -7,6 +7,8 @@ import { Card } from "@/components/ui/card";
 import DetailsCard from "./details-card";
 import MangaCompletedCard from "@/components/Pages/Home/Swiper/Completed/manga-completed-card";
 import SemiCard from "./semi-card";
+import Image from "next/image";
+import DoroLoading from "#/images/doro-loading.gif";
 
 interface ResultTabProps {
   isError: any;
@@ -22,8 +24,14 @@ export default function ResultTabs({
   if (isLoading || !mangas) {
     return (
       <DefaultTabs>
-        <div className="mt-20">
-          <Loader2 className="animate-spin" size={40} />
+        <div className="mt-4">
+          <Image
+            src={DoroLoading}
+            alt="Loading..."
+            unoptimized
+            priority
+            className="w-20 h-auto"
+          />
         </div>
       </DefaultTabs>
     );

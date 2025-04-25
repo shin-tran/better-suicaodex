@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useConfig } from "@/hooks/use-config";
 import { getCompletedMangas } from "@/lib/mangadex/manga";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import useSWR from "swr";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -13,8 +13,9 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import MangaCompletedCard from "./manga-completed-card";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import Image from "next/image";
+import DoroLoading from "#/images/doro-loading.gif";
 
 export default function CompletedSwiper() {
   const isMobile = useIsMobile();
@@ -36,7 +37,13 @@ export default function CompletedSwiper() {
 
         <Alert className="rounded-sm border-none">
           <AlertDescription className="flex justify-center">
-            <Loader2 className="animate-spin" />
+          <Image
+            src={DoroLoading}
+            alt="Loading..."
+            unoptimized
+            priority
+            className="w-20 h-auto"
+          />
           </AlertDescription>
         </Alert>
       </div>

@@ -10,6 +10,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
+import Image from "next/image";
+import DoroLoading from "#/images/doro-loading.gif";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -30,7 +32,13 @@ export default function CommentFeed() {
         </div>
         <Alert className="rounded-sm border-none mt-4">
           <AlertDescription className="flex justify-center">
-            <Loader2 className="animate-spin" />
+            <Image
+              src={DoroLoading}
+              alt="Loading..."
+              unoptimized
+              priority
+              className="w-20 h-auto"
+            />
           </AlertDescription>
         </Alert>
       </>

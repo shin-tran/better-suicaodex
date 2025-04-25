@@ -67,6 +67,10 @@ const data = {
           url: "/recent",
         },
         {
+          title: "Thể loại",
+          url: "/tag",
+        },
+        {
           title: "Truyện ngẫu nhiên",
           url: "/random",
         },
