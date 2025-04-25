@@ -17,7 +17,7 @@ export default function Tags({ tags, contentRating, status }: TagsProps) {
       {tags.map((tag) => (
         <NormalTag key={tag.id} className="uppercase">
           <a
-            href={`/advanced-search?include=${tag.id}`}
+            href={`/tag/${tag.id}`}
             className="hover:underline text-gray-700 dark:text-white"
           >
             {tag.name}

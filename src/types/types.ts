@@ -1,7 +1,14 @@
 export type Tag = {
   id: string;
   name: string;
+  group: string;
 };
+
+export type TagsGroup = {
+  group: string;
+  name: string;
+  tags: Tag[];
+}
 
 export type Author = {
   id: string;
