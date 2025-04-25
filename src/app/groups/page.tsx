@@ -1,6 +1,4 @@
 import { Metadata } from "next";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Terminal } from "lucide-react";
 import GroupsSearch from "@/components/Groups/groups-search";
 
 interface pageProps {
