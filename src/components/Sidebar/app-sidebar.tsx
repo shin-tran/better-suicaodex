@@ -21,7 +21,7 @@ import { NavMain } from "./nav-main";
 import { siteConfig } from "@/config/site";
 import { NavSupports } from "./nav-supports";
 import { NavSettings } from "./nav-settings";
-import { signOut, useSession } from "next-auth/react";
+// import { signOut, useSession } from "next-auth/react";
 
 // This is sample data.
 const data = {

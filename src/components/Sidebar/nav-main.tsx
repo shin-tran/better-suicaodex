@@ -16,6 +16,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { ThemeCustomizer } from "../Theme/theme-customizer";
 
@@ -35,6 +36,8 @@ export function NavMain({
     }[];
   }[];
 }) {
+  const { toggleSidebar, open } = useSidebar();
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Lối tắt</SidebarGroupLabel>
@@ -48,7 +51,15 @@ export function NavMain({
           >
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip={item.title}>
+                <SidebarMenuButton
+                  tooltip={item.title}
+                  onClick={(e) => {
+                    if (!open && (item.isActive || true)) {
+                      e.preventDefault();
+                      toggleSidebar();
+                    }
+                  }}
+                >
                   {item.icon && <item.icon />}
                   <span className="font-semibold">{item.title}</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
