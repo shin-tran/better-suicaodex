@@ -54,12 +54,11 @@ export function NavMain({
                 <SidebarMenuButton
                   tooltip={item.title}
                   onClick={(e) => {
-                    if(!open) {
-                      if(item.isActive) {
-                        e.preventDefault();
-                      }
-                      toggleSidebar();
+                    if(open) return;
+                    if(item.isActive) {
+                      e.preventDefault();
                     }
+                    toggleSidebar();
                   }}
                 >
                   {item.icon && <item.icon />}
