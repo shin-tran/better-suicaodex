@@ -36,7 +36,7 @@ export function NavMain({
     }[];
   }[];
 }) {
-  const { toggleSidebar, open } = useSidebar();
+  const { toggleSidebar, open, openMobile } = useSidebar();
 
   return (
     <SidebarGroup>
@@ -54,7 +54,7 @@ export function NavMain({
                 <SidebarMenuButton
                   tooltip={item.title}
                   onClick={(e) => {
-                    if(open) return;
+                    if(open || openMobile) return;
                     if(item.isActive) {
                       e.preventDefault();
                     }
