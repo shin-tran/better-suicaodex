@@ -50,7 +50,7 @@ Ngoài ra còn cải thiện các chức năng cũ và thêm một số chức n
 ## Dự kiến
 ⬛ Hoàn thiện Thông báo.
 
-⬛ Trang thể loại truyện (thể loại hiện tại đang dùng ké tìm kiếm nâng cao)
+✅ Trang thể loại truyện (thể loại hiện tại đang dùng ké tìm kiếm nâng cao)
 
 ☑️ Hoàn thiện bình luận: 
 1. ✅ Thêm bình luận từng chương.
