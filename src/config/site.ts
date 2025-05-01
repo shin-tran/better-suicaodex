@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: "SuicaoDex",
   url: "https://suicaodex.com",
-  ogImage: "https://suicaodex.com/hanabi_holder.webp",
+  ogImage: "https://suicaodex.com/images/doro_think.webp",
   description: "SuicaoDex - Trang web truyện tranh đầu hàng VN",
   links: {
     discord: "https://discord.gg/dongmoe",
