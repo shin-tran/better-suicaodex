@@ -49,7 +49,7 @@ export default function CommentFeedItem({
         <ReactMarkdown
           className="prose prose-img:my-1 flex-1 flex-col gap-2 dark:prose-invert text-sm"
           remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
-          rehypePlugins={[rehypeRaw, [rehypeSanitize, customSchema]]}
+          rehypePlugins={[rehypeRaw, [rehypeSanitize]]}
           components={{
             a: ({ href, children }) => (
               <a

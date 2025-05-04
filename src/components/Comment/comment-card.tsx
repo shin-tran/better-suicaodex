@@ -78,7 +78,7 @@ export default function CommentCard({ comment }: CommentCardProps) {
         <ReactMarkdown
           className="prose prose-img:my-1 flex-1 flex-col gap-2 pt-1 dark:prose-invert max-w-full"
           remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
-          rehypePlugins={[rehypeRaw, [rehypeSanitize, customSchema]]}
+          rehypePlugins={[rehypeRaw, [rehypeSanitize]]}
           components={{
             a: ({ href, children }) => (
               <a
