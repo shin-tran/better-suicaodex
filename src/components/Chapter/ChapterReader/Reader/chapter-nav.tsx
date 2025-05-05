@@ -169,12 +169,12 @@ export default function ChapterNav({
           </Button>
 
           <Select
-            // defaultValue={chapterData.id}
+            defaultValue={chapterData.id}
             onValueChange={(id) => router.push(`/chapter/${id}`)}
           >
             <SelectTrigger
               className="focus:ring-0 min-w-min md:min-w-48 [&_svg]:size-5 [&[data-state=open]>svg]:rotate-180 bg-secondary"
-              disabled={!chapterData.chapter}
+              // disabled={!chapterData.chapter}
             >
               <SelectValue placeholder={ChapterTitle(chapterData)} />
             </SelectTrigger>
