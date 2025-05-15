@@ -10,7 +10,6 @@ interface LongStripProps {
 }
 
 export default function LongStrip({ images }: LongStripProps) {
-  ``;
   // const [loaded, setLoaded] = useState(false);
 
   const [config] = useConfig();
