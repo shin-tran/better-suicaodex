@@ -38,17 +38,17 @@ export default function LongStrip({ images }: LongStripProps) {
             // className={`block overflow-hidden ${
             //   loaded ? "min-h-0" : "min-h-[100vh]"
             // }`}
-            className="block overflow-hidden"
+            className="block overflow-hidden w-full"
             style={{
-              minHeight: allLoaded ? "auto" : "500px",
+              minHeight: allLoaded ? "auto" : "700px",
             }}
           >
             <LazyLoadImage
               wrapperClassName="!block"
               placeholderSrc={"/images/place-doro.webp"}
               className={cn(
-                "h-auto w-auto mx-auto",
-                config.reader.imageFit === "height" && "!max-h-screen"
+                "h-auto mx-auto",
+                config.reader.imageFit === "height" ? "!max-h-screen w-auto" : "w-full"
               )}
               // onLoad={() => setLoaded(true)}
               onLoad={() => setLoadedCount((prev) => prev + 1)}
