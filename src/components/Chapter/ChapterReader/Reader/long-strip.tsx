@@ -10,23 +10,24 @@ interface LongStripProps {
 }
 
 export default function LongStrip({ images }: LongStripProps) {
+  ``;
   // const [loaded, setLoaded] = useState(false);
 
   const [config] = useConfig();
-
-  const [loadedCount, setLoadedCount] = useState(0);
-  const allLoaded = loadedCount === images.length;
+  // const [loaded, setLoaded] = useState(false);
+  // const [loadedCount, setLoadedCount] = useState(0);
+  // const allLoaded = loadedCount === images.length;
 
   return (
     <div
       className={cn(
-        "min-w-0 relative mt-2",
-        allLoaded ? "min-h-0" : "min-h-lvh"
+        "min-w-0 relative mt-2 min-h-lvh"
+        // allLoaded ? "min-h-0" : "min-h-lvh"
       )}
     >
       <div
         className={cn(
-          "overflow-x-auto flex flex-col items-center h-full select-none bg-transparent"
+          "overflow-x-auto flex flex-col items-center h-full select-none bg-transparent justify-center"
         )}
         style={{
           gap: `${config.reader.imageGap}px`,
@@ -38,30 +39,73 @@ export default function LongStrip({ images }: LongStripProps) {
             // className={`block overflow-hidden ${
             //   loaded ? "min-h-0" : "min-h-[100vh]"
             // }`}
-            className="block overflow-hidden w-full"
-            style={{
-              minHeight: allLoaded ? "auto" : "700px",
-            }}
+            className={cn("block overflow-hidden w-full")}
+            // style={{
+            //   minHeight: allLoaded ? "auto" : "500px",
+            // }}
           >
-            <LazyLoadImage
-              wrapperClassName="!block"
+            {/* <LazyLoadImage
+              wrapperClassName={cn(
+                "!block"
+                // !loaded && "aspect-[5/7]"
+              )}
               placeholderSrc={"/images/place-doro.webp"}
               className={cn(
                 "h-auto mx-auto",
-                config.reader.imageFit === "height" ? "!max-h-screen w-auto" : "w-full"
+                config.reader.imageFit === "height"
+                  ? "!max-h-screen w-auto"
+                  : "w-full"
               )}
               // onLoad={() => setLoaded(true)}
-              onLoad={() => setLoadedCount((prev) => prev + 1)}
+              onLoad={() => {
+                // setLoaded(true);
+                setLoadedCount((prev) => prev + 1);
+              }}
               onError={(e) => {
                 e.currentTarget.src = "/images/xidoco.webp";
               }}
               src={image}
               alt={`Trang ${index + 1}`}
               visibleByDefault={true}
-            />
+            /> */}
+
+            <MangaImage src={image} alt={`Trang ${index + 1}`} />
           </span>
         ))}
       </div>
     </div>
+  );
+}
+
+interface MangaImageProps {
+  src: string;
+  alt: string;
+}
+
+function MangaImage({ src, alt }: MangaImageProps) {
+  const [config] = useConfig();
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <LazyLoadImage
+      wrapperClassName={cn(
+        "!block mx-auto",
+        !loaded && "aspect-[5/7]",
+        config.reader.imageFit === "height" ? "!max-h-screen w-auto" : "w-full"
+      )}
+      placeholderSrc={"/images/place-doro.webp"}
+      className={cn(
+        "h-auto mx-auto",
+        config.reader.imageFit === "height" ? "!max-h-screen w-auto" : "w-full"
+      )}
+      onLoad={() => {
+        setLoaded(true);
+      }}
+      onError={(e) => {
+        e.currentTarget.src = "/images/xidoco.webp";
+      }}
+      src={src}
+      alt={alt}
+      visibleByDefault={true}
+    />
   );
 }
