@@ -10,18 +10,15 @@ interface LongStripProps {
 }
 
 export default function LongStrip({ images }: LongStripProps) {
-  // const [loaded, setLoaded] = useState(false);
-
   const [config] = useConfig();
-  // const [loaded, setLoaded] = useState(false);
-  // const [loadedCount, setLoadedCount] = useState(0);
-  // const allLoaded = loadedCount === images.length;
+  const [loadedCount, setLoadedCount] = useState(0);
+  const allLoaded = loadedCount === images.length;
 
   return (
     <div
       className={cn(
-        "min-w-0 relative mt-2 min-h-lvh"
-        // allLoaded ? "min-h-0" : "min-h-lvh"
+        "min-w-0 relative mt-2",
+        allLoaded ? "min-h-0" : "min-h-lvh"
       )}
     >
       <div
@@ -35,13 +32,10 @@ export default function LongStrip({ images }: LongStripProps) {
         {images.map((image, index) => (
           <span
             key={index + 1}
-            // className={`block overflow-hidden ${
-            //   loaded ? "min-h-0" : "min-h-[100vh]"
-            // }`}
-            className={cn("block overflow-hidden w-full")}
-            // style={{
-            //   minHeight: allLoaded ? "auto" : "500px",
-            // }}
+            className="block overflow-hidden"
+            style={{
+              minHeight: allLoaded ? "auto" : "500px",
+            }}
           >
             {/* <LazyLoadImage
               wrapperClassName={cn(
@@ -68,7 +62,11 @@ export default function LongStrip({ images }: LongStripProps) {
               visibleByDefault={true}
             /> */}
 
-            <MangaImage src={image} alt={`Trang ${index + 1}`} />
+            <MangaImage
+              src={image}
+              alt={`Trang ${index + 1}`}
+              onLoaded={() => setLoadedCount((prev) => prev + 1)}
+            />
           </span>
         ))}
       </div>
@@ -79,25 +77,31 @@ export default function LongStrip({ images }: LongStripProps) {
 interface MangaImageProps {
   src: string;
   alt: string;
+  onLoaded: () => void;
 }
 
-function MangaImage({ src, alt }: MangaImageProps) {
+function MangaImage({ src, alt, onLoaded }: MangaImageProps) {
   const [config] = useConfig();
   const [loaded, setLoaded] = useState(false);
   return (
     <LazyLoadImage
       wrapperClassName={cn(
-        "!block mx-auto",
+        "!block mx-auto h-auto w-auto object-contain",
         !loaded && "aspect-[5/7]",
-        config.reader.imageFit === "height" ? "!max-h-screen w-auto" : "w-full"
+        config.reader.imageFit === "height"
+          ? "!max-h-screen "
+          : "max-w-full min-w-0"
       )}
       placeholderSrc={"/images/place-doro.webp"}
       className={cn(
-        "h-auto mx-auto",
-        config.reader.imageFit === "height" ? "!max-h-screen w-auto" : "w-full"
+        "h-auto mx-auto w-auto object-contain",
+        config.reader.imageFit === "height"
+          ? "!max-h-screen "
+          : "max-w-full min-w-0"
       )}
       onLoad={() => {
         setLoaded(true);
+        onLoaded();
       }}
       onError={(e) => {
         e.currentTarget.src = "/images/xidoco.webp";
