@@ -117,32 +117,34 @@ export default function ChapterNav({
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-2 mt-4 mx-auto">
-        {!!nextChapter && (
-          <Button asChild size="lg" className="[&>svg]:!size-5">
-            <Link href={`/chapter/${nextChapter}`}>
-              <span>Chương tiếp theo</span>
-              <ArrowRight />
-            </Link>
-          </Button>
-        )}
-        {!!prevChapter && (
-          <Button asChild size="lg" className="[&>svg]:!size-5">
-            <Link href={`/chapter/${prevChapter}`}>
-              <span>Chương trước</span>
-              <ArrowLeft />
-            </Link>
-          </Button>
-        )}
+      {config.reader.type === "long-strip" && (
+        <div className="grid grid-cols-1 gap-2 mt-4 mx-auto">
+          {!!nextChapter && (
+            <Button asChild size="lg" className="[&>svg]:!size-5">
+              <Link href={`/chapter/${nextChapter}`}>
+                <span>Chương tiếp theo</span>
+                <ArrowRight />
+              </Link>
+            </Button>
+          )}
+          {!!prevChapter && (
+            <Button asChild size="lg" className="[&>svg]:!size-5">
+              <Link href={`/chapter/${prevChapter}`}>
+                <span>Chương trước</span>
+                <ArrowLeft />
+              </Link>
+            </Button>
+          )}
 
-        {/* {!prevChapter && !nextChapter && (
+          {/* {!prevChapter && !nextChapter && (
           <Button asChild size="lg" className="[&>svg]:!size-5">
             <Link href="/">
               <span>Trở về trang chủ</span>
             </Link>
           </Button>
         )} */}
-      </div>
+        </div>
+      )}
 
       <Card
         className={cn(
@@ -246,10 +248,15 @@ export default function ChapterNav({
                           reader: {
                             ...config.reader,
                             type: "single",
+                            // imageFit: "height",
+                            header: false,
                           },
                         });
 
-                        return toast.info("Chức năng đang phát triển!");
+                        return toast.message("Chức năng chưa hoàn thiện!", {
+                          description:
+                            'Chế độ này đang thử nghiệm nên sẽ có 1 số hạn chế, vui lòng sử dụng "Trượt dọc" nếu bạn muốn sử dụng đầy đủ những chức năng khác.',
+                        });
                       }}
                     >
                       <File />

@@ -192,3 +192,7 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+body.page-no-padding main {
+  padding-bottom: 0 !important;
+}

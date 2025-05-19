@@ -38,8 +38,8 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import useSWRMutation from "swr/mutation";
 import CommentSection from "@/components/Comment/comment-section";
-import { ChapterTitle } from "../chapter-info";
 import { LazyLoadComponent } from "react-lazy-load-image-component";
+import SinglePage from "./single-page";
 
 interface ReaderProps {
   images: string[];
@@ -47,6 +47,7 @@ interface ReaderProps {
 }
 
 export default function Reader({ images, chapterData }: ReaderProps) {
+  const [config] = useConfig();
   const chapterNumber = chapterData.chapter
     ? `Ch. ${chapterData.chapter}`
     : "Oneshot";
@@ -168,16 +169,22 @@ export default function Reader({ images, chapterData }: ReaderProps) {
 
   return (
     <>
-      <LongStrip images={images} />
+      {config.reader.type === "single" ? (
+        <SinglePage images={images} />
+      ) : (
+        <LongStrip images={images} />
+      )}
       <ChapterNav chapterData={chapterData} chapterAggregate={data} />
-      <LazyLoadComponent>
-        <CommentSection
-          id={chapterData.id}
-          type="chapter"
-          title={chapterData.manga.title || ""}
-          chapterNumber={chapterNumber}
-        />
-      </LazyLoadComponent>
+      {config.reader.type === "long-strip" && (
+        <LazyLoadComponent>
+          <CommentSection
+            id={chapterData.id}
+            type="chapter"
+            title={chapterData.manga.title || ""}
+            chapterNumber={chapterNumber}
+          />
+        </LazyLoadComponent>
+      )}
     </>
   );
 }
