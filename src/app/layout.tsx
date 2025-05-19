@@ -9,6 +9,7 @@ import { ThemeProvider } from "@/components/providers";
 import { ThemeSwitcher } from "@/components/Theme/theme-switcher";
 import { META_THEME_COLORS, siteConfig } from "@/config/site";
 import { Toaster } from "@/components/ui/sonner";
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const inter = Inter({
   preload: true,
@@ -73,6 +74,7 @@ export default function RootLayout({
           <ThemeSwitcher />
         </ThemeProvider>
       </body>
+      <GoogleAnalytics gaId="G-GHG1HN9493" />
     </html>
   );
 }
