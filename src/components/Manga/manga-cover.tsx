@@ -1,6 +1,6 @@
 "use client";
 import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
+import { cn, getCoverImageUrl } from "@/lib/utils";
 import { Expand, Loader2 } from "lucide-react";
 import { FC, useState } from "react";
 import {
@@ -36,11 +36,7 @@ const MangaCover: FC<MangaCoverProps> = ({
   preload = false,
   ...props
 }) => {
-  let src = siteConfig.suicaodex.apiURL + "/covers/" + id + "/" + cover;
-
-  if (quality !== "full") {
-    src += `.${quality}.jpg`;
-  }
+  const src = getCoverImageUrl(id, cover, quality !== "full" ? quality : "");
 
   const [loaded, setLoaded] = useState(false);
 
@@ -62,9 +58,7 @@ const MangaCover: FC<MangaCoverProps> = ({
                 <Loader2 className="animate-spin" size={50} />
               </div>
               <img
-                src={
-                  siteConfig.suicaodex.apiURL + "/covers/" + id + "/" + cover
-                }
+                src={getCoverImageUrl(id, cover, "full")}
                 alt={`Ảnh bìa ${alt}`}
                 className="max-h-full max-w-full object-cover z-20"
                 fetchPriority="high"

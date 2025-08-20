@@ -1,7 +1,7 @@
 "use client";
 
 import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
+import { cn, getCoverImageUrl } from "@/lib/utils";
 import { Artist, Author, Manga } from "@/types/types";
 import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
@@ -16,8 +16,7 @@ interface MangaSlideProps {
 
 export default function MangaSlide({ manga }: MangaSlideProps) {
   const isMobile = useIsMobile();
-  const bannerSrc =
-    siteConfig.suicaodex.apiURL + "/covers/" + manga.id + "/" + manga.cover;
+  const bannerSrc = getCoverImageUrl(manga.id, manga.cover, "full");
 
   return (
     <>

@@ -13,7 +13,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { siteConfig } from "@/config/site";
 import { useConfig } from "@/hooks/use-config";
-import { cn } from "@/lib/utils";
+import { cn, getCoverImageUrl } from "@/lib/utils";
 import { LibraryType, Manga } from "@/types/types";
 import {
   Album,
@@ -87,7 +87,7 @@ export default function AddToLibraryBtn({
     setIsNotificationEnabled(isInNotification);
   }, [manga.id, localNotification]);
 
-  const src = `${siteConfig.suicaodex.apiURL}/covers/${manga.id}/${manga.cover}.512.jpg`;
+  const src = getCoverImageUrl(manga.id, manga.cover, "512");
 
   const options = [
     {

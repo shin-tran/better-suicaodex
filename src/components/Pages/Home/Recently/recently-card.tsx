@@ -3,7 +3,7 @@
 import MangaCover from "@/components/Manga/manga-cover";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
+import { cn, getCoverImageUrl } from "@/lib/utils";
 import { Manga } from "@/types/types";
 import { useState } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -13,13 +13,7 @@ interface RecentlyCardProps {
 }
 
 export default function RecentlyCard({ manga }: RecentlyCardProps) {
-  const src =
-    siteConfig.suicaodex.apiURL +
-    "/covers/" +
-    manga.id +
-    "/" +
-    manga.cover +
-    ".512.jpg";
+  const src = getCoverImageUrl(manga.id, manga.cover, "512");
   const [loaded, setLoaded] = useState(false);
 
   return (

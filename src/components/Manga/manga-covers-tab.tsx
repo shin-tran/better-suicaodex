@@ -6,7 +6,7 @@ import useSWR from "swr";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { siteConfig } from "@/config/site";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { cn } from "@/lib/utils";
+import { cn, getCoverImageUrl } from "@/lib/utils";
 import { useState } from "react";
 import {
   Dialog,
@@ -105,13 +105,7 @@ export default function MangaCoversTab({ id }: MangaCoversTabProps) {
                     <Loader2 className="animate-spin" size={50} />
                   </div>
                   <img
-                    src={
-                      siteConfig.suicaodex.apiURL +
-                      "/covers/" +
-                      id +
-                      "/" +
-                      cover.fileName
-                    }
+                    src={getCoverImageUrl(id, cover.fileName)}
                     alt={`Ảnh bìa ${cover.volume}`}
                     className="max-h-full max-w-full object-cover z-20"
                     fetchPriority="high"
@@ -133,7 +127,7 @@ export default function MangaCoversTab({ id }: MangaCoversTabProps) {
                 className={cn(
                   "h-full w-full rounded-sm block object-cover aspect-[3/5]"
                 )}
-                src={`${siteConfig.suicaodex.apiURL}/covers/${id}/${cover.fileName}.512.jpg`}
+                src={getCoverImageUrl(id, cover.fileName, "512")}
                 alt={`Ảnh bìa tập ${cover.volume}`}
                 onLoad={() => setLoaded(true)}
                 onError={(e) => {

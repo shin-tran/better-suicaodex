@@ -1,5 +1,5 @@
 import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
+import { cn, getCoverImageUrl } from "@/lib/utils";
 
 interface BannerProps {
   id?: string;
@@ -8,7 +8,7 @@ interface BannerProps {
 
 export default function Banner({ id, src }: BannerProps) {
   const coverURL = id
-    ? siteConfig.suicaodex.apiURL + "/covers/" + id + "/" + src + ".256.jpg"
+    ? getCoverImageUrl(id, src, "256")
     : src;
 
   return (
