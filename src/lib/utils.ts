@@ -4,6 +4,7 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { vi as locale } from "date-fns/locale";
 import * as cheerio from "cheerio";
 import { defaultSchema } from 'hast-util-sanitize';
+import { siteConfig } from "@/config/site";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -132,4 +133,25 @@ export const customSchema = {
     'u',  // Cho phép thẻ <u>
   ],
 };
+
+let currentWorkingApiUrl: string | null = null;
+
+export function getCurrentApiUrl(): string {
+  return currentWorkingApiUrl || siteConfig.suicaodex.apiURL;
+}
+
+export function setCurrentApiUrl(url: string): void {
+  currentWorkingApiUrl = url;
+}
+
+export function getCoverImageUrl(mangaId: string, fileName: string, size: string = ""): string {
+  const apiUrl = getCurrentApiUrl();
+  
+  if (size === "full") {
+    return `${apiUrl}/covers/${mangaId}/${fileName}`;
+  }
+
+  const sizeStr = size ? `.${size}` : "";
+  return `${apiUrl}/covers/${mangaId}/${fileName}${sizeStr}.jpg`;
+}
 

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { siteConfig } from "@/config/site";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { cn, formatTimeToNow } from "@/lib/utils";
+import { cn, formatTimeToNow, getCoverImageUrl } from "@/lib/utils";
 import { Chapter, Manga } from "@/types/types";
 import { GB, VN } from "country-flag-icons/react/3x2";
 import {
@@ -40,13 +40,7 @@ export default function LatestMangaCard({
   const isMobile = useIsMobile();
   const maxCount = isMobile ? 2 : 3;
   const [expanded, setExpanded] = useState(false);
-  const src =
-    siteConfig.suicaodex.apiURL +
-    "/covers/" +
-    manga.id +
-    "/" +
-    manga.cover +
-    ".512.jpg";
+  const src = getCoverImageUrl(manga.id || "", manga.cover || "", "512");
   const [loaded, setLoaded] = useState(false);
 
   if (type === "cover") {

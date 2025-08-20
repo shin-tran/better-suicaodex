@@ -13,6 +13,7 @@
 
 // axios.ts
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import { setCurrentApiUrl } from "./utils";
 
 // Danh sách proxy
 const proxyList = [
@@ -60,7 +61,13 @@ export const axiosWithProxyFallback = async <T = any>(
       lastSuccessfulProxyIndex = index;
       lastProxySuccessTime = Date.now();
       console.info(`[Proxy Success] Using proxy: ${proxy} | Status: ${response.status}`);
-      return response.data;
+      
+      const responseData = response.data as any;
+      responseData.__proxy_url = proxy;
+ 
+      setCurrentApiUrl(proxy);
+      
+      return responseData;
     } catch (error: any) {
       const status = error.response?.status || "No Response";
       lastError = error;
@@ -71,10 +78,9 @@ export const axiosWithProxyFallback = async <T = any>(
   throw lastError;
 };
 
-// Đối tượng truy cập API chính (luôn dùng pr1)
+// (luôn dùng pr1)
 export const axiosInstance = createAxiosInstance(proxyList[0]);
 
-// Cách dùng:
 // const data = await axiosWithProxyFallback({ url: "/author?name=abc", method: "get" });
-// Hoặc dùng axiosInstance.get() nếu muốn luôn dùng PR1
+// axiosInstance.get() nếu muốn luôn dùng PR1
 

@@ -2,6 +2,7 @@ import { Chapter, ChapterAggregate, Volume } from "@/types/types";
 import { GroupParser } from "./group";
 import { siteConfig } from "@/config/site";
 import { axiosWithProxyFallback } from "../axios";
+import { getCurrentApiUrl } from "../utils";
 
 export function ChaptersParser(data: any[]): Chapter[] {
   return data.map((item) => {
@@ -189,8 +190,11 @@ export async function getChapterDetail(id: string): Promise<Chapter> {
   });
   // console.log(atHomeData);
 
+  // Use the current working API URL for images
+  const apiUrl = getCurrentApiUrl();
+  
   const pages = atHomeData.images.map(
-    (item: string) => `${siteConfig.suicaodex.apiURL}/${item}`
+    (item: string) => `${apiUrl}/${item}`
   );
 
   return { ...chapter, manga: manga(), pages };
