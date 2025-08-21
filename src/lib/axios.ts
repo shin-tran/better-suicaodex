@@ -31,7 +31,7 @@ const PROXY_CACHE_DURATION = 60 * 1000; // Cache trong 1 phút
 const createAxiosInstance = (baseURL: string): AxiosInstance => {
   return axios.create({
     baseURL,
-    timeout: 5000,
+    timeout: 2000,
     headers: {
       "Content-Type": "application/json",
     },
