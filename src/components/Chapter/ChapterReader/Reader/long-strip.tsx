@@ -1,6 +1,7 @@
 "use client";
 
 import { useConfig } from "@/hooks/use-config";
+import { usePreloadImages } from "@/hooks/use-preload-images";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import MangaImage from "./manga-image";
@@ -13,6 +14,14 @@ export default function LongStrip({ images }: LongStripProps) {
   const [config] = useConfig();
   const [loadedCount, setLoadedCount] = useState(0);
   const allLoaded = loadedCount === images.length;
+  // console.log(images);
+
+  // Hook để preload ảnh
+  const { registerImageElement, preloadedImages } = usePreloadImages({
+    images,
+    preloadCount: 5, // Preload 5 ảnh tiếp theo
+    visibilityThreshold: 0.1
+  });
 
   return (
     <div
@@ -36,36 +45,13 @@ export default function LongStrip({ images }: LongStripProps) {
             style={{
               minHeight: allLoaded ? "auto" : "500px",
             }}
+            ref={(element) => registerImageElement(index, element)}
           >
-            {/* <LazyLoadImage
-              wrapperClassName={cn(
-                "!block"
-                // !loaded && "aspect-[5/7]"
-              )}
-              placeholderSrc={"/images/place-doro.webp"}
-              className={cn(
-                "h-auto mx-auto",
-                config.reader.imageFit === "height"
-                  ? "!max-h-screen w-auto"
-                  : "w-full"
-              )}
-              // onLoad={() => setLoaded(true)}
-              onLoad={() => {
-                // setLoaded(true);
-                setLoadedCount((prev) => prev + 1);
-              }}
-              onError={(e) => {
-                e.currentTarget.src = "/images/xidoco.webp";
-              }}
-              src={image}
-              alt={`Trang ${index + 1}`}
-              visibleByDefault={true}
-            /> */}
-
             <MangaImage
               src={image}
               alt={`Trang ${index + 1}`}
               onLoaded={() => setLoadedCount((prev) => prev + 1)}
+              isPreloaded={preloadedImages.has(image)}
             />
           </span>
         ))}

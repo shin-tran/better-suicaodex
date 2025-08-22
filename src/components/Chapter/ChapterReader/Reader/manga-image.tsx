@@ -9,11 +9,13 @@ interface MangaImageProps {
   src: string;
   alt: string;
   onLoaded: () => void;
+  isPreloaded?: boolean;
 }
 
-export default function MangaImage({ src, alt, onLoaded }: MangaImageProps) {
+export default function MangaImage({ src, alt, onLoaded, isPreloaded = false }: MangaImageProps) {
   const [config] = useConfig();
   const [loaded, setLoaded] = useState(false);
+  
   return (
     <LazyLoadImage
       wrapperClassName={cn(
@@ -39,7 +41,7 @@ export default function MangaImage({ src, alt, onLoaded }: MangaImageProps) {
       }}
       src={src}
       alt={alt}
-      visibleByDefault={true}
+      visibleByDefault={isPreloaded} 
     />
   );
 }
