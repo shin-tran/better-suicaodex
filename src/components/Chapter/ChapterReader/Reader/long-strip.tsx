@@ -14,12 +14,10 @@ export default function LongStrip({ images }: LongStripProps) {
   const [config] = useConfig();
   const [loadedCount, setLoadedCount] = useState(0);
   const allLoaded = loadedCount === images.length;
-  // console.log(images);
 
-  // Hook để preload ảnh
-  const { registerImageElement, preloadedImages } = usePreloadImages({
+  const { registerImageElement, preloadedImages, markImageAsLoaded, isImageLoaded } = usePreloadImages({
     images,
-    preloadCount: 5, // Preload 5 ảnh tiếp theo
+    preloadCount: 6,
     visibilityThreshold: 0.1
   });
 
@@ -43,14 +41,17 @@ export default function LongStrip({ images }: LongStripProps) {
             key={index + 1}
             className="block overflow-hidden"
             style={{
-              minHeight: allLoaded ? "auto" : "500px",
+              minHeight: isImageLoaded(index) ? "auto" : "500px",
             }}
             ref={(element) => registerImageElement(index, element)}
           >
             <MangaImage
               src={image}
               alt={`Trang ${index + 1}`}
-              onLoaded={() => setLoadedCount((prev) => prev + 1)}
+              onLoaded={() => {
+                setLoadedCount((prev) => prev + 1);
+                markImageAsLoaded(index);
+              }}
               isPreloaded={preloadedImages.has(image)}
             />
           </span>
