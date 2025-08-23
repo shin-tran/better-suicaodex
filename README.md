@@ -47,6 +47,11 @@ Tuy vậy, SuicaoDex sẽ luôn:
 
 Ngoài ra còn cải thiện các chức năng cũ và thêm một số chức năng mới, sẽ cập nhật sau...
 
+## Vài lỗi đã biết
+- Mất từ khóa khi nhấn enter trên thanh tìm kiếm nhanh
+- Thứ tự truyện trong lịch sử đọc đang sắp xếp theo mốc thời gian của chính chương truyện, không phải theo thời điểm đọc truyện
+- Thông báo bị đần, ngoài ra chưa có chỗ để xem danh sách các truyện đã đăng lý nhận thông báo
+
 ## Dự kiến
 ⬛ Hoàn thiện Thông báo.
 
