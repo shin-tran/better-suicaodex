@@ -56,15 +56,12 @@ export default function QuickSearch() {
     [config.r18]
   );
 
-  // Xử lý tìm kiếm với debounce
   const debouncedSearch = useCallback(
     (query: string) => {
-      // Xóa timeout trước đó nếu có
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
 
-      // Đặt timeout mới
       timeoutRef.current = setTimeout(() => {
         if (query && query.trim()) {
           handleSearch(query);
@@ -74,12 +71,10 @@ export default function QuickSearch() {
     [handleSearch]
   );
 
-  // Gọi debouncedSearch khi searchTerm thay đổi
   useEffect(() => {
     if (!searchTerm || searchTerm.length === 0) return;
     debouncedSearch(searchTerm);
 
-    // Cleanup function để hủy timeout khi component unmount
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -131,7 +126,6 @@ export default function QuickSearch() {
     if (e.key === "Enter") {
       e.preventDefault();
       if (searchTerm && searchTerm.trim()) {
-        // Khi nhấn Enter, hủy timeout hiện tại và tìm kiếm ngay lập tức
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current);
         }
@@ -144,7 +138,6 @@ export default function QuickSearch() {
     if (e.key === "Enter") {
       e.preventDefault();
       if (searchTerm && searchTerm.trim()) {
-        // Khi nhấn Enter, hủy timeout hiện tại và tìm kiếm ngay lập tức
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current);
         }
@@ -411,7 +404,6 @@ export default function QuickSearch() {
 }
 
 function scrollLock(event: WheelEvent) {
-  // Kiểm tra xem sự kiện wheel có xuất phát từ #expanded (kết quả tìm kiếm) hay không
   let target = event.target as Node;
   let isInResultPopup = false;
 
@@ -426,13 +418,10 @@ function scrollLock(event: WheelEvent) {
     target = target.parentNode as Node;
   }
 
-  // Nếu là trong kết quả tìm kiếm thì cho phép scroll bình thường
   if (isInResultPopup) {
-    // Không làm gì cả, để sự kiện scroll diễn ra bình thường trong kết quả popup
     return;
   }
 
-  // Nếu là nơi khác thì chặn scroll
   event.preventDefault();
   event.stopPropagation();
 }
