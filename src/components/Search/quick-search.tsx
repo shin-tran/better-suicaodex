@@ -3,12 +3,8 @@
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { ArrowRight, Search, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Input } from "../ui/input";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import { SearchManga } from "@/lib/mangadex/manga";
 import { useConfig } from "@/hooks/use-config";
 import { Manga } from "@/types/types";
@@ -28,44 +24,19 @@ import {
 import useKeyDown from "@/hooks/use-keydown";
 import { Badge } from "../ui/badge";
 
-const formSchema = z.object({
-  query: z.string().min(1),
-});
-
-// Hàm debounce để giảm số lượng call API
-function debounce<F extends (...args: any[]) => any>(
-  func: F,
-  wait: number
-): (...args: Parameters<F>) => void {
-  let timeout: NodeJS.Timeout | null = null;
-
-  return function (...args: Parameters<F>) {
-    if (timeout) clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
-  };
-}
-
 export default function QuickSearch() {
   const [expanded, setExpanded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [mangas, setMangas] = useState<Manga[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const mobileInputRef = useRef<HTMLInputElement>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [config] = useConfig();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      query: "",
-    },
-  });
-
-  const searchQuery = form.watch("query");
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { query } = values;
+  const handleSearch = useCallback(async (query: string) => {
     if (!query.trim()) return;
 
     try {
@@ -80,54 +51,35 @@ export default function QuickSearch() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [config.r18]);
 
-  // Sử dụng useEffect và debounce để tránh gọi API liên tục khi người dùng đang gõ
-  useEffect(() => {
-    if (!searchQuery || searchQuery.length === 0) return;
-
-    const debouncedSearch = debounce((query: string) => {
-      form.handleSubmit(onSubmit)();
+  // Xử lý tìm kiếm với debounce
+  const debouncedSearch = useCallback((query: string) => {
+    // Xóa timeout trước đó nếu có
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    
+    // Đặt timeout mới
+    timeoutRef.current = setTimeout(() => {
+      if (query && query.trim()) {
+        handleSearch(query);
+      }
     }, 500);
+  }, [handleSearch]);
 
-    debouncedSearch(searchQuery);
-  }, [searchQuery]);
-
-  // useEffect(() => {
-  //   if (expanded) {
-  //     // Lưu vị trí scroll hiện tại
-  //     const scrollY = window.scrollY;
-      
-  //     // Thêm CSS custom để giữ scrollbar nhưng không cho scroll
-  //     document.body.style.cssText = `
-  //       position: fixed;
-  //       top: -${scrollY}px;
-  //       left: 0;
-  //       right: 0;
-  //       bottom: 0;
-  //       overflow-y: scroll;
-  //       width: 100%;
-  //     `;
-  //   } else {
-  //     // Khôi phục scroll
-  //     const scrollY = document.body.style.top;
-  //     document.body.style.cssText = '';
-      
-  //     if (scrollY) {
-  //       window.scrollTo(0, parseInt(scrollY || '0') * -1);
-  //     }
-  //   }
-
-  //   // Cleanup function
-  //   return () => {
-  //     const scrollY = document.body.style.top;
-  //     document.body.style.cssText = '';
-      
-  //     if (scrollY) {
-  //       window.scrollTo(0, parseInt(scrollY || '0') * -1);
-  //     }
-  //   };
-  // }, [expanded]);
+  // Gọi debouncedSearch khi searchTerm thay đổi
+  useEffect(() => {
+    if (!searchTerm || searchTerm.length === 0) return;
+    debouncedSearch(searchTerm);
+    
+    // Cleanup function để hủy timeout khi component unmount
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [searchTerm, debouncedSearch]);
 
   useEffect(() => {
     if (expanded) {
@@ -165,87 +117,111 @@ export default function QuickSearch() {
     if (inputRef.current) inputRef.current.blur();
   });
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (searchTerm && searchTerm.trim()) {
+        // Khi nhấn Enter, hủy timeout hiện tại và tìm kiếm ngay lập tức
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+        handleSearch(searchTerm);
+      }
+    }
+  };
+
+  const handleMobileKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (searchTerm && searchTerm.trim()) {
+        // Khi nhấn Enter, hủy timeout hiện tại và tìm kiếm ngay lập tức
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+        handleSearch(searchTerm);
+      }
+    }
+  };
+
+  const clearSearch = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setSearchTerm("");
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
+  const clearMobileSearch = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setSearchTerm("");
+    if (mobileInputRef.current) {
+      mobileInputRef.current.focus();
+    }
+  };
+
   return (
     <>
       <div
         className={cn("hidden md:flex relative grow justify-end z-10")}
         ref={containerRef}
       >
-        <Form {...form}>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              form.handleSubmit(onSubmit)();
-            }}
-            className="w-full"
-          >
-            <FormField
-              control={form.control}
-              name="query"
-              render={({ field }) => (
-                <FormItem className="flex items-center w-full justify-end space-y-0">
-                  <FormControl>
-                    <Input
-                      autoComplete="off"
-                      placeholder="Tìm kiếm..."
-                      className={cn(
-                        "bg-muted/50 hover:bg-accent focus:bg-background border-none h-8 shadow-sm",
-                        "transition-all sm:pr-12 md:w-40 lg:w-56 xl:w-64",
-                        "placeholder:text-current",
-                        expanded &&
-                          "!shadow-md bg-background md:!w-full lg:!w-2/3"
-                      )}
-                      onFocus={() => setExpanded(true)}
-                      {...field}
-                      ref={(e) => {
-                        // Kết hợp với ref từ react-hook-form
-                        field.ref(e);
-                        inputRef.current = e;
-                      }}
-                    />
-                  </FormControl>
-                  {searchQuery.length === 0 ? (
-                    <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2 items-center">
-                      <div
-                        className={cn(
-                          "hidden lg:flex flex-row gap-1",
-                          expanded && "!hidden"
-                        )}
-                      >
-                        <Badge
-                          variant="default"
-                          className="px-1 py-0 bg-primary/10 hover:bg-primary/10 text-secondary-foreground rounded-sm"
-                        >
-                          Ctrl
-                        </Badge>
-                        <Badge
-                          variant="default"
-                          className="px-1 py-0 bg-primary/10 hover:bg-primary/10 text-secondary-foreground rounded-sm"
-                        >
-                          K
-                        </Badge>
-                      </div>
-                      <Search className="h-4 w-4" />
-                    </div>
-                  ) : (
-                    <Button
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 bg-primary rounded-sm"
-                      size="icon"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        form.setValue("query", "");
-                        // Sử dụng ref để focus trực tiếp vào input
-                        if (inputRef.current) inputRef.current.focus();
-                      }}
-                    >
-                      <X />
-                    </Button>
-                  )}
-                </FormItem>
+        <div className="w-full">
+          <div className="flex items-center w-full justify-end space-y-0">
+            <Input
+              autoComplete="off"
+              placeholder="Tìm kiếm..."
+              className={cn(
+                "bg-muted/50 hover:bg-accent focus:bg-background border-none h-8 shadow-sm",
+                "transition-all sm:pr-12 md:w-40 lg:w-56 xl:w-64",
+                "placeholder:text-current",
+                expanded &&
+                  "!shadow-md bg-background md:!w-full lg:!w-2/3"
               )}
+              value={searchTerm}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              onFocus={() => setExpanded(true)}
+              ref={inputRef}
             />
-          </form>
-        </Form>
+            {searchTerm.length === 0 ? (
+              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex space-x-2 items-center">
+                <div
+                  className={cn(
+                    "hidden lg:flex flex-row gap-1",
+                    expanded && "!hidden"
+                  )}
+                >
+                  <Badge
+                    variant="default"
+                    className="px-1 py-0 bg-primary/10 hover:bg-primary/10 text-secondary-foreground rounded-sm"
+                  >
+                    Ctrl
+                  </Badge>
+                  <Badge
+                    variant="default"
+                    className="px-1 py-0 bg-primary/10 hover:bg-primary/10 text-secondary-foreground rounded-sm"
+                  >
+                    K
+                  </Badge>
+                </div>
+                <Search className="h-4 w-4" />
+              </div>
+            ) : (
+              <Button
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 bg-primary rounded-sm"
+                size="icon"
+                onClick={clearSearch}
+                type="button"
+              >
+                <X />
+              </Button>
+            )}
+          </div>
+        </div>
 
         {/* result popup */}
         {expanded && (
@@ -256,7 +232,7 @@ export default function QuickSearch() {
               "transition-all animate-in fade-in slide-in-from-top-2"
             )}
           >
-            {searchQuery.length === 0 ? (
+            {searchTerm.length === 0 ? (
               <div className="text-gray-500">
                 Nhập từ khoá đi mới tìm được chứ...
               </div>
@@ -280,7 +256,7 @@ export default function QuickSearch() {
                     className="hover:text-primary hover:bg-transparent hover:underline"
                   >
                     <Link
-                      href={`/advanced-search?q=${searchQuery}`}
+                      href={`/advanced-search?q=${searchTerm}`}
                       onClick={() => setExpanded(false)}
                     >
                       Tìm kiếm nâng cao
@@ -335,70 +311,47 @@ export default function QuickSearch() {
             <DialogDescription className="hidden">Tìm kiếm</DialogDescription>
           </DialogHeader>
 
-          <Form {...form}>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                form.handleSubmit(onSubmit)();
-              }}
-              className="w-full"
-            >
-              <FormField
-                control={form.control}
-                name="query"
-                render={({ field }) => (
-                  <FormItem className="flex items-center w-full justify-end gap-1.5 space-y-0">
-                    <FormControl>
-                      <Input
-                        autoComplete="off"
-                        placeholder="Tìm kiếm..."
-                        className={cn(
-                          "bg-secondary border-none h-8 shadow-sm"
-                          // "placeholder:text-current"
-                        )}
-                        {...field}
-                        ref={(e) => {
-                          field.ref(e);
-                          mobileInputRef.current = e;
-                        }}
-                      />
-                    </FormControl>
-                    {searchQuery.length === 0 ? (
-                      <Search className="absolute right-16 transform h-4 w-4" />
-                    ) : (
-                      <Button
-                        className="absolute right-16 transform h-4 w-4 bg-primary rounded-sm"
-                        size="icon"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          form.setValue("query", "");
-                          // Sử dụng ref để focus trực tiếp vào input
-                          if (mobileInputRef.current)
-                            mobileInputRef.current.focus();
-                        }}
-                      >
-                        <X />
-                      </Button>
-                    )}
-
-                    <DialogClose asChild>
-                      <Button
-                        variant="secondary"
-                        size="icon"
-                        className="h-8 w-8 shrink-0"
-                      >
-                        <X />
-                      </Button>
-                    </DialogClose>
-                  </FormItem>
+          <div className="w-full">
+            <div className="flex items-center w-full justify-end gap-1.5 space-y-0">
+              <Input
+                autoComplete="off"
+                placeholder="Tìm kiếm..."
+                className={cn(
+                  "bg-secondary border-none h-8 shadow-sm"
                 )}
+                value={searchTerm}
+                onChange={handleInputChange}
+                onKeyDown={handleMobileKeyDown}
+                ref={mobileInputRef}
               />
-            </form>
-          </Form>
+              {searchTerm.length === 0 ? (
+                <Search className="absolute right-16 transform h-4 w-4" />
+              ) : (
+                <Button
+                  className="absolute right-16 transform h-4 w-4 bg-primary rounded-sm"
+                  size="icon"
+                  onClick={clearMobileSearch}
+                  type="button"
+                >
+                  <X />
+                </Button>
+              )}
+
+              <DialogClose asChild>
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  className="h-8 w-8 shrink-0"
+                >
+                  <X />
+                </Button>
+              </DialogClose>
+            </div>
+          </div>
 
           <DialogFooter>
             <div>
-              {searchQuery.length === 0 ? (
+              {searchTerm.length === 0 ? (
                 <div className="text-gray-500">
                   Nhập từ khoá đi mới tìm được chứ...
                 </div>
@@ -422,7 +375,7 @@ export default function QuickSearch() {
                         variant="ghost"
                         className="hover:text-primary hover:bg-transparent hover:underline"
                       >
-                        <Link href={`/advanced-search?q=${searchQuery}`}>
+                        <Link href={`/advanced-search?q=${searchTerm}`}>
                           Tìm kiếm nâng cao
                           <ArrowRight />
                         </Link>
