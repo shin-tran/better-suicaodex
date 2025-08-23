@@ -36,43 +36,49 @@ export default function QuickSearch() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [config] = useConfig();
 
-  const handleSearch = useCallback(async (query: string) => {
-    if (!query.trim()) return;
+  const handleSearch = useCallback(
+    async (query: string) => {
+      if (!query.trim()) return;
 
-    try {
-      setIsLoading(true);
-      setError(false);
+      try {
+        setIsLoading(true);
+        setError(false);
 
-      const res = await SearchManga(query, config.r18);
-      setMangas(res);
-    } catch (err) {
-      console.error(err);
-      setError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [config.r18]);
+        const res = await SearchManga(query, config.r18);
+        setMangas(res);
+      } catch (err) {
+        console.error(err);
+        setError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [config.r18]
+  );
 
   // Xử lý tìm kiếm với debounce
-  const debouncedSearch = useCallback((query: string) => {
-    // Xóa timeout trước đó nếu có
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    
-    // Đặt timeout mới
-    timeoutRef.current = setTimeout(() => {
-      if (query && query.trim()) {
-        handleSearch(query);
+  const debouncedSearch = useCallback(
+    (query: string) => {
+      // Xóa timeout trước đó nếu có
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
-    }, 500);
-  }, [handleSearch]);
+
+      // Đặt timeout mới
+      timeoutRef.current = setTimeout(() => {
+        if (query && query.trim()) {
+          handleSearch(query);
+        }
+      }, 500);
+    },
+    [handleSearch]
+  );
 
   // Gọi debouncedSearch khi searchTerm thay đổi
   useEffect(() => {
     if (!searchTerm || searchTerm.length === 0) return;
     debouncedSearch(searchTerm);
-    
+
     // Cleanup function để hủy timeout khi component unmount
     return () => {
       if (timeoutRef.current) {
@@ -122,7 +128,7 @@ export default function QuickSearch() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       if (searchTerm && searchTerm.trim()) {
         // Khi nhấn Enter, hủy timeout hiện tại và tìm kiếm ngay lập tức
@@ -135,7 +141,7 @@ export default function QuickSearch() {
   };
 
   const handleMobileKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       if (searchTerm && searchTerm.trim()) {
         // Khi nhấn Enter, hủy timeout hiện tại và tìm kiếm ngay lập tức
@@ -178,8 +184,7 @@ export default function QuickSearch() {
                 "bg-muted/50 hover:bg-accent focus:bg-background border-none h-8 shadow-sm",
                 "transition-all sm:pr-12 md:w-40 lg:w-56 xl:w-64",
                 "placeholder:text-current",
-                expanded &&
-                  "!shadow-md bg-background md:!w-full lg:!w-2/3"
+                expanded && "!shadow-md bg-background md:!w-full lg:!w-2/3"
               )}
               value={searchTerm}
               onChange={handleInputChange}
@@ -316,9 +321,7 @@ export default function QuickSearch() {
               <Input
                 autoComplete="off"
                 placeholder="Tìm kiếm..."
-                className={cn(
-                  "bg-secondary border-none h-8 shadow-sm"
-                )}
+                className={cn("bg-secondary border-none h-8 shadow-sm")}
                 value={searchTerm}
                 onChange={handleInputChange}
                 onKeyDown={handleMobileKeyDown}
@@ -382,9 +385,13 @@ export default function QuickSearch() {
                       </Button>
                     </DialogClose>
                   </div>
-                  <div className="flex flex-col gap-2 max-h-[322px] overflow-y-scroll pb-2">
+                  <div className="flex flex-col gap-2 max-h-[322px] overflow-y-auto pb-2">
                     {mangas.map((manga) => (
-                      <Link key={manga.id} href={`/manga/${manga.id}`} prefetch={false}>
+                      <Link
+                        key={manga.id}
+                        href={`/manga/${manga.id}`}
+                        prefetch={false}
+                      >
                         <DialogClose className="w-full text-start">
                           <CompactCard manga={manga} />
                         </DialogClose>
