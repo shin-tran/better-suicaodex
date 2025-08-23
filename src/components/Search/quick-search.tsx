@@ -382,7 +382,7 @@ export default function QuickSearch() {
                       </Button>
                     </DialogClose>
                   </div>
-                  <div className="flex flex-col gap-2 max-h-lvh overflow-y-scroll pb-2">
+                  <div className="flex flex-col gap-2 max-h-[322px] overflow-y-scroll pb-2">
                     {mangas.map((manga) => (
                       <Link key={manga.id} href={`/manga/${manga.id}`} prefetch={false}>
                         <DialogClose className="w-full text-start">
