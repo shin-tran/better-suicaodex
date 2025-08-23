@@ -15,10 +15,10 @@ export function usePreloadImages({
 }: UsePreloadImagesOptions) {
   const [visibleImages, setVisibleImages] = useState<Set<number>>(new Set());
   const [preloadedImages, setPreloadedImages] = useState<Set<string>>(new Set());
+  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
   const observerRef = useRef<IntersectionObserver | null>(null);
   const imageRefs = useRef<Map<number, HTMLElement>>(new Map());
 
-  // Preload ảnh
   const preloadImage = (src: string) => {
     if (preloadedImages.has(src)) return;
     
@@ -52,7 +52,7 @@ export function usePreloadImages({
       },
       {
         threshold: visibilityThreshold,
-        rootMargin: '50px 0px 200px 0px' // Mở rộng vùng detect để preload sớm hơn
+        rootMargin: '100px 0px 400px 0px' 
       }
     );
 
@@ -63,14 +63,12 @@ export function usePreloadImages({
     };
   }, [visibilityThreshold]);
 
-  // Preload images dựa trên những ảnh đang visible
   useEffect(() => {
     if (visibleImages.size === 0) return;
 
     const maxVisibleIndex = Math.max(...Array.from(visibleImages));
     const imagesToPreload: string[] = [];
 
-    // Preload các ảnh tiếp theo
     for (let i = 1; i <= preloadCount; i++) {
       const nextIndex = maxVisibleIndex + i;
       if (nextIndex < images.length) {
@@ -78,11 +76,9 @@ export function usePreloadImages({
       }
     }
 
-    // Bắt đầu preload
     imagesToPreload.forEach(preloadImage);
   }, [visibleImages, images, preloadCount]);
 
-  // Function để register element với observer
   const registerImageElement = (index: number, element: HTMLElement | null) => {
     if (!element || !observerRef.current) return;
 
@@ -98,8 +94,18 @@ export function usePreloadImages({
     observerRef.current.observe(element);
   };
 
+  const markImageAsLoaded = (index: number) => {
+    setLoadedImages(prev => new Set([...prev, index]));
+  };
+
+  const isImageLoaded = (index: number) => {
+    return loadedImages.has(index);
+  };
+
   return {
     registerImageElement,
+    markImageAsLoaded,
+    isImageLoaded,
     preloadedImages,
     visibleImages
   };
