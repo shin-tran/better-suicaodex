@@ -61,7 +61,7 @@ export default function MangaCoversTab({ id }: MangaCoversTabProps) {
     );
   }
 
-  //   console.log(data);
+  // console.log(data);
   const localeList = [
     { value: "ja", label: "Tiếng Nhật", icon: JP },
     { value: "vi", label: "Tiếng Việt", icon: VN },
@@ -105,7 +105,7 @@ export default function MangaCoversTab({ id }: MangaCoversTabProps) {
                     <Loader2 className="animate-spin" size={50} />
                   </div>
                   <img
-                    src={getCoverImageUrl(id, cover.fileName)}
+                    src={getCoverImageUrl(id, cover.fileName, "full")}
                     alt={`Ảnh bìa ${cover.volume}`}
                     className="max-h-full max-w-full object-cover z-20"
                     fetchPriority="high"
