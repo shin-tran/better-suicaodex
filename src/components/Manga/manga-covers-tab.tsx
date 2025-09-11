@@ -88,7 +88,7 @@ export default function MangaCoversTab({ id }: MangaCoversTabProps) {
         {filterByLocale(selectedLocale, data).map((cover) => (
           <Card
             key={cover.id}
-            className="relative rounded-sm shadow-md drop-shadow-md transition-colors duration-200 w-full h-full border-none"
+            className="relative rounded-sm shadow-md drop-shadow-md transition-colors duration-200 w-full  border-none"
           >
             <Dialog>
               <DialogTrigger className="z-10 flex opacity-0 hover:opacity-100 transition-opacity items-center justify-center absolute inset-0 bg-black bg-opacity-50 rounded-sm cursor-pointer">
@@ -117,15 +117,15 @@ export default function MangaCoversTab({ id }: MangaCoversTabProps) {
               </DialogContent>
             </Dialog>
 
-            <CardContent className="p-0 h-full w-full">
+            <CardContent className="p-0  w-full">
               <LazyLoadImage
                 wrapperClassName={cn(
-                  "!block rounded-sm object-cover w-full h-full",
-                  !loaded && "aspect-[3/5]"
+                  "!block rounded-sm object-cover w-full",
+                  !loaded && "aspect-[5/7]"
                 )}
                 placeholderSrc="/images/place-doro.webp"
                 className={cn(
-                  "h-full w-full rounded-sm block object-cover aspect-[3/5]"
+                  "w-full rounded-sm block object-cover aspect-[5/7]"
                 )}
                 src={getCoverImageUrl(id, cover.fileName, "512")}
                 alt={`Ảnh bìa tập ${cover.volume}`}
