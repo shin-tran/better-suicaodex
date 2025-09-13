@@ -42,6 +42,9 @@ import {
   List,
   MessageSquare,
   Share2,
+  Square,
+  SquareCheck,
+  SquareCheckBig,
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -66,6 +69,8 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
   const [statusCode, setStatusCode] = useState<number>(200);
 
   const { count: cmtCount } = useCommentCount(id);
+
+  const [showHiddenChapters, setShowHiddenChapters] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -397,9 +402,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
               <MessageSquare size={18} />
               Bình luận
               {!!cmtCount && cmtCount > 0 && (
-                <span>
-                  ({cmtCount.toLocaleString("en-US")})
-                </span>
+                <span>({cmtCount.toLocaleString("en-US")})</span>
               )}
             </TabsTrigger>
 
@@ -417,12 +420,27 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
                 <MangaSubInfo manga={manga} />
               </div>
               <div className="w-full">
+                <Button
+                  variant="ghost"
+                  className="px-0 hover:bg-transparent text-base [&_svg]:size-5"
+                  size="lg"
+                  onClick={() => setShowHiddenChapters(!showHiddenChapters)}
+                >
+                  {showHiddenChapters ? (
+                    <SquareCheckBig className="text-primary" strokeWidth={3} />
+                  ) : (
+                    <Square strokeWidth={3} />
+                  )}
+                  Hiển thị các chương ẩn
+                </Button>
+
                 <ChapterList
                   language={config.translatedLanguage}
                   limit={100}
                   mangaID={manga.id}
                   finalChapter={manga.finalChapter}
                   r18={config.r18}
+                  showUnavailable={showHiddenChapters}
                 />
               </div>
             </div>
