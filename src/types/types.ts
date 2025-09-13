@@ -141,6 +141,7 @@ export type Chapter = {
     title?: string;
     cover?: string;
   };
+  isUnavailable?: boolean;
 };
 
 export type ChapterVolume = {

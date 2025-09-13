@@ -26,6 +26,7 @@ export function ChaptersParser(data: any[]): Chapter[] {
       manga: {
         id: mangaData.id,
       },
+      isUnavailable: item.attributes.isUnavailable,
     };
   });
 }
@@ -96,7 +97,8 @@ export async function getChapterVolume(
   language: string[],
   limit: number,
   offset: number,
-  r18?: boolean
+  r18?: boolean,
+  showUnavailable?: boolean
 ): Promise<{ volumes: Volume[]; total: number }> {
   const order = {
     volume: "desc",
@@ -114,17 +116,6 @@ export async function getChapterVolume(
     contentRating.push("pornographic");
   }
 
-  // const data = await axiosWithProxyFallback.get(`/manga/${mangaID}/feed?`, {
-  //   params: {
-  //     limit: limit,
-  //     offset: offset,
-  //     translatedLanguage: language,
-  //     includes: ["scanlation_group", "manga"],
-  //     contentRating: contentRating,
-  //     ...finalOrderQuery,
-  //   },
-  // });
-
   const data = await axiosWithProxyFallback({
     url: `/manga/${mangaID}/feed?`,
     method: "get",
@@ -134,6 +125,7 @@ export async function getChapterVolume(
       translatedLanguage: language,
       includes: ["scanlation_group", "manga"],
       contentRating: contentRating,
+      includeUnavailable: showUnavailable ? "1" : "0",
       ...finalOrderQuery,
     },
   })
