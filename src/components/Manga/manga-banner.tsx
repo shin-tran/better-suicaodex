@@ -30,7 +30,7 @@ export default function Banner({ id, src }: BannerProps) {
           className={cn(
             "absolute h-[17.5rem] w-full",
             "transition-[width] duration-150 ease-in-out",
-            "bg-no-repeat bg-cover bg-center-25"
+            "bg-no-repeat bg-cover bg-[center_top_33%] bg-fixed"
           )}
           style={{ backgroundImage: `url('${coverURL}')` }}
         ></div>
