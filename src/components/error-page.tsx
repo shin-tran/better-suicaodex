@@ -133,7 +133,7 @@ export default function ErrorPage({
                       )}
                     </Button>
                   </div>
-                  <p className="font-mono">{error.message}</p>
+                  <p className="font-mono break-all">{error.message}</p>
                 </div>
               )}
             </div>
