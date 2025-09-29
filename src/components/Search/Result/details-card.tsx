@@ -53,7 +53,7 @@ export default function DetailsCard({ manga }: DetailsCardProps) {
             }}
           >
             <ReactMarkdown
-              className="flex flex-col gap-0 text-sm max-h-[60px] overflow-y-hidden"
+              className="flex flex-col gap-0 text-sm max-h-[60px] overflow-y-hidden break-all"
               remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
               components={{
                 a: ({ href, children }) => (
