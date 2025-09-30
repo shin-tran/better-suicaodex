@@ -17,7 +17,7 @@ import { setCurrentApiUrl } from "./utils";
 
 // Danh sách proxy
 const proxyList = [
-  // "https://api.suicaodex.com",
+  "https://api.suicaodex.com",
   "https://proxy.baclethanxa2022.workers.dev",
   "https://api2.suicaodex.com",
   "https://clf.suicaodex.com",
