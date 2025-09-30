@@ -18,10 +18,13 @@ export function usePreloadImages({
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
   const observerRef = useRef<IntersectionObserver | null>(null);
   const imageRefs = useRef<Map<number, HTMLElement>>(new Map());
+  const attemptedImagesRef = useRef<Set<string>>(new Set());
 
   const preloadImage = (src: string) => {
-    if (preloadedImages.has(src)) return;
-    
+    if (preloadedImages.has(src) || attemptedImagesRef.current.has(src)) return;
+
+    attemptedImagesRef.current.add(src);
+
     const img = new Image();
     img.src = src;
     img.onload = () => {
