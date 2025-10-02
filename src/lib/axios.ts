@@ -19,7 +19,7 @@ import { setCurrentApiUrl } from "./utils";
 const proxyList = [
   "https://proxy.42015881.workers.dev",
   "https://api.suicaodex.com",
-  "https://proxy.baclethanxa2022.workers.dev",
+  "https://proxy.bltx.workers.dev",
   // "https://api2.suicaodex.com",
   "https://clf.suicaodex.com",
 ];
