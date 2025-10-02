@@ -431,7 +431,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
                   ) : (
                     <Square strokeWidth={3} />
                   )}
-                  Hiển thị các chương ẩn
+                  Hiển thị các chương (nếu có)
                 </Button>
 
                 <ChapterList
