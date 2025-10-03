@@ -103,9 +103,18 @@ export function NavUser() {
                   <>
                     <div className="relative inline-block">
                       {!!localNotification.unread.length && (
-                        <span className="absolute block rounded-full ring-2 ring-white top-0 left-0 bg-red-500 size-2.5 animate-bounce duration-250" />
+                        <span className="z-10 absolute block rounded-full ring-2 ring-white top-0 left-0 bg-red-500 size-2.5 animate-bounce duration-250" />
                       )}
-                      <CircleUserRound className="size-8" strokeWidth={1.5} />
+                      <Avatar className="h-8 w-8 rounded-lg">
+                        <AvatarImage
+                          src="/avatars/doro_think.webp"
+                          alt=""
+                          className="object-cover"
+                        />
+                        <AvatarFallback className="rounded-lg">
+                          S
+                        </AvatarFallback>
+                      </Avatar>
                     </div>
 
                     <div className="grid flex-1 text-left text-sm leading-tight">
