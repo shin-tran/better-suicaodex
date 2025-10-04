@@ -84,9 +84,9 @@ Tôi rất hoan nghênh và thậm chí là khuyến khích cmn luôn, làm mộ
 
 > Lưu ý: MangaDex API yêu cầu proxy, hãy tự tạo proxy mà dùng vì nếu bạn dùng của tôi thì tôi bị tốn thêm tiền.
 
->Bạn có thể tham khảo [suicaodex-api](https://github.com/TNTKien/suicaodex-api) hoặc proxy tích hợp sẵn trong [suicaodex cũ](https://github.com/TNTKien/suicaodex/blob/main/app/api/mangadex/%5B...path%5D/route.ts).
+>Bạn có thể tham khảo [simple-proxy](https://github.com/TNTKien/simple-proxy), ~~[suicaodex-api](https://github.com/TNTKien/suicaodex-api)~~ hoặc proxy tích hợp sẵn trong [suicaodex cũ](https://github.com/TNTKien/suicaodex/blob/main/app/api/mangadex/%5B...path%5D/route.ts) (không khuyến khích lắm).
 
-> Khi đã có proxy, hãy chỉnh sửa lại `src/config/site.ts` và `src/lib/axios.ts` cho phù hợp (có thể sẽ cần sửa thêm 1 số url ảnh).
+> Khi đã có proxy, hãy chỉnh sửa lại `src/config/site.ts` và `src/lib/axios.ts` cho phù hợp (ngoài ra sẽ cần sửa thêm 1 số url ảnh truyện, ảnh  bìa).
 
 > `.env`: SuicaoDex sử dụng [AuthJS](https://authjs.dev/), nhớ đọc kỹ docs để biết đường mà config, có thể tham khảo `example.env`.
 
