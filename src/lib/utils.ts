@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { formatDistanceToNowStrict } from "date-fns";
 import { vi as locale } from "date-fns/locale";
 import * as cheerio from "cheerio";
-import { defaultSchema } from 'hast-util-sanitize';
+import { defaultSchema } from "hast-util-sanitize";
 import { siteConfig } from "@/config/site";
 
 export function cn(...inputs: ClassValue[]) {
@@ -35,7 +35,7 @@ export function getContentLength(html: string): number {
   const text = $.text().trim();
   const textLength = text.length;
 
-  const imgCount = $('img').length;
+  const imgCount = $("img").length;
 
   const totalLength = textLength + imgCount;
 
@@ -99,38 +99,38 @@ export const customSchema = {
   ...defaultSchema,
   attributes: {
     ...(defaultSchema.attributes || {}),
-    '*': [
-      ...((defaultSchema.attributes && defaultSchema.attributes['*']) || []),
-      'style',
-      'className',
+    "*": [
+      ...((defaultSchema.attributes && defaultSchema.attributes["*"]) || []),
+      "style",
+      "className",
     ],
     div: [
-      ...((defaultSchema.attributes && defaultSchema.attributes['div']) || []),
-      'style',
-      'className',
+      ...((defaultSchema.attributes && defaultSchema.attributes["div"]) || []),
+      "style",
+      "className",
     ],
     span: [
-      ...((defaultSchema.attributes && defaultSchema.attributes['span']) || []),
-      'style',
-      'className',
+      ...((defaultSchema.attributes && defaultSchema.attributes["span"]) || []),
+      "style",
+      "className",
     ],
     p: [
-      ...((defaultSchema.attributes && defaultSchema.attributes['p']) || []),
-      'style',
-      'className',
+      ...((defaultSchema.attributes && defaultSchema.attributes["p"]) || []),
+      "style",
+      "className",
     ],
     u: [
-      ...((defaultSchema.attributes && defaultSchema.attributes['u']) || []),
-      'style',
-      'className',
+      ...((defaultSchema.attributes && defaultSchema.attributes["u"]) || []),
+      "style",
+      "className",
     ],
   },
   tagNames: [
     ...(defaultSchema.tagNames || []),
-    'div',
-    'span',
-    'p',
-    'u',  // Cho phép thẻ <u>
+    "div",
+    "span",
+    "p",
+    "u", // Cho phép thẻ <u>
   ],
 };
 
@@ -144,9 +144,13 @@ export function setCurrentApiUrl(url: string): void {
   currentWorkingApiUrl = url;
 }
 
-export function getCoverImageUrl(mangaId: string, fileName: string, size: string = ""): string {
+export function getCoverImageUrl(
+  mangaId: string,
+  fileName: string,
+  size: string = ""
+): string {
   const apiUrl = getCurrentApiUrl();
-  
+
   if (size === "full") {
     return `${apiUrl}/covers/${mangaId}/${fileName}`;
   }
@@ -155,3 +159,33 @@ export function getCoverImageUrl(mangaId: string, fileName: string, size: string
   return `${apiUrl}/covers/${mangaId}/${fileName}${sizeStr}.jpg`;
 }
 
+const SUPPORTED_URL_PROTOCOLS = new Set([
+  "http:",
+  "https:",
+  "mailto:",
+  "sms:",
+  "tel:",
+]);
+
+export function sanitizeUrl(url: string): string {
+  try {
+    const parsedUrl = new URL(url);
+    // eslint-disable-next-line no-script-url
+    if (!SUPPORTED_URL_PROTOCOLS.has(parsedUrl.protocol)) {
+      return "about:blank";
+    }
+  } catch {
+    return url;
+  }
+  return url;
+}
+
+// Source: https://stackoverflow.com/a/8234912/2013580
+const urlRegExp = new RegExp(
+  /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=+$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=+$,\w]+@)[A-Za-z0-9.-]+)((?:\/[+~%/.\w-_]*)?\??(?:[-+=&;%@.\w_]*)#?(?:[\w]*))?)/
+);
+export function validateUrl(url: string): boolean {
+  // TODO Fix UI for link insertion; it should never default to an invalid URL such as https://.
+  // Maybe show a dialog where they user can type the URL before inserting it.
+  return url === "https://" || urlRegExp.test(url);
+}
