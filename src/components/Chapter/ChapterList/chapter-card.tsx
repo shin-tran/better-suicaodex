@@ -37,29 +37,40 @@ export const ChapterCard = ({ chapters, finalChapter }: ChapterCardProps) => {
     return (
       <Accordion
         type="multiple"
-        className="w-full bg-card shadow-sm border rounded-[0.125rem]"
+        className="w-full"
         defaultValue={["chapter"]}
       >
         <AccordionItem value="chapter" className="border-none">
-          <AccordionTrigger className="p-1.5 [&[data-state=open]]:border-b">
-            <p className="font-semibold text-sm md:text-base line-clamp-1">
-              {chapters.chapter ? `Chapter ${chapters.chapter}` : "Oneshot"}
-            </p>
+          <AccordionTrigger className="px-4 py-2 bg-card hover:bg-accent rounded-[0.125rem] border shadow-sm [&[data-state=open]>svg]:rotate-90 transition-all">
+            <div className="flex items-center gap-2">
+              <p className="font-semibold text-sm md:text-base line-clamp-1">
+                {chapters.chapter ? `Chapter ${chapters.chapter}` : "Oneshot"}
+              </p>
+            </div>
           </AccordionTrigger>
-          {chapters.group.map((chapter, index) => (
-            <AccordionContent key={chapter.id} className="pb-0">
-              <div className="pl-6">
-                <SingleCard
-                  chapter={chapter}
-                  finalChapter={finalChapter}
-                  className={cn(
-                    "border-r-0 shadow-none border-b-0 rounded-none",
-                    index === 0 && "border-t-0"
+          <AccordionContent className="pb-0 pt-0">
+            <div className="relative pl-6 ml-4 mt-1 space-y-1">
+              {chapters.group.map((chapter, index) => (
+                <div key={chapter.id} className="relative">
+                  {/* Vertical line from top to first item */}
+                  {index === 0 && (
+                    <div className="absolute left-0 top-0 w-[2px] bg-border -ml-6" style={{ height: '50%' }} />
                   )}
-                />
-              </div>
-            </AccordionContent>
-          ))}
+                  {/* Vertical line connecting items */}
+                  {index < chapters.group.length - 1 && (
+                    <div className="absolute left-0 top-1/2 w-[2px] bg-border -ml-6" style={{ height: 'calc(100% + 0.25rem)' }} />
+                  )}
+                  {/* Horizontal branch to the item */}
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-6 h-[2px] bg-border -ml-6 z-10" />
+                  <SingleCard
+                    chapter={chapter}
+                    finalChapter={finalChapter}
+                    className="shadow-sm"
+                  />
+                </div>
+              ))}
+            </div>
+          </AccordionContent>
         </AccordionItem>
       </Accordion>
     );
