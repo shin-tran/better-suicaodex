@@ -31,7 +31,7 @@ import { siteConfig } from "@/config/site";
 import { useConfig } from "@/hooks/use-config";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { fetchMangaDetail } from "@/lib/mangadex/manga";
-import { cn } from "@/lib/utils";
+import { cn, getCoverImageUrl } from "@/lib/utils";
 import { Artist, Author, Manga } from "@/types/types";
 import {
   Archive,
@@ -72,6 +72,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
 
   const [showHiddenChapters, setShowHiddenChapters] = useState(false);
 
+  //TODO: useSWR
   useEffect(() => {
     const fetchData = async () => {
       const { manga, status } = await getMangaData(id);
