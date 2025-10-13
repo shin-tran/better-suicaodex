@@ -524,3 +524,11 @@ export async function getCompletedMangas(
 
   return data.data.map((item: any) => MangaParser(item));
 }
+
+export async function getTotalMangas(): Promise<number> {
+  const data = await axiosWithProxyFallback({
+    url: `/manga`,
+    method: "get",
+  });
+  return data.total;
+}
