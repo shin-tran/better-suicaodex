@@ -31,7 +31,7 @@ import { siteConfig } from "@/config/site";
 import { useConfig } from "@/hooks/use-config";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { fetchMangaDetail } from "@/lib/mangadex/manga";
-import { cn, getCoverImageUrl } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Artist, Author, Manga } from "@/types/types";
 import {
   Archive,
@@ -44,7 +44,6 @@ import {
   Share2,
   Sprout,
   Square,
-  SquareCheck,
   SquareCheckBig,
   Terminal,
 } from "lucide-react";
@@ -57,8 +56,8 @@ import MangaCoversTab from "@/components/Manga/manga-covers-tab";
 import MangaSubInfo from "@/components/Manga/manga-subinfo";
 import CommentSection from "@/components/Comment/comment-section";
 import { useCommentCount } from "@/hooks/use-comment-count";
-import { Card } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import MangaRecommendations from "@/components/Manga/manga-recomendations";
 
 interface MangaDetailsProps {
   id: string;
@@ -459,13 +458,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
               </TabsContent>
 
               <TabsContent value="recommendation" className="mt-0">
-                <Alert className="bg-secondary mt-2 rounded-sm">
-                  <Terminal className="h-4 w-4" />
-                  <AlertTitle>Ehe! 🤪</AlertTitle>
-                  <AlertDescription>
-                    Chức năng đang phát triển...
-                  </AlertDescription>
-                </Alert>
+                <MangaRecommendations id={manga.id} />
               </TabsContent>
             </Tabs>
           </div>

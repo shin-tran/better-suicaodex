@@ -524,3 +524,36 @@ export async function getCompletedMangas(
 
   return data.data.map((item: any) => MangaParser(item));
 }
+
+export async function getRecommendedMangas(
+  id: string,
+  r18: boolean
+): Promise<Manga[]> {
+  const rcmData = await axiosWithProxyFallback({
+    url: `/manga/${id}/recommendation`,
+    method: "get",
+  });
+
+  //filter "type": "manga_recommendation"
+  const mangaIDs = rcmData.data
+    .filter((item: any) => item.type === "manga_recommendation")
+    .map((item: any) => item.id.split("_")[1]);
+
+  if (mangaIDs.length === 0) return [];
+
+
+  const mangasData = await axiosWithProxyFallback({
+    url: "/manga",
+    method: "get",
+    params: {
+      limit: 100,
+      ids: mangaIDs,
+      includes: ["cover_art", "author", "artist"],
+      contentRating: r18
+        ? ["safe", "suggestive", "erotica", "pornographic"]
+        : ["safe", "suggestive", "erotica"],
+    },
+  });
+
+  return mangasData.data.map((m: any) => MangaParser(m));
+}
