@@ -11,7 +11,7 @@ import {
 import { RatingChart } from "./rating-chart";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { useConfig } from "@/hooks/use-config";
-import { cn } from "@/lib/utils";
+import { cn, formatNumber } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MangaStatsProps {
@@ -24,7 +24,7 @@ export const MangaStatsComponent: FC<MangaStatsProps> = ({ stats, size }) => {
   const isMobile = useIsMobile();
   //TODO: fetch
   return (
-    <div className="flex flex-row gap-2">
+    <div className="flex flex-row gap-2 !lowercase">
       {isMobile ? (
         <Popover>
           <PopoverTrigger asChild>
@@ -65,7 +65,7 @@ export const MangaStatsComponent: FC<MangaStatsProps> = ({ stats, size }) => {
         )}
       >
         <Bookmark size={size === "sm" ? 16 : 18} />
-        <span>{stats.follows.toLocaleString("en-US")}</span>
+        <span>{formatNumber(stats.follows)}</span>
       </span>
       {!!stats.comments && (
         <span
@@ -75,7 +75,7 @@ export const MangaStatsComponent: FC<MangaStatsProps> = ({ stats, size }) => {
           )}
         >
           <MessageSquare size={size === "sm" ? 16 : 18} />
-          <span>{stats.comments.toLocaleString("en-US")}</span>
+          <span>{formatNumber(stats.comments)}</span>
         </span>
       )}
     </div>
