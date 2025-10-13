@@ -31,7 +31,7 @@ import { siteConfig } from "@/config/site";
 import { useConfig } from "@/hooks/use-config";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { fetchMangaDetail } from "@/lib/mangadex/manga";
-import { cn } from "@/lib/utils";
+import { cn, getCoverImageUrl } from "@/lib/utils";
 import { Artist, Author, Manga } from "@/types/types";
 import {
   Archive,
@@ -72,6 +72,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
 
   const [showHiddenChapters, setShowHiddenChapters] = useState(false);
 
+  //TODO: useSWR
   useEffect(() => {
     const fetchData = async () => {
       const { manga, status } = await getMangaData(id);
@@ -89,6 +90,9 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
   if (statusCode === 404) return <MangaNotFound />;
   if (statusCode === 503) return <MangaMaintain />;
   if (statusCode !== 200 || !manga) return <div>Lỗi mất rồi 😭</div>;
+
+  const jsonld = generateJsonLd(manga);
+  console.log(jsonld);
 
   return (
     <>
@@ -467,4 +471,21 @@ async function getMangaData(
   } catch (error: any) {
     return { status: error.status || 500, manga: null };
   }
+}
+
+function generateJsonLd(manga: Pick<Manga, 'id' | 'title' | 'cover'>) {
+  const src = getCoverImageUrl(manga.id, manga.cover, "full");
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    mainEntityOfPage: `${siteConfig.url}/manga/${manga.id}`,
+    headline: `${manga.title}`,
+    description: `Đọc truyện ${manga.title} | SuicaoDex`,
+    image: {
+      '@type': 'ImageObject',
+      url: src,
+      width: 1280,
+      height: 960,
+    },
+  };
 }
