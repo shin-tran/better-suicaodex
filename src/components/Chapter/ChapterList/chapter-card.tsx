@@ -35,11 +35,7 @@ interface SingleCardProps {
 export const ChapterCard = ({ chapters, finalChapter }: ChapterCardProps) => {
   if (chapters.group.length > 1)
     return (
-      <Accordion
-        type="multiple"
-        className="w-full"
-        defaultValue={["chapter"]}
-      >
+      <Accordion type="multiple" className="w-full" defaultValue={["chapter"]}>
         <AccordionItem value="chapter" className="border-none">
           <AccordionTrigger className="px-4 py-2 bg-card hover:bg-accent rounded-[0.125rem] border shadow-sm [&[data-state=open]>svg]:rotate-90 transition-all">
             <div className="flex items-center gap-2">
@@ -49,19 +45,25 @@ export const ChapterCard = ({ chapters, finalChapter }: ChapterCardProps) => {
             </div>
           </AccordionTrigger>
           <AccordionContent className="pb-0 pt-0">
-            <div className="relative pl-6 ml-4 mt-1 space-y-1">
+            <div className="relative pl-4 mt-1 space-y-1">
               {chapters.group.map((chapter, index) => (
                 <div key={chapter.id} className="relative">
                   {/* Vertical line from top to first item */}
                   {index === 0 && (
-                    <div className="absolute left-0 top-0 w-[2px] bg-border -ml-6" style={{ height: '50%' }} />
+                    <div
+                      className="absolute left-0 top-0 w-1 bg-border -ml-4"
+                      style={{ height: "50%" }}
+                    />
                   )}
                   {/* Vertical line connecting items */}
                   {index < chapters.group.length - 1 && (
-                    <div className="absolute left-0 top-1/2 w-[2px] bg-border -ml-6" style={{ height: 'calc(100% + 0.25rem)' }} />
+                    <div
+                      className="absolute left-0 top-1/2 w-1 bg-border -ml-4"
+                      style={{ height: "calc(100% + 0.25rem)" }}
+                    />
                   )}
                   {/* Horizontal branch to the item */}
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-6 h-[2px] bg-border -ml-6 z-10" />
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-1 bg-border -ml-4 z-10" />
                   <SingleCard
                     chapter={chapter}
                     finalChapter={finalChapter}
@@ -166,7 +168,9 @@ const SingleCard = ({ chapter, finalChapter, className }: SingleCardProps) => {
     return (
       <Tooltip>
         <TooltipTrigger asChild>{card}</TooltipTrigger>
-        <TooltipContent className="select-none">Không thể đọc chương này</TooltipContent>
+        <TooltipContent className="select-none">
+          Không thể đọc chương này
+        </TooltipContent>
       </Tooltip>
     );
 
