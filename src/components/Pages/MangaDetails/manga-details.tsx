@@ -361,22 +361,10 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
               </DropdownMenu>
 
               <MangaReadButtons id={id} />
-
-              {/* <Button className="rounded-sm grow" variant="secondary">
-              <BookOpenCheck /> Đọc tiếp Ch. 999
-            </Button> */}
             </div>
           </>
         )}
 
-        {/* {!!manga.description.content && (
-          <MangaDescription
-            content={manga.description.content}
-            language={manga.description.language}
-            maxHeight={isMobile ? 78 : 234}
-            manga={manga}
-          />
-        )} */}
         <MangaDescription
           content={manga.description.content}
           language={
