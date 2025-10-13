@@ -42,6 +42,7 @@ import {
   List,
   MessageSquare,
   Share2,
+  Sprout,
   Square,
   SquareCheck,
   SquareCheckBig,
@@ -372,33 +373,44 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
         />
 
         <Tabs defaultValue="chapter">
-          <TabsList className="rounded-sm w-full md:w-auto md:min-w-96">
-            <TabsTrigger
-              value="chapter"
-              className="rounded-sm w-full flex gap-1 px-2"
-            >
-              <List size={18} />
-              DS Chương
-            </TabsTrigger>
-            <TabsTrigger
-              value="comment"
-              className="rounded-sm w-full flex gap-1 px-2"
-            >
-              <MessageSquare size={18} />
-              Bình luận
-              {!!cmtCount && cmtCount > 0 && (
-                <span>({cmtCount.toLocaleString("en-US")})</span>
-              )}
-            </TabsTrigger>
+          <div className="relative overflow-x-auto h-12">
+            <TabsList className="absolute rounded-sm">
+              <TabsTrigger
+                value="chapter"
+                className="rounded-sm flex gap-1 px-2"
+              >
+                <List size={18} />
+                DS Chương
+              </TabsTrigger>
+              <TabsTrigger
+                value="comment"
+                className="rounded-sm flex gap-1 px-2"
+              >
+                <MessageSquare size={18} />
+                Bình luận
+                {!!cmtCount && cmtCount > 0 && (
+                  <span>({cmtCount.toLocaleString("en-US")})</span>
+                )}
+              </TabsTrigger>
 
-            <TabsTrigger
-              value="art"
-              className="rounded-sm w-full flex gap-1 px-2"
-            >
-              <ImagesIcon size={18} />
-              Ảnh bìa
-            </TabsTrigger>
-          </TabsList>
+              <TabsTrigger
+                value="art"
+                className="rounded-sm flex gap-1 px-2"
+              >
+                <ImagesIcon size={18} />
+                Ảnh bìa
+              </TabsTrigger>
+
+              <TabsTrigger
+                value="recommendation"
+                className="rounded-sm flex gap-1 px-2"
+              >
+                <Sprout size={18} />
+                Có thể bạn sẽ thích
+              </TabsTrigger>
+            </TabsList>
+          </div>
+
           <TabsContent value="chapter">
             <div className="flex flex-row gap-4 w-full">
               <div className="hidden xl:block pt-4 min-w-[25%] max-w-[400px]">
