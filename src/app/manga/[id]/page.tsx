@@ -5,12 +5,25 @@ import { fetchMangaDetail } from "@/lib/mangadex/manga";
 import { Manga } from "@/types/types";
 import { Metadata } from "next";
 import { validate as isValidUUID } from "uuid";
+import { cache } from "react";
 
 interface PageProps {
   params: Promise<{
     id: string;
   }>;
 }
+
+const getMangaData = cache(
+  async (id: string): Promise<{ status: number; manga: Manga | null }> => {
+    if (!isValidUUID(id)) return { status: 404, manga: null };
+    try {
+      const mangaData = await fetchMangaDetail(id);
+      return { status: 200, manga: mangaData };
+    } catch (error: any) {
+      return { status: error.status || 500, manga: null };
+    }
+  }
+);
 
 export async function generateMetadata({
   params,
@@ -61,18 +74,6 @@ export default async function Page({ params }: PageProps) {
       <MangaDetails id={id} />
     </>
   );
-}
-
-async function getMangaData(
-  id: string
-): Promise<{ status: number; manga: Manga | null }> {
-  if (!isValidUUID(id) === false) return { status: 404, manga: null };
-  try {
-    const mangaData = await fetchMangaDetail(id);
-    return { status: 200, manga: mangaData };
-  } catch (error: any) {
-    return { status: error.status || 500, manga: null };
-  }
 }
 
 function generateJsonLd(manga: Pick<Manga, "id" | "title" | "cover">) {
