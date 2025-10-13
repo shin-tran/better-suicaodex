@@ -189,3 +189,11 @@ export function validateUrl(url: string): boolean {
   // Maybe show a dialog where they user can type the URL before inserting it.
   return url === "https://" || urlRegExp.test(url);
 }
+
+export function formatNumber(num: number): string {
+  const f = Intl.NumberFormat("en", {
+    notation: "compact",
+    compactDisplay: "short",
+  });
+  return f.format(num);
+}

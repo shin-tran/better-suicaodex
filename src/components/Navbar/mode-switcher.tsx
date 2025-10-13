@@ -23,6 +23,8 @@ export function ModeSwitcher() {
 
   const { ref, toggleSwitchTheme } = useModeAnimation({
     onDarkModeChange: toggleTheme,
+    duration: 500,
+    isDarkMode: true,
   });
 
   return (

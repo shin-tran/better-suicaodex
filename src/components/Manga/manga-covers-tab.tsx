@@ -46,7 +46,7 @@ export default function MangaCoversTab({ id }: MangaCoversTabProps) {
 
   if (error) {
     return (
-      <Card className="mt-4 rounded-sm justify-center items-center flex h-16 w-full">
+      <Card className="mt-2 rounded-sm justify-center items-center flex h-16 w-full">
         <p className="italic">Lỗi mất rồi 😭</p>
       </Card>
     );
@@ -54,7 +54,7 @@ export default function MangaCoversTab({ id }: MangaCoversTabProps) {
 
   if (!data || data.length === 0) {
     return (
-      <Card className="mt-4 rounded-sm justify-center items-center flex h-16 w-full">
+      <Card className="mt-2 rounded-sm justify-center items-center flex h-16 w-full">
         <p className="italic">Không có kết quả!</p>
       </Card>
     );
@@ -73,7 +73,7 @@ export default function MangaCoversTab({ id }: MangaCoversTabProps) {
   return (
     <>
       <MultiSelect
-        className="w-full mt-4 shadow-sm"
+        className="w-full mt-2 shadow-sm"
         placeholder="Mặc định"
         disableFooter
         disableSearch
@@ -83,7 +83,7 @@ export default function MangaCoversTab({ id }: MangaCoversTabProps) {
         maxCount={isMobile ? 1 : 4}
       />
 
-      <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3">
+      <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
         {filterByLocale(selectedLocale, data).map((cover) => (
           <Card
             key={cover.id}
