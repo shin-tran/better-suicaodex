@@ -40,12 +40,11 @@ export default function RootLayout({
                 if (window.localStorage && (localStorage.theme === 'dark' || ((!('theme' in localStorage) || localStorage.theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches))) {
                   document.querySelector('meta[name="theme-color"]').setAttribute('content', '${META_THEME_COLORS.dark}')
                 }
-              } catch (_) {
-                console.warn('localStorage is not available, continuing with default theme');
-              }
+              } catch (_) {}
             `,
           }}
         />
+        <meta name="theme-color" content={META_THEME_COLORS.dark} />
       </head>
       {/* <body className={`${leagueSpartan.className} antialiased`}> */}
       <body className={`${inter.className} antialiased`}>
