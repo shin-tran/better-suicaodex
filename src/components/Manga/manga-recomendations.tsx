@@ -7,6 +7,7 @@ import useSWR from "swr";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import NoPrefetchLink from "../Custom/no-prefetch-link";
 import RecentlyCard from "../Pages/Home/Recently/recently-card";
+import { generateSlug } from "@/lib/utils";
 
 interface MangaRecommendationsProps {
   id: string;
@@ -56,7 +57,7 @@ export default function MangaRecommendations({
   return (
     <div className="mt-2 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
       {data.map((manga) => (
-        <NoPrefetchLink key={manga.id} href={`/manga/${manga.id}`}>
+        <NoPrefetchLink key={manga.id} href={`/manga/${manga.id}/${generateSlug(manga.title)}`}>
           <RecentlyCard manga={manga} />
         </NoPrefetchLink>
       ))}
