@@ -48,6 +48,18 @@ export function MainNav() {
         priority
       />
       <Image
+        src={logos.scdex}
+        alt="SuicaoDex's logo"
+        quality={100}
+        priority
+        className={cn(
+          "h-[22px] w-auto drop-shadow-md dark:invert xs:hidden",
+          pathname.includes("/manga") && "md:invert",
+          // pathname.includes("/group/") && "md:invert",
+          !isAtTop && "filter-none md:filter-none"
+        )}
+      />
+      <Image
         src={logos.suicaodex}
         alt="SuicaoDex's logo"
         quality={100}
