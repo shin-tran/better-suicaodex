@@ -8,7 +8,7 @@ export async function GET(
 ) {
   const params = await context.params;
   const offset = parseInt(params.page) * 100;
-  const res = await getRecentlyMangas(100, ["vi", "en"], false, offset);
+  const res = await getRecentlyMangas(100, ["vi"], false, offset);
 
   const siteMap = await (
     await getServerSideSitemap(

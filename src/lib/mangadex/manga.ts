@@ -541,7 +541,6 @@ export async function getRecommendedMangas(
 
   if (mangaIDs.length === 0) return [];
 
-
   const mangasData = await axiosWithProxyFallback({
     url: "/manga",
     method: "get",
@@ -562,6 +561,11 @@ export async function getTotalMangas(): Promise<number> {
   const data = await axiosWithProxyFallback({
     url: `/manga`,
     method: "get",
+    params: {
+      availableTranslatedLanguage: ["vi"],
+    },
   });
+  if (data.total > 10000) return 10000;
+
   return data.total;
 }
