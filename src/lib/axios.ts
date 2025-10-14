@@ -17,10 +17,10 @@ import { setCurrentApiUrl } from "./utils";
 
 // Danh sách proxy
 const proxyList = [
-  "https://proxy.42015881.workers.dev",
-  "https://api.suicaodex.com",
+  "https://pr.memaydex.online",
+  "https://api2.suicaodex.com",
   "https://proxy.bltx.workers.dev",
-  // "https://api2.suicaodex.com",
+  // "https://api.suicaodex.com",
   "https://clf.suicaodex.com",
 ];
 
