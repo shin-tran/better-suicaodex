@@ -1,28 +1,24 @@
-import { db } from '@/lib/db';
-import { getServerSideSitemap } from 'next-sitemap';
+import { getRecentlyMangas } from "@/lib/mangadex/manga";
+import { generateSlug } from "@/lib/utils";
+import { getServerSideSitemap } from "next-sitemap";
 
-export async function GET(req: Request, context: { params: { page: string } }) {
-  const mangas = await db.manga.findMany({
-    orderBy: {
-      createdAt: 'asc',
-    },
-    where: {
-      isPublished: true,
-    },
-    take: 7000,
-    skip: parseInt(context.params.page) * 7000,
-    select: {
-      slug: true,
-    },
-  });
+export async function GET(
+  req: Request,
+  context: { params: Promise<{ page: string }> }
+) {
+  const params = await context.params;
+  const offset = (parseInt(params.page) - 1) * 100;
+  const res = await getRecentlyMangas(100, ["vi", "en"], false, offset);
 
   const siteMap = await (
     await getServerSideSitemap(
-      mangas.map((manga) => ({
-        loc: `${process.env.NEXTAUTH_URL}/manga/${manga.slug}`,
+      res.mangas.map((manga) => ({
+        loc: `${process.env.NEXTAUTH_URL}/manga/${manga.id}/${generateSlug(
+          manga.title
+        )}`,
         lastmod: new Date().toISOString(),
         priority: 0.9,
-        changefreq: 'daily',
+        changefreq: "daily",
       })),
       req.headers
     )
@@ -30,8 +26,8 @@ export async function GET(req: Request, context: { params: { page: string } }) {
 
   return new Response(siteMap, {
     headers: {
-      'Content-Type': 'application/xml; charset=utf-8',
-      'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=900',
+      "Content-Type": "application/xml; charset=utf-8",
+      "Cache-Control": "public, s-maxage=60, stale-while-revalidate=900",
     },
   });
 }

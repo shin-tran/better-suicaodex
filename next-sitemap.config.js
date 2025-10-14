@@ -4,11 +4,11 @@ const url = process.env.SITE_URL || 'https://suicaodex.com';
 module.exports = {
   siteUrl: url,
   generateRobotsTxt: true,
-  sitemapSize: 7000,
+  sitemapSize: 100,
   robotsTxtOptions: {
     additionalSitemaps: [
       `${url}/manga-sitemap.xml`,
-      `${url}/chapter-sitemap.xml`,
+      // `${url}/chapter-sitemap.xml`,
     ],
   },
 };
