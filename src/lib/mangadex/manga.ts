@@ -557,3 +557,11 @@ export async function getRecommendedMangas(
 
   return mangasData.data.map((m: any) => MangaParser(m));
 }
+
+export async function getTotalMangas(): Promise<number> {
+  const data = await axiosWithProxyFallback({
+    url: `/manga`,
+    method: "get",
+  });
+  return data.total;
+}
