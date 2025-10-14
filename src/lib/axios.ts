@@ -17,10 +17,10 @@ import { setCurrentApiUrl } from "./utils";
 
 // Danh sách proxy
 const proxyList = [
-  "https://proxy.42015881.workers.dev",
-  "https://api.suicaodex.com",
+  "https://pr.memaydex.online",
+  "https://api2.suicaodex.com",
   "https://proxy.bltx.workers.dev",
-  // "https://api2.suicaodex.com",
+  // "https://api.suicaodex.com",
   "https://clf.suicaodex.com",
 ];
 
@@ -62,7 +62,7 @@ export const axiosWithProxyFallback = async <T = any>(
       // Cập nhật proxy thành công
       lastSuccessfulProxyIndex = index;
       lastProxySuccessTime = Date.now();
-      console.info(`[Proxy Success] Using proxy: ${proxy} | Status: ${response.status}`);
+      console.info(`[Success] Using: ${proxy} | Status: ${response.status}`);
       
       const responseData = response.data as any;
       responseData.__proxy_url = proxy;
@@ -73,10 +73,10 @@ export const axiosWithProxyFallback = async <T = any>(
     } catch (error: any) {
       const status = error.response?.status || "No Response";
       lastError = error;
-      console.warn(`[Proxy Failed] Proxy: ${proxy} failed with status: ${status}, trying next...`);
+      console.warn(`[Failed] ${proxy} failed with status: ${status}, trying next...`);
     }
   }
-  console.error("[Proxy Error] All proxies failed");
+  console.error("All failed");
   throw lastError;
 };
 

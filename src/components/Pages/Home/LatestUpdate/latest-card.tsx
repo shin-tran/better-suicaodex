@@ -4,7 +4,7 @@ import NoPrefetchLink from "@/components/Custom/no-prefetch-link";
 import MangaCover from "@/components/Manga/manga-cover";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { formatTimeToNow } from "@/lib/utils";
+import { formatTimeToNow, generateSlug } from "@/lib/utils";
 import { Chapter } from "@/types/types";
 import { GB, VN } from "country-flag-icons/react/3x2";
 import { Clock, ExternalLink, Users } from "lucide-react";
@@ -19,7 +19,11 @@ export default function LatestCard({ chapter }: LatestCardProps) {
       <CardContent className="flex gap-2 p-1">
         {!!chapter.manga.title && !!chapter.manga.cover && (
           <>
-            <NoPrefetchLink href={`/manga/${chapter.manga.id}`}>
+            <NoPrefetchLink
+              href={`/manga/${chapter.manga.id}/${generateSlug(
+                chapter.manga.title
+              )}`}
+            >
               <MangaCover
                 id={chapter.manga.id}
                 cover={chapter.manga.cover}
@@ -34,7 +38,9 @@ export default function LatestCard({ chapter }: LatestCardProps) {
 
             <div className="flex flex-col justify-evenly w-full">
               <NoPrefetchLink
-                href={`/manga/${chapter.manga.id}`}
+                href={`/manga/${chapter.manga.id}/${generateSlug(
+                  chapter.manga.title
+                )}`}
                 className="line-clamp-1 font-bold text-lg break-all"
               >
                 {chapter.manga.title}
@@ -84,7 +90,9 @@ export default function LatestCard({ chapter }: LatestCardProps) {
                           className="whitespace-normal font-normal text-start line-clamp-1 rounded-sm h-4 py-0 px-[0.25rem] hover:text-primary break-all"
                           size="sm"
                         >
-                          <NoPrefetchLink href={`/group/${group.id}`}>{group.name}</NoPrefetchLink>
+                          <NoPrefetchLink href={`/group/${group.id}`}>
+                            {group.name}
+                          </NoPrefetchLink>
                         </Button>
                       ))}
                     </div>

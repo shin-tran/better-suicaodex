@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { cn, getCoverImageUrl } from "@/lib/utils";
+import { cn, generateSlug, getCoverImageUrl } from "@/lib/utils";
 import { Manga } from "@/types/types";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
@@ -65,7 +65,7 @@ export default function MangaCompletedCard({ manga }: MangaCompletedCardProps) {
               size="icon"
               variant="secondary"
             >
-              <NoPrefetchLink href={`/manga/${manga.id}`}>
+              <NoPrefetchLink href={`/manga/${manga.id}/${generateSlug(manga.title)}`}>
                 <ArrowRight />
               </NoPrefetchLink>
             </Button>
@@ -90,7 +90,7 @@ export default function MangaCompletedCard({ manga }: MangaCompletedCardProps) {
       </CardContent>
 
       <CardFooter className="py-2 px-0 w-full">
-        <NoPrefetchLink href={`/manga/${manga.id}`}>
+        <NoPrefetchLink href={`/manga/${manga.id}/${generateSlug(manga.title)}`}>
           <p className="text-base font-semibold line-clamp-2 drop-shadow-sm">
             {manga.title}
           </p>

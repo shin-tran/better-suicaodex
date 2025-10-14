@@ -148,7 +148,7 @@ const MangaDescription = ({
       {fullHeight > maxHeight && (
         <div
           className={cn(
-            "flex justify-center w-full h-full border-t transition-[border-color]",
+            "flex justify-center w-full border-t transition-[border-color]",
             state.expanded ? "border-transparent" : "border-primary"
           )}
         >

@@ -5,6 +5,7 @@ import { vi as locale } from "date-fns/locale";
 import * as cheerio from "cheerio";
 import { defaultSchema } from "hast-util-sanitize";
 import { siteConfig } from "@/config/site";
+import slugify from "slugify";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -188,4 +189,21 @@ export function validateUrl(url: string): boolean {
   // TODO Fix UI for link insertion; it should never default to an invalid URL such as https://.
   // Maybe show a dialog where they user can type the URL before inserting it.
   return url === "https://" || urlRegExp.test(url);
+}
+
+export function formatNumber(num: number): string {
+  const f = Intl.NumberFormat("en", {
+    notation: "compact",
+    compactDisplay: "short",
+  });
+  return f.format(num);
+}
+
+export function generateSlug(title: string): string {
+  if (!title) return "";
+  return slugify(title, {
+    lower: true,
+    locale: "vi",
+    remove: /[*+~.,()'"!?:@\[\]]/g,
+  });
 }

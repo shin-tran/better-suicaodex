@@ -42,9 +42,10 @@ import {
   List,
   MessageSquare,
   Share2,
+  Sprout,
   Square,
-  SquareCheck,
   SquareCheckBig,
+  Terminal,
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -55,6 +56,8 @@ import MangaCoversTab from "@/components/Manga/manga-covers-tab";
 import MangaSubInfo from "@/components/Manga/manga-subinfo";
 import CommentSection from "@/components/Comment/comment-section";
 import { useCommentCount } from "@/hooks/use-comment-count";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import MangaRecommendations from "@/components/Manga/manga-recomendations";
 
 interface MangaDetailsProps {
   id: string;
@@ -72,6 +75,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
 
   const [showHiddenChapters, setShowHiddenChapters] = useState(false);
 
+  //TODO: useSWR
   useEffect(() => {
     const fetchData = async () => {
       const { manga, status } = await getMangaData(id);
@@ -129,8 +133,8 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
       <Banner id={manga.id} src={manga.cover} />
 
       {/* Content */}
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-row gap-4">
+      <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-[auto_1fr] gap-4 w-full">
           <div className="relative">
             <MangaCover
               id={manga.id}
@@ -146,11 +150,25 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
           {isMobile ? (
             <div className="flex flex-col gap-2 justify-between">
               <div className="flex flex-col gap-1.5">
-                <p className="drop-shadow-md font-black text-2xl leading-7">
+                <p
+                  className="drop-shadow-md font-black leading-[1.15]"
+                  style={{
+                    fontSize: `clamp(0.875rem, ${
+                      manga.title.length <= 30
+                        ? "7vw"
+                        : manga.title.length <= 50
+                        ? "6vw"
+                        : manga.title.length <= 70
+                        ? "5vw"
+                        : "4.5vw"
+                    }, 3rem)`,
+                    overflowWrap: "break-word",
+                  }}
+                >
                   {manga.title}
                 </p>
                 {!!manga.altTitle && (
-                  <h2 className="drop-shadow-md text-lg leading-5 line-clamp-2">
+                  <h2 className="drop-shadow-md text-base leading-5 line-clamp-2">
                     {manga.altTitle}
                   </h2>
                 )}
@@ -172,11 +190,20 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
               <div className="flex flex-col justify-between h-[13.5rem] pb-[0.5rem]">
                 <div className="flex flex-col">
                   <p
-                    className={cn(
-                      "drop-shadow-md font-black md:text-white",
-                      // "text-3xl md:text-white md:text-5xl"
-                      manga.title.length > 20 ? "text-4xl" : "text-6xl"
-                    )}
+                    className="drop-shadow-md font-black md:text-white break-words leading-[1.15]"
+                    style={{
+                      fontSize: `clamp(2.25rem, ${
+                        manga.title.length <= 20
+                          ? "5vw"
+                          : manga.title.length <= 35
+                          ? "4.2vw"
+                          : manga.title.length <= 50
+                          ? "3.6vw"
+                          : manga.title.length <= 70
+                          ? "3.1vw"
+                          : "2.6vw"
+                      }, 5rem)`,
+                    }}
                   >
                     {manga.title}
                   </p>
@@ -294,10 +321,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
               />
             </div>
 
-            <div className="flex flex-grow gap-2 w-full">
-              {/* <Button size="icon" className="rounded-sm grow-0">
-                <ListPlus />
-              </Button> */}
+            <div className="flex flex-wrap gap-2 w-full">
               <AddToLibraryBtn isMobile={isMobile} manga={manga} />
 
               <Button
@@ -361,22 +385,10 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
               </DropdownMenu>
 
               <MangaReadButtons id={id} />
-
-              {/* <Button className="rounded-sm grow" variant="secondary">
-              <BookOpenCheck /> Đọc tiếp Ch. 999
-            </Button> */}
             </div>
           </>
         )}
 
-        {/* {!!manga.description.content && (
-          <MangaDescription
-            content={manga.description.content}
-            language={manga.description.language}
-            maxHeight={isMobile ? 78 : 234}
-            manga={manga}
-          />
-        )} */}
         <MangaDescription
           content={manga.description.content}
           language={
@@ -386,43 +398,55 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
           manga={manga}
         />
 
-        <Tabs defaultValue="chapter">
-          <TabsList className="rounded-sm w-full md:w-auto md:min-w-96">
-            <TabsTrigger
-              value="chapter"
-              className="rounded-sm w-full flex gap-1 px-2"
-            >
-              <List size={18} />
-              DS Chương
-            </TabsTrigger>
-            <TabsTrigger
-              value="comment"
-              className="rounded-sm w-full flex gap-1 px-2"
-            >
-              <MessageSquare size={18} />
-              Bình luận
-              {!!cmtCount && cmtCount > 0 && (
-                <span>({cmtCount.toLocaleString("en-US")})</span>
-              )}
-            </TabsTrigger>
+        <div className="flex flex-row gap-4 w-full">
+          <div className="hidden xl:block pt-2 min-w-[25%] max-w-[400px]">
+            <MangaSubInfo manga={manga} />
+          </div>
 
-            <TabsTrigger
-              value="art"
-              className="rounded-sm w-full flex gap-1 px-2"
-            >
-              <ImagesIcon size={18} />
-              Ảnh bìa
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="chapter">
-            <div className="flex flex-row gap-4 w-full">
-              <div className="hidden xl:block pt-4 min-w-[25%] max-w-[400px]">
-                <MangaSubInfo manga={manga} />
+          <div className="w-full">
+            <Tabs defaultValue="chapter">
+              <div className="relative overflow-x-auto h-12">
+                <TabsList className="absolute rounded-sm">
+                  <TabsTrigger
+                    value="chapter"
+                    className="rounded-sm flex gap-1 px-2"
+                  >
+                    <List size={18} />
+                    Danh sách chương
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="comment"
+                    className="rounded-sm flex gap-1 px-2"
+                  >
+                    <MessageSquare size={18} />
+                    Bình luận
+                    {!!cmtCount && cmtCount > 0 && (
+                      <span>({cmtCount.toLocaleString("en-US")})</span>
+                    )}
+                  </TabsTrigger>
+
+                  <TabsTrigger
+                    value="art"
+                    className="rounded-sm flex gap-1 px-2"
+                  >
+                    <ImagesIcon size={18} />
+                    Ảnh bìa
+                  </TabsTrigger>
+
+                  <TabsTrigger
+                    value="recommendation"
+                    className="rounded-sm flex gap-1 px-2"
+                  >
+                    <Sprout size={18} />
+                    Có thể bạn sẽ thích
+                  </TabsTrigger>
+                </TabsList>
               </div>
-              <div className="w-full">
+
+              <TabsContent value="chapter" className="mt-0">
                 <Button
                   variant="ghost"
-                  className="px-0 hover:bg-transparent text-base [&_svg]:size-5"
+                  className="px-0 hover:bg-transparent text-base [&_svg]:size-5 whitespace-normal"
                   size="lg"
                   onClick={() => setShowHiddenChapters(!showHiddenChapters)}
                 >
@@ -442,17 +466,26 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
                   r18={config.r18}
                   showUnavailable={showHiddenChapters}
                 />
-              </div>
-            </div>
-          </TabsContent>
-          <TabsContent value="comment">
-            <CommentSection id={manga.id} type="manga" title={manga.title} />
-          </TabsContent>
+              </TabsContent>
 
-          <TabsContent value="art">
-            <MangaCoversTab id={manga.id} />
-          </TabsContent>
-        </Tabs>
+              <TabsContent value="comment" className="mt-0">
+                <CommentSection
+                  id={manga.id}
+                  type="manga"
+                  title={manga.title}
+                />
+              </TabsContent>
+
+              <TabsContent value="art" className="mt-0">
+                <MangaCoversTab id={manga.id} />
+              </TabsContent>
+
+              <TabsContent value="recommendation" className="mt-0">
+                <MangaRecommendations id={manga.id} />
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
       </div>
     </>
   );

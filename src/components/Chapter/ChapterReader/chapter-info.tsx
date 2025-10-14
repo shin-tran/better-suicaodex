@@ -1,6 +1,7 @@
 "use client";
 
 import { useLocalNotification } from "@/hooks/use-local-notification";
+import { generateSlug } from "@/lib/utils";
 import { Chapter } from "@/types/types";
 import { Users } from "lucide-react";
 import Link from "next/link";
@@ -25,7 +26,7 @@ export default function ChapterInfo({ chapter }: ChapterInfoProps) {
       <h1 className="text-xl">{ChapterTitle(chapter)}</h1>
 
       <Link
-        href={`/manga/${chapter.manga.id}`}
+        href={`/manga/${chapter.manga.id}/${generateSlug(chapter.manga.title || "")}`}
         className="text-primary font-semibold"
       >
         {chapter.manga.title}

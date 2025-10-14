@@ -8,6 +8,7 @@ import Tags from "@/components/Manga/Tags";
 import MangaCover from "@/components/Manga/manga-cover";
 import { useIsMobile } from "@/hooks/use-mobile";
 import NoPrefetchLink from "@/components/Custom/no-prefetch-link";
+import slugify from "slugify";
 
 interface MangaSlideProps {
   manga: Manga;
@@ -16,6 +17,11 @@ interface MangaSlideProps {
 export default function MangaSlide({ manga }: MangaSlideProps) {
   const isMobile = useIsMobile();
   const bannerSrc = getCoverImageUrl(manga.id, manga.cover, "full");
+  const slug = slugify(manga.title, {
+    lower: true,
+    locale: "vi",
+    remove: /[*+~.,()'"!:@\[\]]/g,
+  });
 
   return (
     <>
@@ -49,7 +55,7 @@ export default function MangaSlide({ manga }: MangaSlideProps) {
           "md:pr-[calc(32px+var(--sidebar-width-icon))] lg:pr-[calc(48px+var(--sidebar-width-icon))]"
         )}
       >
-        <NoPrefetchLink href={`/manga/${manga.id}`}>
+        <NoPrefetchLink href={`/manga/${manga.id}/${slug}`}>
           <MangaCover
             id={manga.id}
             cover={manga.cover}
@@ -69,7 +75,7 @@ export default function MangaSlide({ manga }: MangaSlideProps) {
               : "max-content min-content auto max-content",
           }}
         >
-          <NoPrefetchLink href={`/manga/${manga.id}`}>
+          <NoPrefetchLink href={`/manga/${manga.id}/${slug}`}>
             <p className="drop-shadow-md font-black text-xl line-clamp-5 sm:line-clamp-2 lg:text-4xl overflow-hidden lg:!leading-[2.75rem]">
               {manga.title}
             </p>

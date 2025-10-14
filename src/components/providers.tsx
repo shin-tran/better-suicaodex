@@ -12,6 +12,7 @@ import {
 } from "@bprogress/next";
 import { NotificationProvider } from "./notification-provider";
 import { SessionProvider } from "next-auth/react";
+import { SWRConfig } from "swr";
 
 export function ThemeProvider({
   children,
@@ -19,24 +20,26 @@ export function ThemeProvider({
 }: React.ComponentProps<typeof NextThemesProvider>) {
   return (
     <JotaiProvider>
-      <NextThemesProvider {...props}>
-        <ThemeWrapper>
-          <ProgressProvider
-            height="3px"
-            options={{ showSpinner: false, template: null }}
-            shallowRouting
-          >
-            <Progress>
-              <Bar className="!bg-primary" />
-            </Progress>
-            <TooltipProvider delayDuration={0}>
-              <SessionProvider>
-                <NotificationProvider>{children}</NotificationProvider>
-              </SessionProvider>
-            </TooltipProvider>
-          </ProgressProvider>
-        </ThemeWrapper>
-      </NextThemesProvider>
+      <SWRConfig value={{ errorRetryCount: 3 }}>
+        <NextThemesProvider {...props}>
+          <ThemeWrapper>
+            <ProgressProvider
+              height="3px"
+              options={{ showSpinner: false, template: null }}
+              shallowRouting
+            >
+              <Progress>
+                <Bar className="!bg-primary" />
+              </Progress>
+              <TooltipProvider delayDuration={0}>
+                <SessionProvider>
+                  <NotificationProvider>{children}</NotificationProvider>
+                </SessionProvider>
+              </TooltipProvider>
+            </ProgressProvider>
+          </ThemeWrapper>
+        </NextThemesProvider>
+      </SWRConfig>
     </JotaiProvider>
   );
 }

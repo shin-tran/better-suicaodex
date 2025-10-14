@@ -8,6 +8,7 @@ import SRT from "#/images/logo/srt.webp";
 import Trinity from "#/images/logo/trinity.webp";
 import Valkyrie from "#/images/logo/valkyrie.webp";
 import SuicaoDex from "#/suicaodex.webp";
+import SCDex from "#/SCDex-lite.webp";
 
 export const logos = {
   abydos: Abydos,
@@ -20,6 +21,7 @@ export const logos = {
   trinity: Trinity,
   valkyrie: Valkyrie,
   suicaodex: SuicaoDex,
+  scdex: SCDex,
 };
 
 export const getLogo = (name: string) => {

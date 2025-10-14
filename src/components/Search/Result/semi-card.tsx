@@ -8,16 +8,18 @@ import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import NoPrefetchLink from "@/components/Custom/no-prefetch-link";
+import { generateSlug } from "@/lib/utils";
 
 interface SemiCardProps {
   manga: Manga;
 }
 
 export default function SemiCard({ manga }: SemiCardProps) {
+  const slug = generateSlug(manga.title);
   return (
     <Card className="rounded-sm shadow-sm transition-colors duration-200">
       <CardContent className="flex gap-2 p-1">
-        <NoPrefetchLink href={`/manga/${manga.id}`}>
+        <NoPrefetchLink href={`/manga/${manga.id}/${slug}`}>
           <MangaCover
             id={manga.id}
             cover={manga.cover}
@@ -32,7 +34,7 @@ export default function SemiCard({ manga }: SemiCardProps) {
         </NoPrefetchLink>
         <div className="flex flex-col gap-1 w-full pr-2">
           <NoPrefetchLink
-            href={`/manga/${manga.id}`}
+            href={`/manga/${manga.id}/${slug}`}
             className="line-clamp-1 font-bold text-xl break-all"
           >
             {manga.title}
