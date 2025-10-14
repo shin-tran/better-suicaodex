@@ -150,11 +150,25 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
           {isMobile ? (
             <div className="flex flex-col gap-2 justify-between">
               <div className="flex flex-col gap-1.5">
-                <p className="drop-shadow-md font-black text-2xl leading-7 break-words">
+                <p
+                  className="drop-shadow-md font-black leading-[1.15]"
+                  style={{
+                    fontSize: `clamp(0.875rem, ${
+                      manga.title.length <= 30
+                        ? "7vw"
+                        : manga.title.length <= 50
+                        ? "6vw"
+                        : manga.title.length <= 70
+                        ? "5vw"
+                        : "4.5vw"
+                    }, 3rem)`,
+                    overflowWrap: "break-word",
+                  }}
+                >
                   {manga.title}
                 </p>
                 {!!manga.altTitle && (
-                  <h2 className="drop-shadow-md text-lg leading-5 line-clamp-2 break-all">
+                  <h2 className="drop-shadow-md text-base leading-5 line-clamp-2">
                     {manga.altTitle}
                   </h2>
                 )}
@@ -176,11 +190,20 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
               <div className="flex flex-col justify-between h-[13.5rem] pb-[0.5rem]">
                 <div className="flex flex-col">
                   <p
-                    className={cn(
-                      "drop-shadow-md font-black md:text-white",
-                      // "text-3xl md:text-white md:text-5xl"
-                      manga.title.length > 20 ? "text-4xl" : "text-6xl"
-                    )}
+                    className="drop-shadow-md font-black md:text-white break-words leading-[1.15]"
+                    style={{
+                      fontSize: `clamp(2.25rem, ${
+                        manga.title.length <= 20
+                          ? "5vw"
+                          : manga.title.length <= 35
+                          ? "4.2vw"
+                          : manga.title.length <= 50
+                          ? "3.6vw"
+                          : manga.title.length <= 70
+                          ? "3.1vw"
+                          : "2.6vw"
+                      }, 5rem)`,
+                    }}
                   >
                     {manga.title}
                   </p>
