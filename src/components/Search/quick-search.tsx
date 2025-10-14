@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn, generateSlug } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { ArrowRight, Search, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -266,7 +266,7 @@ export default function QuickSearch() {
                   {mangas.map((manga) => (
                     <Link
                       key={manga.id}
-                      href={`/manga/${manga.id}`}
+                      href={`/manga/${manga.id}/${generateSlug(manga.title)}`}
                       onClick={() => setExpanded(false)}
                       prefetch={false}
                     >
@@ -382,7 +382,7 @@ export default function QuickSearch() {
                     {mangas.map((manga) => (
                       <Link
                         key={manga.id}
-                        href={`/manga/${manga.id}`}
+                        href={`/manga/${manga.id}/${generateSlug(manga.title)}`}
                         prefetch={false}
                       >
                         <DialogClose className="w-full text-start">
