@@ -133,8 +133,8 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
       <Banner id={manga.id} src={manga.cover} />
 
       {/* Content */}
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-row gap-4">
+      <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-[auto_1fr] gap-4 w-full">
           <div className="relative">
             <MangaCover
               id={manga.id}
@@ -150,11 +150,11 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
           {isMobile ? (
             <div className="flex flex-col gap-2 justify-between">
               <div className="flex flex-col gap-1.5">
-                <p className="drop-shadow-md font-black text-2xl leading-7">
+                <p className="drop-shadow-md font-black text-2xl leading-7 break-words">
                   {manga.title}
                 </p>
                 {!!manga.altTitle && (
-                  <h2 className="drop-shadow-md text-lg leading-5 line-clamp-2">
+                  <h2 className="drop-shadow-md text-lg leading-5 line-clamp-2 break-all">
                     {manga.altTitle}
                   </h2>
                 )}
@@ -298,7 +298,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
               />
             </div>
 
-            <div className="flex flex-grow gap-2 w-full">
+            <div className="flex flex-wrap gap-2 w-full">
               <AddToLibraryBtn isMobile={isMobile} manga={manga} />
 
               <Button
@@ -423,7 +423,7 @@ export default function MangaDetails({ id }: MangaDetailsProps) {
               <TabsContent value="chapter" className="mt-0">
                 <Button
                   variant="ghost"
-                  className="px-0 hover:bg-transparent text-base [&_svg]:size-5"
+                  className="px-0 hover:bg-transparent text-base [&_svg]:size-5 whitespace-normal"
                   size="lg"
                   onClick={() => setShowHiddenChapters(!showHiddenChapters)}
                 >
