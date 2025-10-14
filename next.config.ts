@@ -28,6 +28,16 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  rewrites: async () => [
+    {
+      source: "/manga-sitemap.xml",
+      destination: "/manga-sitemap",
+    },
+    {
+      source: "/manga-sitemap-:page.xml",
+      destination: "/manga-sitemap/:page",
+    },
+  ],
 };
 
 export default nextConfig;

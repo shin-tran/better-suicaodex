@@ -7,7 +7,7 @@ export async function GET(
   context: { params: Promise<{ page: string }> }
 ) {
   const params = await context.params;
-  const offset = (parseInt(params.page) - 1) * 100;
+  const offset = parseInt(params.page) * 100;
   const res = await getRecentlyMangas(100, ["vi", "en"], false, offset);
 
   const siteMap = await (
