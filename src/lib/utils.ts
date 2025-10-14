@@ -5,6 +5,7 @@ import { vi as locale } from "date-fns/locale";
 import * as cheerio from "cheerio";
 import { defaultSchema } from "hast-util-sanitize";
 import { siteConfig } from "@/config/site";
+import slugify from "slugify";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -196,4 +197,13 @@ export function formatNumber(num: number): string {
     compactDisplay: "short",
   });
   return f.format(num);
+}
+
+export function generateSlug(title: string): string {
+  if (!title) return "";
+  return slugify(title, {
+    lower: true,
+    locale: "vi",
+    remove: /[*+~.,()'"!?:@\[\]]/g,
+  });
 }

@@ -5,7 +5,7 @@ import { getStaffPickMangas } from "@/lib/mangadex/manga";
 import useSWR from "swr";
 import { Skeleton } from "@/components/ui/skeleton";
 import RecentlyCard from "../Recently/recently-card";
-import { cn } from "@/lib/utils";
+import { cn, generateSlug } from "@/lib/utils";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronsDown, ChevronsUp } from "lucide-react";
@@ -97,7 +97,7 @@ export default function StaffPick() {
         }}
       >
         {data.map((manga) => (
-          <NoPrefetchLink key={manga.id} href={`/manga/${manga.id}`}>
+          <NoPrefetchLink key={manga.id} href={`/manga/${manga.id}/${generateSlug(manga.title)}`}>
             <RecentlyCard manga={manga} />
           </NoPrefetchLink>
         ))}

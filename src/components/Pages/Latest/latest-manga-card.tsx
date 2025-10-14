@@ -10,7 +10,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { cn, formatTimeToNow, getCoverImageUrl } from "@/lib/utils";
+import { cn, formatTimeToNow, generateSlug, getCoverImageUrl } from "@/lib/utils";
 import { Chapter, Manga } from "@/types/types";
 import { GB, VN } from "country-flag-icons/react/3x2";
 import {
@@ -45,7 +45,7 @@ export default function LatestMangaCard({
   if (type === "cover") {
     return (
       <Card className="relative rounded-sm shadow-none transition-colors duration-200 w-full h-full border-none bg-background">
-        <NoPrefetchLink href={`/manga/${manga.id}`}>
+        <NoPrefetchLink href={`/manga/${manga.id}/${generateSlug(manga.title || "")}`}>
           <CardContent className="relative p-0 rounded-sm">
             <LazyLoadImage
               wrapperClassName={cn(
@@ -77,14 +77,14 @@ export default function LatestMangaCard({
     <Card className="rounded-sm shadow-sm transition-colors duration-200">
       <CardHeader className="p-1 md:hidden">
         <NoPrefetchLink
-          href={`/manga/${manga.id}`}
+          href={`/manga/${manga.id}/${generateSlug(manga.title || "")}`}
           className="line-clamp-1 font-bold text-lg break-all border-b"
         >
           {manga.title}
         </NoPrefetchLink>
       </CardHeader>
       <CardContent className="flex gap-1.5 p-1 md:p-1.5">
-        <NoPrefetchLink href={`/manga/${manga.id}`}>
+        <NoPrefetchLink href={`/manga/${manga.id}/${generateSlug(manga.title || "")}`}>
           <MangaCover
             id={manga.id || ""}
             cover={manga.cover || ""}
@@ -98,7 +98,7 @@ export default function LatestMangaCard({
         </NoPrefetchLink>
         <div className="flex flex-col w-full">
           <NoPrefetchLink
-            href={`/manga/${manga.id}`}
+            href={`/manga/${manga.id}/${generateSlug(manga.title || "")}`}
             className="hidden md:flex line-clamp-1 font-bold text-lg break-all border-b md:pb-1 px-1.5"
           >
             {manga.title}
