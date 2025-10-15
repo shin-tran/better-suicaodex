@@ -6,6 +6,7 @@ import { Manga } from "@/types/types";
 import { Metadata } from "next";
 import { validate as isValidUUID } from "uuid";
 import { cache } from "react";
+import { generateSlug } from "@/lib/utils";
 
 interface PageProps {
   params: Promise<{
@@ -82,7 +83,7 @@ function generateJsonLd(manga: Pick<Manga, "id" | "title" | "cover" | "descripti
   return {
     "@context": "https://schema.org",
     "@type": "Article",
-    mainEntityOfPage: `${process.env.SITE_URL}/manga/${manga.id}`,
+    mainEntityOfPage: `${process.env.SITE_URL}/manga/${manga.id}/${generateSlug(manga.title)}`,
     headline: `${manga.title}`,
     description: description,
     image: {
