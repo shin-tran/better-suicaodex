@@ -76,13 +76,15 @@ export default async function Page({ params }: PageProps) {
   );
 }
 
-function generateJsonLd(manga: Pick<Manga, "id" | "title" | "cover">) {
+function generateJsonLd(manga: Pick<Manga, "id" | "title" | "cover" | "description">) {
+  const description =
+    manga.description.content || `Đọc truyện ${manga.title} - SuicaoDex`;
   return {
     "@context": "https://schema.org",
     "@type": "Article",
     mainEntityOfPage: `${process.env.SITE_URL}/manga/${manga.id}`,
     headline: `${manga.title}`,
-    description: `Đọc truyện ${manga.title} | SuicaoDex`,
+    description: description,
     image: {
       "@type": "ImageObject",
       url: `${siteConfig.mangadexAPI.ogURL}/manga/${manga.id}`,
