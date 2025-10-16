@@ -31,8 +31,9 @@ export function MangaParser(data: any): Manga {
   ];
   const viTitle = altTitles.find((t: any) => t.vi)?.vi || undefined;
   const jaTitle = altTitles.find((t: any) => t.ja)?.ja || undefined;
+  const originalTitle = titles[Object.keys(titles)[0]];
 
-  const title = viTitle || enTitles[0] || jaTitle;
+  const title = viTitle || enTitles[0] || jaTitle || originalTitle;
   let altTitle: string | null = null;
   if (title == viTitle) {
     altTitle = enTitles[0] || jaTitle || null;
