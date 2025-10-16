@@ -136,6 +136,7 @@ export const customSchema = {
 };
 
 let currentWorkingApiUrl: string | null = null;
+let currentImageProxyUrl: string | null = null;
 
 export function getCurrentApiUrl(): string {
   return currentWorkingApiUrl || siteConfig.suicaodex.apiURL;
@@ -145,12 +146,21 @@ export function setCurrentApiUrl(url: string): void {
   currentWorkingApiUrl = url;
 }
 
+export function getCurrentImageProxyUrl(): string {
+  return currentImageProxyUrl || siteConfig.suicaodex.apiURL;
+}
+
+export function setCurrentImageProxyUrl(url: string): void {
+  currentImageProxyUrl = url;
+}
+
 export function getCoverImageUrl(
   mangaId: string,
   fileName: string,
   size: string = ""
 ): string {
-  const apiUrl = getCurrentApiUrl();
+  // Dùng image proxy URL thay vì API URL
+  const apiUrl = getCurrentImageProxyUrl();
 
   if (size === "full") {
     return `${apiUrl}/covers/${mangaId}/${fileName}`;

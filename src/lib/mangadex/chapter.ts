@@ -1,7 +1,7 @@
 import { Chapter, ChapterAggregate, Volume } from "@/types/types";
 import { GroupParser } from "./group";
 import { axiosWithProxyFallback } from "../axios";
-import { getCurrentApiUrl } from "../utils";
+import { getCurrentApiUrl, getCurrentImageProxyUrl } from "../utils";
 
 export function ChaptersParser(data: any[]): Chapter[] {
   return data.map((item) => {
@@ -182,7 +182,8 @@ export async function getChapterDetail(id: string): Promise<Chapter> {
   // console.log(atHomeData);
 
   // Use the current working API URL for images
-  const apiUrl = getCurrentApiUrl();
+  // const apiUrl = getCurrentApiUrl();
+  const apiUrl = getCurrentImageProxyUrl();
   
   const pages = atHomeData.images.map(
     (item: string) => `${apiUrl}/${item}`
