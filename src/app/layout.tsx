@@ -10,6 +10,7 @@ import { ThemeSwitcher } from "@/components/Theme/theme-switcher";
 import { META_THEME_COLORS, siteConfig } from "@/config/site";
 import { Toaster } from "@/components/ui/sonner";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { ImageProxyInitializer } from "@/components/image-proxy-initializer";
 
 const inter = Inter({
   preload: true,
@@ -76,6 +77,7 @@ export default function RootLayout({
           enableColorScheme
           enableSystem
         >
+          <ImageProxyInitializer />
           <SidebarProvider defaultOpen={false}>
             <div className="border-grid flex flex-1 flex-col">
               <SiteHeader />
