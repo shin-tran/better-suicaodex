@@ -29,8 +29,12 @@ const getMangaData = cache(
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const { id } = await params;
+  const { id, slug = [] } = (await params) as { id: string; slug?: string[] };
   const { status, manga } = await getMangaData(id);
+
+  const path = `/manga/${id}${
+    Array.isArray(slug) && slug.length ? `/${slug.join("/")}` : ""
+  }`;
 
   if (status === 404) {
     return { title: "Truyện không tồn tại" };
@@ -49,6 +53,7 @@ export async function generateMetadata({
     keywords: [`Manga`, manga.title, "SuicaoDex", manga.altTitle || ""],
     openGraph: {
       title: `${manga.title} - SuicaoDex`,
+      url: path,
       siteName: "SuicaoDex",
       description,
       images: [
