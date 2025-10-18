@@ -51,7 +51,20 @@ export async function generateMetadata({
       title: `${manga.title} - SuicaoDex`,
       siteName: "SuicaoDex",
       description,
-      images: `${siteConfig.mangadexAPI.ogURL}/manga/${manga.id}`,
+      images: [
+        {
+          url: `${siteConfig.mangadexAPI.ogURL}/manga/${manga.id}`,
+          width: 1200,
+          height: 630,
+          alt: "SuicaoDex",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${manga.title} - SuicaoDex`,
+      description,
+      images: [`${siteConfig.mangadexAPI.ogURL}/manga/${manga.id}`],
     },
   };
 }
@@ -77,13 +90,17 @@ export default async function Page({ params }: PageProps) {
   );
 }
 
-function generateJsonLd(manga: Pick<Manga, "id" | "title" | "cover" | "description">) {
+function generateJsonLd(
+  manga: Pick<Manga, "id" | "title" | "cover" | "description">
+) {
   const description =
     manga.description.content || `Đọc truyện ${manga.title} - SuicaoDex`;
   return {
     "@context": "https://schema.org",
     "@type": "Article",
-    mainEntityOfPage: `${process.env.SITE_URL}/manga/${manga.id}/${generateSlug(manga.title)}`,
+    mainEntityOfPage: `${process.env.SITE_URL}/manga/${manga.id}/${generateSlug(
+      manga.title
+    )}`,
     headline: `${manga.title}`,
     description: description,
     image: {
