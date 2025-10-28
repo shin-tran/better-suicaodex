@@ -27,6 +27,7 @@ const proxyGroup2 = [
 ];
 
 const proxyList = [
+  process.env.NEXT_PUBLIC_PROXY_URL as string,
   "https://pr.memaydex.online",
   "https://api2.suicaodex.com",
   "https://proxy.bltx.workers.dev",
@@ -75,13 +76,13 @@ export const axiosWithProxyFallback = async <T = any>(
       lastSuccessfulProxyIndex = index;
       lastProxySuccessTime = Date.now();
       console.info(`[API Success] Using: ${proxy} | Status: ${response.status}`);
-      
+
       const responseData = response.data as any;
       responseData.__proxy_url = proxy;
- 
+
       // Set API URL
       setCurrentApiUrl(proxy);
-      
+
       return responseData;
     } catch (error: any) {
       const status = error.response?.status || "No Response";
@@ -101,23 +102,23 @@ export const initImageProxy = async (): Promise<void> => {
 
   for (const proxy of prioritizedProxyList) {
     const instance = createAxiosInstance(proxy);
-    
+
     try {
       await instance.get("/ping", { timeout: 3000 }).catch(() => {
         return instance.get("/", { timeout: 3000 });
       });
-      
+
       lastSuccessfulImageProxyIndex = prioritizedProxyList.indexOf(proxy);
       lastImageProxySuccessTime = Date.now();
       console.info(`[Image Init] Using: ${proxy}`);
-      
+
       setCurrentImageProxyUrl(proxy);
       return;
     } catch (error) {
       console.warn(`[Image Init] ${proxy} failed, trying next...`);
     }
   }
-  
+
   console.warn("[Image Init] All failed, using fallback");
   const fallbackProxy = proxyGroup1[0];
   setCurrentImageProxyUrl(fallbackProxy);
