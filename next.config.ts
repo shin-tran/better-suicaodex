@@ -38,6 +38,19 @@ const nextConfig: NextConfig = {
       destination: "/manga-sitemap/:page",
     },
   ],
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Referrer-Policy",
+            value: "no-referrer", // Don't send Referer: localhost:3000 when calling the image API.
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
