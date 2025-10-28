@@ -27,7 +27,7 @@ const proxyGroup2 = [
 ];
 
 const proxyList = [
-  process.env.NEXT_PUBLIC_PROXY_URL as string,
+  // process.env.NEXT_PUBLIC_PROXY_URL as string, // pls use your own proxy
   "https://pr.memaydex.online",
   "https://api2.suicaodex.com",
   "https://proxy.bltx.workers.dev",
