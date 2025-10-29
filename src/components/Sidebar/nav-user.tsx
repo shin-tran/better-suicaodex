@@ -69,13 +69,13 @@ export function NavUser() {
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton
                 size="lg"
-                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground overflow-visible"
+                className="overflow-visible data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
                 {!!user ? (
                   <>
                     <div className="relative inline-block">
                       {!!localNotification.unread.length && (
-                        <span className="absolute block rounded-full ring-2 ring-white top-0 left-0 bg-red-500 size-2.5 z-10 animate-bounce duration-250" />
+                        <span className="duration-250 absolute left-0 top-0 z-10 block size-2.5 animate-bounce rounded-full bg-red-500 ring-2 ring-white" />
                       )}
                       <Avatar className="h-8 w-8 rounded-lg">
                         <AvatarImage
@@ -103,7 +103,7 @@ export function NavUser() {
                   <>
                     <div className="relative inline-block">
                       {!!localNotification.unread.length && (
-                        <span className="z-10 absolute block rounded-full ring-2 ring-white top-0 left-0 bg-red-500 size-2.5 animate-bounce duration-250" />
+                        <span className="duration-250 absolute left-0 top-0 z-10 block size-2.5 animate-bounce rounded-full bg-red-500 ring-2 ring-white" />
                       )}
                       <Avatar className="h-8 w-8 rounded-lg">
                         <AvatarImage
@@ -173,13 +173,13 @@ export function NavUser() {
                     <Bell
                       className={cn(
                         !!localNotification.unread.length &&
-                          "animate-bell-shake"
+                          "animate-bell-shake",
                       )}
                     />
                     Thông báo
                     {!!localNotification.unread.length && (
                       <Badge
-                        className="rounded-full ml-auto min-w-4 h-4 justify-center p-1 text-xs font-normal"
+                        className="ml-auto h-4 min-w-4 justify-center rounded-full p-1 text-xs font-normal"
                         variant="destructive"
                       >
                         {localNotification.unread.length <= 10
@@ -234,7 +234,7 @@ export function NavUser() {
               </Button>
 
               <Button
-                className="text-white bg-stone-800  hover:bg-stone-800/80"
+                className="bg-stone-800 text-white hover:bg-stone-800/80"
                 onClick={() => signIn("google")}
                 // onClick={() =>
                 //   toast.error("Tạm chưa thể đăng nhập bằng Google")
@@ -244,7 +244,7 @@ export function NavUser() {
               </Button>
 
               <Button
-                className="bg-slate-700  text-white hover:bg-slate-700/80"
+                className="bg-slate-700 text-white hover:bg-slate-700/80"
                 onClick={() => signIn("github")}
                 // onClick={() =>
                 //   toast.error("Tạm chưa thể đăng nhập bằng Github")
