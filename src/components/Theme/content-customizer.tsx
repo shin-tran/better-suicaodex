@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { Eye, EyeOff, Globe, Repeat, SlidersHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useConfig } from "@/hooks/use-config";
@@ -18,11 +17,12 @@ import { Label } from "../ui/label";
 import { Skeleton } from "../ui/skeleton";
 import { SidebarMenuButton } from "../ui/sidebar";
 import { GB, VN } from "country-flag-icons/react/3x2";
+import { useEffect, useState } from "react";
 
 export function ContentCustomizer() {
-  const [mounted, setMounted] = React.useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMounted(true);
   }, []);
 
@@ -70,10 +70,10 @@ export function ContentCustomizer() {
 }
 
 function Customizer() {
-  const [mounted, setMounted] = React.useState(false);
+  const [mounted, setMounted] = useState(false);
   const [config, setConfig] = useConfig();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMounted(true);
   }, []);
 

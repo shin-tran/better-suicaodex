@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { Check, MonitorCog, Moon, Palette, Repeat, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
@@ -19,13 +18,14 @@ import { Label } from "../ui/label";
 import { Skeleton } from "../ui/skeleton";
 import { baseColors } from "@/config/base-colors";
 import { SidebarMenuButton } from "../ui/sidebar";
+import { CSSProperties, useEffect, useState } from "react";
 
 export function ThemeCustomizer() {
   // const [config, setConfig] = useConfig();
   // const { resolvedTheme: mode } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMounted(true);
   }, []);
 
@@ -46,10 +46,14 @@ export function ThemeCustomizer() {
           <Customizer />
         </DrawerContent>
       </Drawer>
-      <div className="hidden items-center md:flex grow">
+      <div className="hidden grow items-center md:flex">
         <Popover>
           <PopoverTrigger asChild>
-            <SidebarMenuButton asChild tooltip="Giao diện" className="cursor-pointer">
+            <SidebarMenuButton
+              asChild
+              tooltip="Giao diện"
+              className="cursor-pointer"
+            >
               <div>
                 <Palette />
                 <span>Giao diện</span>
@@ -58,7 +62,7 @@ export function ThemeCustomizer() {
           </PopoverTrigger>
           <PopoverContent
             align="start"
-            className="z-40 w-[340px] rounded-xl bg-white p-6 dark:bg-zinc-950 mr-2"
+            className="z-40 mr-2 w-[340px] rounded-xl bg-white p-6 dark:bg-zinc-950"
           >
             <Customizer />
           </PopoverContent>
@@ -69,11 +73,15 @@ export function ThemeCustomizer() {
 }
 
 function Customizer() {
-  const [mounted, setMounted] = React.useState(false);
-  const { setTheme: setMode, resolvedTheme: mode, theme: unResolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const {
+    setTheme: setMode,
+    resolvedTheme: mode,
+    theme: unResolvedTheme,
+  } = useTheme();
   const [config, setConfig] = useConfig();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMounted(true);
   }, []);
 
@@ -84,10 +92,10 @@ function Customizer() {
     >
       <div className="flex items-start pt-4 md:pt-0">
         <div className="space-y-1 pr-2">
-          <div className="font-semibold leading-none tracking-tight">
+          <div className="leading-none font-semibold tracking-tight">
             Tuỳ chỉnh giao diện
           </div>
-          <div className="text-xs text-muted-foreground">
+          <div className="text-muted-foreground text-xs">
             Cứ chọn màu bạn thích nha!
           </div>
         </div>
@@ -113,8 +121,7 @@ function Customizer() {
           <div className="grid grid-cols-3 gap-2">
             {baseColors
               .filter(
-                (theme) =>
-                  !["stone", "gray", "neutral"].includes(theme.name)
+                (theme) => !["stone", "gray", "neutral"].includes(theme.name),
               )
               .map((theme) => {
                 const isActive = config.theme === theme.name;
@@ -132,19 +139,19 @@ function Customizer() {
                     }}
                     className={cn(
                       "justify-start",
-                      isActive && "border-2 border-primary"
+                      isActive && "border-primary border-2",
                     )}
                     style={
                       {
                         "--theme-primary": `hsl(${
                           theme?.activeColor[mode === "dark" ? "dark" : "light"]
                         })`,
-                      } as React.CSSProperties
+                      } as CSSProperties
                     }
                   >
                     <span
                       className={cn(
-                        "flex size-5 shrink-0 -translate-x-1 items-center justify-center rounded-full bg-[--theme-primary]"
+                        "flex size-5 shrink-0 -translate-x-1 items-center justify-center rounded-full bg-[--theme-primary]",
                       )}
                     >
                       {isActive && <Check className="h-4 w-4 text-white" />}
@@ -167,7 +174,9 @@ function Customizer() {
                   variant={"outline"}
                   size="sm"
                   onClick={() => setMode("light")}
-                  className={cn(unResolvedTheme === "light" && "border-2 border-primary")}
+                  className={cn(
+                    unResolvedTheme === "light" && "border-primary border-2",
+                  )}
                 >
                   <Sun />
                   Sáng
@@ -176,7 +185,9 @@ function Customizer() {
                   variant={"outline"}
                   size="sm"
                   onClick={() => setMode("dark")}
-                  className={cn(unResolvedTheme === "dark" && "border-2 border-primary")}
+                  className={cn(
+                    unResolvedTheme === "dark" && "border-primary border-2",
+                  )}
                 >
                   <Moon />
                   Tối
@@ -185,7 +196,9 @@ function Customizer() {
                   variant={"outline"}
                   size="sm"
                   onClick={() => setMode("system")}
-                  className={cn(unResolvedTheme === "system" && "border-2 border-primary")}
+                  className={cn(
+                    unResolvedTheme === "system" && "border-primary border-2",
+                  )}
                 >
                   <MonitorCog />
                   Hệ thống

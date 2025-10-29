@@ -19,7 +19,7 @@ export function ThemeWrapper({
       className={cn(
         `theme-${defaultTheme || config.theme}`,
         "w-full",
-        className
+        className,
       )}
       style={
         {
