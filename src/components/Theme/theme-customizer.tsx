@@ -5,7 +5,6 @@ import { Check, MonitorCog, Moon, Palette, Repeat, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import { useConfig } from "@/hooks/use-config";
-import "@/styles/mdx.css";
 import {
   Drawer,
   DrawerContent,
@@ -59,7 +58,7 @@ export function ThemeCustomizer() {
           </PopoverTrigger>
           <PopoverContent
             align="start"
-            className="z-40 w-[340px] rounded-[12px] bg-white p-6 dark:bg-zinc-950 mr-2"
+            className="z-40 w-[340px] rounded-xl bg-white p-6 dark:bg-zinc-950 mr-2"
           >
             <Customizer />
           </PopoverContent>
